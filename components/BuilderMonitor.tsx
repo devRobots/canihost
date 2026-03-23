@@ -2,7 +2,7 @@
 
 import { useAppStore } from '@/lib/store';
 import { useTranslations } from 'next-intl';
-import PieChart from './PieChart';
+import PieChart from '@/components/PieChart';
 import { type Machine, type Service } from '@/types';
 import { getServiceIcon } from '@/lib/icons';
 

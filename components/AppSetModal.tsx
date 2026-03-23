@@ -1,7 +1,6 @@
 'use client';
 
-import * as React from 'react';
-import Modal from './Modal';
+import Modal from '@/components/Modal';
 import { getServiceIcon } from '@/lib/icons';
 import { useTranslations } from 'next-intl';
 

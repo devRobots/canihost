@@ -1,11 +1,11 @@
 'use client';
 
-import * as React from 'react';
+import { useState } from 'react';
 import { useAppStore } from '@/lib/store';
 import { useTranslations } from 'next-intl';
 import { getServiceIcon } from '@/lib/icons';
-import ServiceModal from './ServiceModal';
-import AppSetModal from './AppSetModal';
+import ServiceModal from '@/components/ServiceModal';
+import AppSetModal from '@/components/AppSetModal';
 import { type Service, type AppSet } from '@/types';
 
 type Props = {
@@ -20,8 +20,8 @@ type Props = {
 export default function RecommendationsPanel({ t }: Props) {
   const { machines, allSets, allServices, selectedMachineId, mode } = useAppStore();
   const tSet = useTranslations('AppSets');
-  const [serviceModalData, setServiceModalData] = React.useState<Service | null>(null);
-  const [appSetModalData, setAppSetModalData] = React.useState<AppSet | null>(null);
+  const [serviceModalData, setServiceModalData] = useState<Service | null>(null);
+  const [appSetModalData, setAppSetModalData] = useState<AppSet | null>(null);
 
   const isExpert = mode === 'expert';
   const machine = selectedMachineId ? machines.find(m => m.id === selectedMachineId) ?? null : null;

@@ -1,10 +1,9 @@
 'use client';
 
-import * as React from 'react';
 import MachinePicker from '@/components/MachinePicker';
 import { useAppStore } from '@/lib/store';
-import Hero from './Hero';
-import RecommendationsPanel from './RecommendationsPanel';
+import Hero from '@/components/Hero';
+import RecommendationsPanel from '@/components/RecommendationsPanel';
 
 type Props = {
   t: {

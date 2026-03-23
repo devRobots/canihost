@@ -1,12 +1,12 @@
 'use client';
 
-import * as React from 'react';
+import { useState } from 'react';
 import { useAppStore } from '@/lib/store';
-import Modal from './Modal';
-import ServiceModal from './ServiceModal';
+import Modal from '@/components/Modal';
+import ServiceModal from '@/components/ServiceModal';
 import { useTranslations } from 'next-intl';
-import BuilderCatalog from './BuilderCatalog';
-import BuilderMonitor from './BuilderMonitor';
+import BuilderCatalog from '@/components/BuilderCatalog';
+import BuilderMonitor from '@/components/BuilderMonitor';
 import { type Service, type Machine } from '@/types';
 
 export default function ServerBuilder() {
@@ -14,8 +14,8 @@ export default function ServerBuilder() {
   const machine = machines.find((m: Machine) => m.id === selectedMachineId) || machines[0];
   const tMod = useTranslations('Modal');
 
-  const [machineModalOpen, setMachineModalOpen] = React.useState(false);
-  const [serviceModalData, setServiceModalData] = React.useState<Service | null>(null);
+  const [machineModalOpen, setMachineModalOpen] = useState(false);
+  const [serviceModalData, setServiceModalData] = useState<Service | null>(null);
 
   if (!machine) {
     return (

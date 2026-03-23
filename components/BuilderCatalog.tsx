@@ -1,6 +1,6 @@
 'use client';
 
-import * as React from 'react';
+import { useState } from 'react';
 import { useAppStore } from '@/lib/store';
 import { getServiceIcon } from '@/lib/icons';
 import { useTranslations } from 'next-intl';
@@ -19,7 +19,7 @@ export default function BuilderCatalog({ machine, setServiceModalData, setMachin
   const tIdx = useTranslations('Index');
   const isExpert = mode === 'expert';
 
-  const [collapsedCategories, setCollapsedCategories] = React.useState<Record<string, boolean>>({});
+  const [collapsedCategories, setCollapsedCategories] = useState<Record<string, boolean>>({});
   const categories = Array.from(new Set(allServices.map(s => s.category))).sort();
 
   const toggleCategory = (cat: string) => {
