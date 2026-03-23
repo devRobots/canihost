@@ -5,9 +5,10 @@ import HomeClient from "@/components/HomeClient";
 export default async function Home() {
   const t = await getTranslations("Index");
 
-  const [machines, allSets] = await Promise.all([
+  const [machines, allSets, allServices] = await Promise.all([
     prisma.machine.findMany({ orderBy: { name: 'asc' } }),
     prisma.appSet.findMany({ include: { services: true } }),
+    prisma.service.findMany({ orderBy: { name: 'asc' } }),
   ]);
 
   const translations = {
@@ -22,5 +23,5 @@ export default async function Home() {
     cloudWarning: t("cloudWarning"),
   };
 
-  return <HomeClient machines={machines} allSets={allSets} t={translations} />;
+  return <HomeClient machines={machines} allSets={allSets} allServices={allServices} t={translations} />;
 }

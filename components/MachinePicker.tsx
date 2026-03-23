@@ -14,10 +14,16 @@ type Machine = {
 
 type Props = {
   machines: Machine[];
+  onSelect?: (id: string) => void;
 };
 
-export default function MachinePicker({ machines }: Props) {
+export default function MachinePicker({ machines, onSelect }: Props) {
   const { selectedMachineId, setSelectedMachineId } = useAppStore();
+
+  const handleSelect = (id: string) => {
+    setSelectedMachineId(id);
+    if (onSelect) onSelect(id);
+  };
 
   const excluded = [
     'Beelink SER5',
@@ -55,7 +61,7 @@ export default function MachinePicker({ machines }: Props) {
               key={m.id}
               machine={m}
               isSelected={selectedMachineId === m.id}
-              onSelect={setSelectedMachineId}
+              onSelect={handleSelect}
             />
           ))}
         </div>

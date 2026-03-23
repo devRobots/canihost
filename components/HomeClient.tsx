@@ -7,6 +7,7 @@ import { useAppStore } from '@/lib/store';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import ServiceModal from './ServiceModal';
+import AppSetModal from './AppSetModal';
 
 type Machine = {
   id: string;
@@ -39,6 +40,7 @@ type AppSet = {
 type Props = {
   machines: Machine[];
   allSets: AppSet[];
+  allServices: Service[];
   t: {
     title: string;
     subtitle: string;
@@ -52,10 +54,11 @@ type Props = {
   };
 };
 
-export default function HomeClient({ machines, allSets, t }: Props) {
+export default function HomeClient({ machines, allSets, allServices, t }: Props) {
   const { selectedMachineId, mode, setSelectedMachineId } = useAppStore();
   const tSet = useTranslations('AppSets');
   const [serviceModalData, setServiceModalData] = React.useState<Service | null>(null);
+  const [appSetModalData, setAppSetModalData] = React.useState<AppSet | null>(null);
   const isExpert = mode === 'expert';
 
   React.useEffect(() => {
@@ -82,7 +85,15 @@ export default function HomeClient({ machines, allSets, t }: Props) {
           if (!svc.isCloudRecommended && machine.type === 'VPS') cloudSafe = false;
         }
         return totalCpu <= machine.cpuCores && totalRam <= machine.memoryRamGb * 0.9 && cloudSafe;
-      })
+      }).slice(0, 3)
+    : [];
+
+  const recommendedApps = machine
+    ? allServices.filter(svc => 
+        svc.cpuCost <= machine.cpuCores && 
+        svc.ramCostGb <= machine.memoryRamGb * 0.8 &&
+        !(svc.isCloudRecommended === false && machine.type === 'VPS')
+      ).slice(0, 6)
     : [];
 
   return (
@@ -145,12 +156,17 @@ export default function HomeClient({ machines, allSets, t }: Props) {
             {t.selectMachine}
           </div>
 
-          <MachinePicker machines={machines} />
+          <MachinePicker 
+            machines={machines} 
+            onSelect={() => {
+              setTimeout(() => document.getElementById('recommendations-section')?.scrollIntoView({ behavior: 'smooth' }), 100);
+            }} 
+          />
         </section>
 
         {/* SECTION: Recommendations */}
         {machine && (
-          <section className="flex flex-col gap-6">
+          <section id="recommendations-section" className="flex flex-col gap-6">
 
             {/* Section header */}
             <div
@@ -196,18 +212,34 @@ export default function HomeClient({ machines, allSets, t }: Props) {
 
                   return (
                     <div key={set.id} className="card flex flex-col gap-4 p-5" style={{ borderRadius: 4 }}>
-                      <div>
-                        <div className="flex items-center gap-2 mb-1">
-                          <span style={{ color: 'var(--accent)' }}>◈</span>
-                          <h4 className="font-bold text-sm" style={{ color: 'var(--fg)' }}>
+                      {/* Card Header & Button */}
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <div className="flex items-center gap-2 mb-1">
+                            <span style={{ color: 'var(--accent)' }}>◈</span>
+                            <h4 className="font-bold text-sm" style={{ color: 'var(--fg)' }}>
+                              {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                              {tSet(set.name as any) || set.name}
+                            </h4>
+                          </div>
+                          <p className="text-xs leading-relaxed" style={{ color: 'var(--fg-muted)' }}>
                             {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                            {tSet(set.name as any) || set.name}
-                          </h4>
+                            {tSet(set.description as any) || set.description}
+                          </p>
                         </div>
-                        <p className="text-xs leading-relaxed" style={{ color: 'var(--fg-muted)' }}>
-                          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                          {tSet(set.description as any) || set.description}
-                        </p>
+                        <button
+                          onClick={() => setAppSetModalData(set)}
+                          className="w-6 h-6 shrink-0 flex items-center justify-center text-[10px] font-bold transition-all hover:bg-white/10 ml-2"
+                          style={{ 
+                            background: 'var(--bg-input)', 
+                            border: '1px solid var(--accent)', 
+                            color: 'var(--accent)', 
+                            borderRadius: 4 
+                          }}
+                          title="View Set Details"
+                        >
+                          i
+                        </button>
                       </div>
 
                       {/* CPU bar — expert only */}
@@ -258,6 +290,66 @@ export default function HomeClient({ machines, allSets, t }: Props) {
                 })}
               </div>
             )}
+
+            {/* Individual Apps header */}
+            <div
+              className="flex items-center gap-3 text-xs font-bold uppercase tracking-widest mt-6"
+              style={{ color: 'var(--fg-muted)' }}
+            >
+              <span style={{ color: 'var(--accent)' }}>{'//'}</span>
+              Top Individual Apps
+            </div>
+
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+              {recommendedApps.map(svc => (
+                 <button
+                   key={svc.id}
+                   onClick={() => setServiceModalData(svc)}
+                   className="relative flex flex-col pt-3 pb-2 px-3 transition-all active:scale-[0.98] cursor-pointer hover:brightness-110"
+                   style={{
+                     background: 'var(--bg-card)',
+                     border: '1px solid var(--border)',
+                     borderRadius: 6,
+                   }}
+                 >
+                   {/* Info Button Top Left */}
+                   <div
+                     className="absolute top-2 left-2 w-5 h-5 flex items-center justify-center text-[10px] font-bold transition-all"
+                     style={{ 
+                       background: 'var(--bg-input)', 
+                       border: '1px solid var(--border)', 
+                       color: 'var(--fg)', 
+                       borderRadius: 4 
+                     }}
+                   >
+                     i
+                   </div>
+                   
+                   <div className="flex flex-col items-center gap-2 text-center flex-1 pt-4 pb-1">
+                     <span className="text-3xl leading-none">{getServiceIcon(svc.name)}</span>
+                     <span className="font-bold text-xs mt-1 leading-tight px-1" style={{ color: 'var(--fg)' }}>
+                       {svc.name}
+                     </span>
+                   </div>
+                   <div className="flex justify-center mt-auto pt-2 text-[10px] font-mono w-full" style={{ borderTop: '1px solid var(--border)', color: 'var(--fg-dim)' }}>
+                     {isExpert ? (
+                       <div className="flex gap-2 w-full justify-center">
+                         <span>{svc.cpuCost.toFixed(1)}c</span>
+                         <span>|</span>
+                         <span>{svc.ramCostGb.toFixed(1)}G</span>
+                       </div>
+                     ) : (
+                       <div className="flex gap-2 w-full justify-center">
+                         <span>{(svc.cpuCost / machine.cpuCores * 100).toFixed(0)}%C</span>
+                         <span>|</span>
+                         <span>{(svc.ramCostGb / machine.memoryRamGb * 100).toFixed(0)}%R</span>
+                       </div>
+                     )}
+                   </div>
+                 </button>
+              ))}
+            </div>
+
           </section>
         )}
 
@@ -270,6 +362,7 @@ export default function HomeClient({ machines, allSets, t }: Props) {
         )}
       </div>
       <ServiceModal service={serviceModalData} onClose={() => setServiceModalData(null)} />
+      <AppSetModal set={appSetModalData} onClose={() => setAppSetModalData(null)} />
     </div>
   );
 }
