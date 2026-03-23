@@ -7,6 +7,8 @@ import { routing } from "../../i18n/routing";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import ThemeToggle from "@/components/ThemeToggle";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import { ModeProvider } from "@/components/ModeContext";
+import ModeToggle from "@/components/ModeToggle";
 
 export const metadata: Metadata = {
   title: "CanIHost.tech",
@@ -30,6 +32,7 @@ export default async function RootLayout({
     <html lang={locale} suppressHydrationWarning>
       <body className="scanlines min-h-screen flex flex-col">
         <ThemeProvider>
+          <ModeProvider>
           <NextIntlClientProvider messages={messages}>
             {/* NAV */}
             <nav
@@ -54,6 +57,7 @@ export default async function RootLayout({
 
                 {/* Toolbar */}
                 <div className="flex items-center gap-2">
+                  <ModeToggle />
                   <LanguageSwitcher />
                   <ThemeToggle />
                 </div>
@@ -65,6 +69,7 @@ export default async function RootLayout({
               {children}
             </div>
           </NextIntlClientProvider>
+          </ModeProvider>
         </ThemeProvider>
       </body>
     </html>

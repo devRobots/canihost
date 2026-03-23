@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from 'react';
 import { getMachineIcon } from '@/lib/icons';
+import { useMode } from './ModeContext';
 
 type Machine = {
   id: string;
@@ -38,7 +39,7 @@ export default function MachinePicker({ machines, selectedId, onSelect }: Props)
           <span style={{ color: 'var(--accent)' }}>▸</span>
           Mini PCs &amp; SBCs
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
           {miniPcs.map(m => (
             <MachineCard
               key={m.id}
@@ -87,6 +88,8 @@ function MachineCard({
 }) {
   const icon = getMachineIcon(machine.brand);
   const isVps = machine.type === 'VPS';
+  const { mode } = useMode();
+  const isExpert = mode === 'expert';
 
   return (
     <button
@@ -101,10 +104,10 @@ function MachineCard({
         boxShadow: isSelected ? '0 0 14px var(--accent-glow)' : 'none',
         borderRadius: 4,
       }}
-      className="flex items-start gap-3 p-3 w-full cursor-pointer hover:brightness-110 active:scale-[0.98]"
+      className="flex items-center gap-3 p-3 w-full cursor-pointer hover:brightness-110 active:scale-[0.98]"
     >
       {/* Icon */}
-      <span className="text-2xl leading-none mt-0.5 shrink-0">{icon}</span>
+      <span className="text-2xl leading-none shrink-0">{icon}</span>
 
       {/* Info */}
       <div className="flex flex-col gap-0.5 min-w-0">
@@ -115,9 +118,11 @@ function MachineCard({
           {isSelected && <span style={{ color: 'var(--accent)' }}>▶ </span>}
           {machine.name}
         </span>
-        <span className="text-xs" style={{ color: 'var(--fg-muted)' }}>
-          {machine.cpuCores}c / {machine.memoryRamGb}GB{isVps ? ' · CubePath' : ''}
-        </span>
+        {isExpert && (
+          <span className="text-xs" style={{ color: 'var(--fg-muted)' }}>
+            {machine.cpuCores}c / {machine.memoryRamGb}GB{isVps ? ' · CubePath' : ''}
+          </span>
+        )}
       </div>
     </button>
   );

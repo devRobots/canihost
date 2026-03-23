@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import MachinePicker from '@/components/MachinePicker';
 import { getServiceIcon } from '@/lib/icons';
+import { useMode } from './ModeContext';
 
 type Machine = {
   id: string;
@@ -48,6 +49,8 @@ type Props = {
 
 export default function HomeClient({ machines, allSets, t }: Props) {
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const { mode } = useMode();
+  const isExpert = mode === 'expert';
 
   const machine = selectedId ? machines.find(m => m.id === selectedId) ?? null : null;
 
@@ -140,10 +143,12 @@ export default function HomeClient({ machines, allSets, t }: Props) {
                     {machine.type === 'VPS' ? 'Cloud VPS' : 'Mini PC'}
                   </span>
                 </div>
-                <div className="flex gap-4 text-xs" style={{ color: 'var(--fg-muted)' }}>
-                  <span>CPU: <strong style={{ color: 'var(--fg)' }}>{machine.cpuCores} cores</strong></span>
-                  <span>RAM: <strong style={{ color: 'var(--fg)' }}>{machine.memoryRamGb} GB</strong></span>
-                </div>
+                {isExpert && (
+                  <div className="flex gap-4 text-xs" style={{ color: 'var(--fg-muted)' }}>
+                    <span>CPU: <strong style={{ color: 'var(--fg)' }}>{machine.cpuCores} cores</strong></span>
+                    <span>RAM: <strong style={{ color: 'var(--fg)' }}>{machine.memoryRamGb} GB</strong></span>
+                  </div>
+                )}
               </div>
               <a
                 href={`/builder?machineId=${machine.id}`}
@@ -207,31 +212,35 @@ export default function HomeClient({ machines, allSets, t }: Props) {
                         </p>
                       </div>
 
-                      {/* CPU bar */}
-                      <div className="flex flex-col gap-1">
-                        <div className="flex justify-between text-xs" style={{ color: 'var(--fg-dim)' }}>
-                          <span>CPU</span>
-                          <span style={{ color: cpuClass === 'danger' ? 'var(--red)' : cpuClass === 'warn' ? 'var(--yellow)' : 'var(--fg-muted)' }}>
-                            {totalCpu}c / {machine.cpuCores}c ({cpuPct}%)
-                          </span>
+                      {/* CPU bar - expert only */}
+                      {isExpert && (
+                        <div className="flex flex-col gap-1">
+                          <div className="flex justify-between text-xs" style={{ color: 'var(--fg-dim)' }}>
+                            <span>CPU</span>
+                            <span style={{ color: cpuClass === 'danger' ? 'var(--red)' : cpuClass === 'warn' ? 'var(--yellow)' : 'var(--fg-muted)' }}>
+                              {totalCpu}c / {machine.cpuCores}c ({cpuPct}%)
+                            </span>
+                          </div>
+                          <div className="bar-track">
+                            <div className={`bar-fill ${cpuClass}`} style={{ width: `${cpuPct}%` }} />
+                          </div>
                         </div>
-                        <div className="bar-track">
-                          <div className={`bar-fill ${cpuClass}`} style={{ width: `${cpuPct}%` }} />
-                        </div>
-                      </div>
+                      )}
 
-                      {/* RAM bar */}
-                      <div className="flex flex-col gap-1">
-                        <div className="flex justify-between text-xs" style={{ color: 'var(--fg-dim)' }}>
-                          <span>RAM</span>
-                          <span style={{ color: ramClass === 'danger' ? 'var(--red)' : ramClass === 'warn' ? 'var(--yellow)' : 'var(--fg-muted)' }}>
-                            {totalRam}GB / {machine.memoryRamGb}GB ({ramPct}%)
-                          </span>
+                      {/* RAM bar - expert only */}
+                      {isExpert && (
+                        <div className="flex flex-col gap-1">
+                          <div className="flex justify-between text-xs" style={{ color: 'var(--fg-dim)' }}>
+                            <span>RAM</span>
+                            <span style={{ color: ramClass === 'danger' ? 'var(--red)' : ramClass === 'warn' ? 'var(--yellow)' : 'var(--fg-muted)' }}>
+                              {totalRam}GB / {machine.memoryRamGb}GB ({ramPct}%)
+                            </span>
+                          </div>
+                          <div className="bar-track">
+                            <div className={`bar-fill ${ramClass}`} style={{ width: `${ramPct}%` }} />
+                          </div>
                         </div>
-                        <div className="bar-track">
-                          <div className={`bar-fill ${ramClass}`} style={{ width: `${ramPct}%` }} />
-                        </div>
-                      </div>
+                      )}
 
                       {/* Services list */}
                       <div className="flex flex-wrap gap-1 pt-1">
