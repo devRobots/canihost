@@ -1,7 +1,6 @@
 'use client';
 
 import { useAppStore } from '@/lib/store';
-import { useTranslations } from 'next-intl';
 import PieChart from '@/components/PieChart';
 import { type Machine, type Service } from '@/types';
 import { getServiceIcon } from '@/lib/icons';
@@ -13,7 +12,6 @@ type Props = {
 
 export default function BuilderMonitor({ machine, setServiceModalData }: Props) {
   const { allServices, selectedServiceIds, mode } = useAppStore();
-  const tIdx = useTranslations('Index');
   const isExpert = mode === 'expert';
 
   const selectedServices = allServices.filter(s => selectedServiceIds.has(s.id));
@@ -46,7 +44,7 @@ export default function BuilderMonitor({ machine, setServiceModalData }: Props) 
         <div className="flex flex-col gap-5">
           <div className="flex flex-col gap-2">
             <div className="flex justify-between text-xs text-fg-dim">
-              <span>{tIdx('cpu')}</span>
+              <span>CPU</span>
               <span className={isCpuOver ? 'text-red-500' : 'text-fg'}>
                 {totalCpu.toFixed(1)} / {machine.cpuCores.toFixed(1)} ({cpuPct}%)
               </span>
@@ -58,7 +56,7 @@ export default function BuilderMonitor({ machine, setServiceModalData }: Props) 
 
           <div className="flex flex-col gap-2">
             <div className="flex justify-between text-xs text-fg-dim">
-              <span>{tIdx('ram')}</span>
+              <span>RAM</span>
               <span className={isRamOver ? 'text-red-500' : 'text-fg'}>
                 {totalRam.toFixed(1)}GB / {machine.memoryRamGb}GB ({ramPct}%)
               </span>

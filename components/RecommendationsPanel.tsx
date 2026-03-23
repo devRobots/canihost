@@ -2,31 +2,27 @@
 
 import { useState } from 'react';
 import { useAppStore } from '@/lib/store';
-import { useTranslations } from 'next-intl';
 import { getServiceIcon } from '@/lib/icons';
 import ServiceModal from '@/components/ServiceModal';
 import AppSetModal from '@/components/AppSetModal';
 import { type Service, type AppSet } from '@/types';
 
-type Props = {
-  t: {
-    recommendations: string;
-    noRecommendations: string;
-    cpuLabel: string;
-    ramLabel: string;
-  };
-};
-
-export default function RecommendationsPanel({ t }: Props) {
+export default function RecommendationsPanel() {
   const { machines, allSets, allServices, selectedMachineId, mode } = useAppStore();
-  const tSet = useTranslations('AppSets');
   const [serviceModalData, setServiceModalData] = useState<Service | null>(null);
   const [appSetModalData, setAppSetModalData] = useState<AppSet | null>(null);
 
   const isExpert = mode === 'expert';
   const machine = selectedMachineId ? machines.find(m => m.id === selectedMachineId) ?? null : null;
 
-  if (!machine) return null;
+  if (!machine) {
+    return (
+      <div className="text-center py-16 text-sm text-fg-dim">
+        <div className="text-4xl mb-4">_</div>
+        <span className="prompt">Select a machine above to see recommendations</span>
+      </div>
+    );
+  }
 
   const maxSets = 3;
   const recommendedSets = allSets.filter((set) => {
@@ -55,14 +51,14 @@ export default function RecommendationsPanel({ t }: Props) {
       {/* Section header */}
       <div className="flex items-center gap-3 text-xs font-bold uppercase tracking-widest text-fg-muted">
          <span className="text-accent">{'//'}</span>
-         {t.recommendations}
+         Recommended AppSets
       </div>
 
       {/* AppSets Grid */}
       {recommendedSets.length === 0 ? (
         <div className="py-12 text-center text-sm card text-fg-muted">
           <div className="text-3xl mb-4">⚠</div>
-          {t.noRecommendations}
+          No sets fit this machine or environment. Limited resources, or perhaps it's a VPS and the sets include local-only apps (like Home Assistant). Try the manual builder.
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -78,19 +74,17 @@ export default function RecommendationsPanel({ t }: Props) {
               <div key={set.id} className="card flex flex-col gap-4 p-5 rounded">
                 {/* Card Header & Button */}
                 <div className="flex justify-between items-start">
-                  <div>
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="text-accent">◈</span>
-                      <h4 className="font-bold text-sm text-fg">
-                        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                        {tSet(set.name as any) || set.name}
-                      </h4>
-                    </div>
-                    <p className="text-xs leading-relaxed text-fg-muted">
-                      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                      {tSet(set.description as any) || set.description}
-                    </p>
-                  </div>
+                      <div>
+                        <div className="flex items-center gap-2 mb-1">
+                          <span className="text-accent">◈</span>
+                          <h4 className="font-bold text-sm text-fg">
+                            {set.name}
+                          </h4>
+                        </div>
+                        <p className="text-xs leading-relaxed text-fg-muted">
+                          {set.description}
+                        </p>
+                      </div>
                   <button
                     onClick={() => setAppSetModalData(set)}
                     className="w-6 h-6 shrink-0 flex items-center justify-center text-[10px] font-bold transition-all btn-terminal ml-2"

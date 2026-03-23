@@ -153,41 +153,41 @@ async function main() {
   
   const servicesData = [
     // Databases
-    { name: 'PostgreSQL', category: 'Databases', cpuCost: 0.5, ramCostGb: 0.5, isCloudRecommended: true, description: 'desc_postgresql', minRequirements: '1 Core, 512MB RAM', recRequirements: '2 Cores, 2GB+ RAM' },
-    { name: 'MySQL', category: 'Databases', cpuCost: 0.5, ramCostGb: 0.5, isCloudRecommended: true, description: 'desc_mysql', minRequirements: '1 Core, 512MB RAM', recRequirements: '2 Cores, 2GB+ RAM' },
-    { name: 'MongoDB', category: 'Databases', cpuCost: 0.5, ramCostGb: 1.0, isCloudRecommended: true, description: 'desc_mongodb', minRequirements: '1 Core, 1GB RAM', recRequirements: '2 Cores, 4GB RAM' },
-    { name: 'Redis', category: 'Databases', cpuCost: 0.2, ramCostGb: 0.2, isCloudRecommended: true, description: 'desc_redis', minRequirements: '1 Core, 64MB RAM', recRequirements: '1 Core, 1GB RAM' },
+    { name: 'PostgreSQL', category: 'Databases', cpuCost: 0.5, ramCostGb: 0.5, isCloudRecommended: true, description: 'Powerful open source relational database.', minRequirements: '1 Core, 512MB RAM', recRequirements: '2 Cores, 2GB+ RAM' },
+    { name: 'MySQL', category: 'Databases', cpuCost: 0.5, ramCostGb: 0.5, isCloudRecommended: true, description: 'Standard relational DB.', minRequirements: '1 Core, 512MB RAM', recRequirements: '2 Cores, 2GB+ RAM' },
+    { name: 'MongoDB', category: 'Databases', cpuCost: 0.5, ramCostGb: 1.0, isCloudRecommended: true, description: 'Leading NoSQL database.', minRequirements: '1 Core, 1GB RAM', recRequirements: '2 Cores, 4GB RAM' },
+    { name: 'Redis', category: 'Databases', cpuCost: 0.2, ramCostGb: 0.2, isCloudRecommended: true, description: 'In-memory key-value store and cache.', minRequirements: '1 Core, 64MB RAM', recRequirements: '1 Core, 1GB RAM' },
     // Development & DevOps
-    { name: 'Gitlab', category: 'DevOps', cpuCost: 2.0, ramCostGb: 4.0, isCloudRecommended: true, description: 'desc_gitlab', minRequirements: '4 Cores, 4GB RAM', recRequirements: '8 Cores, 8GB RAM' },
-    { name: 'Jenkins', category: 'DevOps', cpuCost: 1.0, ramCostGb: 1.5, isCloudRecommended: true, description: 'desc_jenkins', minRequirements: '1 Core, 1GB RAM', recRequirements: '4 Cores, 4GB RAM' },
-    { name: 'Gitea', category: 'DevOps', cpuCost: 0.5, ramCostGb: 0.5, isCloudRecommended: true, description: 'desc_gitea', minRequirements: '1 Core, 512MB RAM', recRequirements: '2 Cores, 1GB RAM' },
-    { name: 'Portainer', category: 'DevOps', cpuCost: 0.2, ramCostGb: 0.2, isCloudRecommended: true, description: 'desc_portainer', minRequirements: '1 Core, 256MB RAM', recRequirements: '1 Core, 512MB RAM' },
-    { name: 'Coolify', category: 'DevOps', cpuCost: 0.8, ramCostGb: 1.0, isCloudRecommended: true, description: 'desc_coolify', minRequirements: '2 Cores, 2GB RAM', recRequirements: '4 Cores, 4GB RAM' },
+    { name: 'Gitlab', category: 'DevOps', cpuCost: 2.0, ramCostGb: 4.0, isCloudRecommended: true, description: 'Comprehensive DevOps platform.', minRequirements: '4 Cores, 4GB RAM', recRequirements: '8 Cores, 8GB RAM' },
+    { name: 'Jenkins', category: 'DevOps', cpuCost: 1.0, ramCostGb: 1.5, isCloudRecommended: true, description: 'Open source automation server.', minRequirements: '1 Core, 1GB RAM', recRequirements: '4 Cores, 4GB RAM' },
+    { name: 'Gitea', category: 'DevOps', cpuCost: 0.5, ramCostGb: 0.5, isCloudRecommended: true, description: 'Lightweight GitLab/GitHub alternative.', minRequirements: '1 Core, 512MB RAM', recRequirements: '2 Cores, 1GB RAM' },
+    { name: 'Portainer', category: 'DevOps', cpuCost: 0.2, ramCostGb: 0.2, isCloudRecommended: true, description: 'Lightweight Docker/Kubernetes management.', minRequirements: '1 Core, 256MB RAM', recRequirements: '1 Core, 512MB RAM' },
+    { name: 'Coolify', category: 'DevOps', cpuCost: 0.8, ramCostGb: 1.0, isCloudRecommended: true, description: 'Modern self-hosted PAAS platform.', minRequirements: '2 Cores, 2GB RAM', recRequirements: '4 Cores, 4GB RAM' },
     // Networking
-    { name: 'Nginx Proxy Manager', category: 'Networking', cpuCost: 0.2, ramCostGb: 0.2, isCloudRecommended: true, description: 'desc_nginxpm', minRequirements: '1 Core, 256MB RAM', recRequirements: '1 Core, 512MB RAM' },
-    { name: 'Traefik', category: 'Networking', cpuCost: 0.3, ramCostGb: 0.2, isCloudRecommended: true, description: 'desc_traefik', minRequirements: '1 Core, 256MB RAM', recRequirements: '2 Cores, 1GB RAM' },
-    { name: 'Pi-Hole', category: 'Networking', cpuCost: 0.1, ramCostGb: 0.2, isCloudRecommended: false, description: 'desc_pihole', minRequirements: '1 Core, 512MB RAM', recRequirements: '1 Core, 1GB RAM' },
-    { name: 'Wireguard (WG-Easy)', category: 'Networking', cpuCost: 0.2, ramCostGb: 0.2, isCloudRecommended: true, description: 'desc_wireguard', minRequirements: '1 Core, 256MB RAM', recRequirements: '1 Core, 512MB RAM' },
+    { name: 'Nginx Proxy Manager', category: 'Networking', cpuCost: 0.2, ramCostGb: 0.2, isCloudRecommended: true, description: 'Visual panel for Nginx reverse proxy.', minRequirements: '1 Core, 256MB RAM', recRequirements: '1 Core, 512MB RAM' },
+    { name: 'Traefik', category: 'Networking', cpuCost: 0.3, ramCostGb: 0.2, isCloudRecommended: true, description: 'Smart reverse proxy.', minRequirements: '1 Core, 256MB RAM', recRequirements: '2 Cores, 1GB RAM' },
+    { name: 'Pi-Hole', category: 'Networking', cpuCost: 0.1, ramCostGb: 0.2, isCloudRecommended: false, description: 'Network-level ad blocker (DNS).', minRequirements: '1 Core, 512MB RAM', recRequirements: '1 Core, 1GB RAM' },
+    { name: 'Wireguard (WG-Easy)', category: 'Networking', cpuCost: 0.2, ramCostGb: 0.2, isCloudRecommended: true, description: 'Fast and modern VPN.', minRequirements: '1 Core, 256MB RAM', recRequirements: '1 Core, 512MB RAM' },
     // CMS
-    { name: 'Strapi', category: 'CMS', cpuCost: 0.8, ramCostGb: 1.0, isCloudRecommended: true, description: 'desc_strapi', minRequirements: '1 Core, 1GB RAM', recRequirements: '2 Cores, 2GB RAM' },
-    { name: 'WordPress', category: 'CMS', cpuCost: 0.5, ramCostGb: 0.5, isCloudRecommended: true, description: 'desc_wordpress', minRequirements: '1 Core, 512MB RAM', recRequirements: '2 Cores, 1GB RAM' },
+    { name: 'Strapi', category: 'CMS', cpuCost: 0.8, ramCostGb: 1.0, isCloudRecommended: true, description: 'Node.js Headless CMS.', minRequirements: '1 Core, 1GB RAM', recRequirements: '2 Cores, 2GB RAM' },
+    { name: 'WordPress', category: 'CMS', cpuCost: 0.5, ramCostGb: 0.5, isCloudRecommended: true, description: "The world's most popular CMS.", minRequirements: '1 Core, 512MB RAM', recRequirements: '2 Cores, 1GB RAM' },
     // Productivity
-    { name: 'Nextcloud', category: 'Productivity', cpuCost: 1.0, ramCostGb: 1.5, isCloudRecommended: true, description: 'desc_nextcloud', minRequirements: '1 Core, 1GB RAM', recRequirements: '4 Cores, 4GB RAM' },
-    { name: 'Vaultwarden', category: 'Security', cpuCost: 0.1, ramCostGb: 0.1, isCloudRecommended: true, description: 'desc_vaultwarden', minRequirements: '1 Core, 128MB RAM', recRequirements: '1 Core, 512MB RAM' },
-    { name: 'Paperless-ngx', category: 'Productivity', cpuCost: 0.5, ramCostGb: 1.0, isCloudRecommended: true, description: 'desc_paperless', minRequirements: '1 Core, 1GB RAM', recRequirements: '2 Cores, 2GB RAM' },
+    { name: 'Nextcloud', category: 'Productivity', cpuCost: 1.0, ramCostGb: 1.5, isCloudRecommended: true, description: 'Full personal cloud suite (files, contacts, etc).', minRequirements: '1 Core, 1GB RAM', recRequirements: '4 Cores, 4GB RAM' },
+    { name: 'Vaultwarden', category: 'Security', cpuCost: 0.1, ramCostGb: 0.1, isCloudRecommended: true, description: 'Lightweight Bitwarden in Rust.', minRequirements: '1 Core, 128MB RAM', recRequirements: '1 Core, 512MB RAM' },
+    { name: 'Paperless-ngx', category: 'Productivity', cpuCost: 0.5, ramCostGb: 1.0, isCloudRecommended: true, description: 'Digital document archive with OCR.', minRequirements: '1 Core, 1GB RAM', recRequirements: '2 Cores, 2GB RAM' },
     // Smart Home & IoT
-    { name: 'n8n', category: 'Automation', cpuCost: 0.5, ramCostGb: 1.0, isCloudRecommended: true, description: 'desc_n8n', minRequirements: '1 Core, 1GB RAM', recRequirements: '2 Cores, 2GB RAM' },
-    { name: 'Home Assistant', category: 'Smart Home', cpuCost: 1.0, ramCostGb: 1.0, isCloudRecommended: false, description: 'desc_homeassistant', minRequirements: '2 Cores, 2GB RAM', recRequirements: '4 Cores, 4GB RAM' },
-    { name: 'Frigate NVR', category: 'Media', cpuCost: 2.0, ramCostGb: 2.0, isCloudRecommended: false, description: 'desc_frigate', minRequirements: '2 Cores, 2GB RAM (Hardware Acceleration needed)', recRequirements: '4 Cores, 4GB RAM + Google Coral TPU' },
+    { name: 'n8n', category: 'Automation', cpuCost: 0.5, ramCostGb: 1.0, isCloudRecommended: true, description: 'Zapier-like automation tool.', minRequirements: '1 Core, 1GB RAM', recRequirements: '2 Cores, 2GB RAM' },
+    { name: 'Home Assistant', category: 'Smart Home', cpuCost: 1.0, ramCostGb: 1.0, isCloudRecommended: false, description: 'Total home automation control. (NOT RECOMMENDED IN CLOUD)', minRequirements: '2 Cores, 2GB RAM', recRequirements: '4 Cores, 4GB RAM' },
+    { name: 'Frigate NVR', category: 'Media', cpuCost: 2.0, ramCostGb: 2.0, isCloudRecommended: false, description: 'NVR with AI detection. Requires Coral/GPU hardware.', minRequirements: '2 Cores, 2GB RAM (Hardware Acceleration needed)', recRequirements: '4 Cores, 4GB RAM + Google Coral TPU' },
     // Media & Entertainment
-    { name: 'Plex', category: 'Media', cpuCost: 1.5, ramCostGb: 2.0, isCloudRecommended: false, description: 'desc_plex', minRequirements: '2 Cores, 2GB RAM', recRequirements: '4 Cores, 4GB RAM + Intel QuickSync/Nvidia GPU' },
-    { name: 'Jellyfin', category: 'Media', cpuCost: 1.5, ramCostGb: 2.0, isCloudRecommended: false, description: 'desc_jellyfin', minRequirements: '2 Cores, 1GB RAM', recRequirements: '4 Cores, 4GB RAM + Hardware Transcoding' },
-    { name: 'Immich', category: 'Media', cpuCost: 2.0, ramCostGb: 3.0, isCloudRecommended: true, description: 'desc_immich', minRequirements: '2 Cores, 4GB RAM', recRequirements: '4 Cores, 8GB RAM + Redis/PostgreSQL' },
-    { name: 'Minecraft Server', category: 'Gaming', cpuCost: 1.5, ramCostGb: 2.5, isCloudRecommended: true, description: 'desc_minecraft', minRequirements: '1 Core, 2GB RAM', recRequirements: '2 Cores, 4GB+ RAM (High Clock Speed)' },
+    { name: 'Plex', category: 'Media', cpuCost: 1.5, ramCostGb: 2.0, isCloudRecommended: false, description: 'Media center (streaming). Best with local GPU.', minRequirements: '2 Cores, 2GB RAM', recRequirements: '4 Cores, 4GB RAM + Intel QuickSync/Nvidia GPU' },
+    { name: 'Jellyfin', category: 'Media', cpuCost: 1.5, ramCostGb: 2.0, isCloudRecommended: false, description: 'Telemetry-free open media software.', minRequirements: '2 Cores, 1GB RAM', recRequirements: '4 Cores, 4GB RAM + Hardware Transcoding' },
+    { name: 'Immich', category: 'Media', cpuCost: 2.0, ramCostGb: 3.0, isCloudRecommended: true, description: 'High performance self-hosted photo backup.', minRequirements: '2 Cores, 4GB RAM', recRequirements: '4 Cores, 8GB RAM + Redis/PostgreSQL' },
+    { name: 'Minecraft Server', category: 'Gaming', cpuCost: 1.5, ramCostGb: 2.5, isCloudRecommended: true, description: 'Famous game server (Java/Bedrock).', minRequirements: '1 Core, 2GB RAM', recRequirements: '2 Cores, 4GB+ RAM (High Clock Speed)' },
     // Monitoring
-    { name: 'Grafana', category: 'Monitoring', cpuCost: 0.5, ramCostGb: 0.5, isCloudRecommended: true, description: 'desc_grafana', minRequirements: '1 Core, 512MB RAM', recRequirements: '2 Cores, 1GB RAM' },
-    { name: 'Prometheus', category: 'Monitoring', cpuCost: 0.5, ramCostGb: 1.0, isCloudRecommended: true, description: 'desc_prometheus', minRequirements: '1 Core, 1GB RAM', recRequirements: '4 Cores, 4GB RAM' },
-    { name: 'Uptime Kuma', category: 'Monitoring', cpuCost: 0.2, ramCostGb: 0.2, isCloudRecommended: true, description: 'desc_uptimekuma', minRequirements: '1 Core, 256MB RAM', recRequirements: '1 Core, 1GB RAM' },
+    { name: 'Grafana', category: 'Monitoring', cpuCost: 0.5, ramCostGb: 0.5, isCloudRecommended: true, description: 'Dashboards and visual analytics.', minRequirements: '1 Core, 512MB RAM', recRequirements: '2 Cores, 1GB RAM' },
+    { name: 'Prometheus', category: 'Monitoring', cpuCost: 0.5, ramCostGb: 1.0, isCloudRecommended: true, description: 'Metric monitoring and alerting.', minRequirements: '1 Core, 1GB RAM', recRequirements: '4 Cores, 4GB RAM' },
+    { name: 'Uptime Kuma', category: 'Monitoring', cpuCost: 0.2, ramCostGb: 0.2, isCloudRecommended: true, description: 'Visual uptime monitoring tool.', minRequirements: '1 Core, 256MB RAM', recRequirements: '1 Core, 1GB RAM' },
   ];
 
   await prisma.service.createMany({ data: servicesData });
@@ -199,28 +199,28 @@ async function main() {
 
   const sets = [
     {
-      name: 'set_basic_dev',
-      description: 'set_basic_dev_desc',
+      name: 'Basic Dev Stack',
+      description: 'Essential tools for any development team.',
       services: ['PostgreSQL', 'Redis', 'Gitlab', 'Nginx Proxy Manager']
     },
     {
-      name: 'set_web_hosting',
-      description: 'set_web_hosting_desc',
+      name: 'Web Hosting Pro',
+      description: 'Everything needed to host websites and blogs with analytics.',
       services: ['WordPress', 'MySQL', 'Nginx Proxy Manager', 'Uptime Kuma', 'Grafana']
     },
     {
-      name: 'set_home_media',
-      description: 'set_home_media_desc',
+      name: 'Home Entertainment',
+      description: 'Self-hosted media center (restricted to local hardware/GPUs).',
       services: ['Jellyfin', 'Nextcloud']
     },
     {
-       name: 'set_personal_cloud',
-       description: 'set_personal_cloud_desc',
+       name: 'My Personal Cloud (Secure)',
+       description: 'Replace Google Drive/Photos with absolute privacy.',
        services: ['Nextcloud', 'Immich', 'Vaultwarden', 'Nginx Proxy Manager']
     },
     {
-      name: 'set_smart_home',
-      description: 'set_smart_home_desc',
+      name: 'Smart Home Master',
+      description: 'Total local control of your smart home without cloud reliance.',
       services: ['Home Assistant', 'Frigate NVR']
     }
   ];

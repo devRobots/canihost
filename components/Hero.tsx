@@ -2,12 +2,7 @@
 
 import Link from 'next/link';
 
-type Props = {
-  subtitle: string;
-  builder: string;
-};
-
-export default function Hero({ subtitle, builder }: Props) {
+export default function Hero() {
   return (
     <header className="w-full border-b border-default bg-card">
       <div className="container mx-auto px-4 sm:px-8 py-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
@@ -20,7 +15,7 @@ export default function Hero({ subtitle, builder }: Props) {
             <span className="text-fg-muted">.tech</span>
           </h1>
           <p className="text-sm max-w-xl text-fg-muted">
-            {subtitle}
+            Discover what services you can run on your Machine or VPS — self-hosting made simple.
           </p>
         </div>
         <div>
@@ -28,7 +23,7 @@ export default function Hero({ subtitle, builder }: Props) {
             href="/builder"
             className="inline-block text-[13px] font-bold px-8 py-4 shadow-lg btn-terminal transition-all"
           >
-            ⚡ {builder}
+            ⚡ Build my server manually
           </Link>
         </div>
       </div>

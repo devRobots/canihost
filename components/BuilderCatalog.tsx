@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useAppStore } from '@/lib/store';
 import { getServiceIcon } from '@/lib/icons';
-import { useTranslations } from 'next-intl';
+
 import Link from 'next/link';
 import { type Machine, type Service } from '@/types';
 
@@ -15,8 +15,7 @@ type Props = {
 
 export default function BuilderCatalog({ machine, setServiceModalData, setMachineModalOpen }: Props) {
   const { allServices, selectedServiceIds, toggleServiceId, mode } = useAppStore();
-  const tCat = useTranslations('Categories');
-  const tIdx = useTranslations('Index');
+
   const isExpert = mode === 'expert';
 
   const [collapsedCategories, setCollapsedCategories] = useState<Record<string, boolean>>({});
@@ -38,7 +37,7 @@ export default function BuilderCatalog({ machine, setServiceModalData, setMachin
             <button
               onClick={() => setMachineModalOpen(true)}
               className="ml-2 text-xs w-6 h-6 flex items-center justify-center rounded-full border border-accent text-accent transition-all hover:bg-white/10"
-              title={tIdx('info')}
+              title="Info"
             >
               i
             </button>
@@ -53,15 +52,12 @@ export default function BuilderCatalog({ machine, setServiceModalData, setMachin
           href="/"
           className="text-xs font-bold px-4 py-2 transition-all text-center btn-terminal"
         >
-          ↶ {tIdx('changeMachine')}
+          ↶ Change Machine
         </Link>
       </div>
-
-      {/* Categories */}
       {categories.map(cat => {
         const isCollapsed = collapsedCategories[cat];
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const catNameTranslated = tCat(cat as any) || cat;
+        const catNameTranslated = cat;
 
         return (
           <div key={cat} className="flex flex-col gap-3">
@@ -101,7 +97,7 @@ export default function BuilderCatalog({ machine, setServiceModalData, setMachin
                       <button
                         onClick={(e) => { e.stopPropagation(); setServiceModalData(svc); }}
                         className="absolute top-2 left-2 w-6 h-6 flex items-center justify-center text-[10px] font-bold transition-all hover:bg-white/10 z-10 btn-terminal bg-input"
-                        title={tIdx('info')}
+                        title="Info"
                       >
                         i
                       </button>

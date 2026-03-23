@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useAppStore } from '@/lib/store';
 import Modal from '@/components/Modal';
 import ServiceModal from '@/components/ServiceModal';
-import { useTranslations } from 'next-intl';
+
 import BuilderCatalog from '@/components/BuilderCatalog';
 import BuilderMonitor from '@/components/BuilderMonitor';
 import { type Service, type Machine } from '@/types';
@@ -12,7 +12,7 @@ import { type Service, type Machine } from '@/types';
 export default function ServerBuilder() {
   const { machines, selectedMachineId } = useAppStore();
   const machine = machines.find((m: Machine) => m.id === selectedMachineId) || machines[0];
-  const tMod = useTranslations('Modal');
+
 
   const [machineModalOpen, setMachineModalOpen] = useState(false);
   const [serviceModalData, setServiceModalData] = useState<Service | null>(null);
@@ -58,28 +58,28 @@ export default function ServerBuilder() {
           <div className="flex flex-col gap-4">
             {machine.targetAudience && (
               <div className="flex flex-col gap-1">
-                <div className="font-bold text-accent uppercase tracking-widest text-[10px]">{'// '} {tMod('targetAudience')}</div>
+                <div className="font-bold text-accent uppercase tracking-widest text-[10px]">{'// '} Target Audience</div>
                 <div className="text-fg-dim leading-relaxed">{machine.targetAudience}</div>
               </div>
             )}
 
             {machine.useCases && (
               <div className="flex flex-col gap-1">
-                <div className="font-bold text-accent uppercase tracking-widest text-[10px]">{'// '} {tMod('useCases')}</div>
+                <div className="font-bold text-accent uppercase tracking-widest text-[10px]">{'// '} Ideal Use Cases</div>
                 <div className="text-fg-dim leading-relaxed">{machine.useCases}</div>
               </div>
             )}
 
             {machine.specialTech && (
               <div className="flex flex-col gap-1">
-                <div className="font-bold text-accent uppercase tracking-widest text-[10px]">{'// '} {tMod('specialTech')}</div>
+                <div className="font-bold text-accent uppercase tracking-widest text-[10px]">{'// '} Special Technology</div>
                 <div className="text-fg-dim leading-relaxed">{machine.specialTech}</div>
               </div>
             )}
 
             {machine.technicalSpecs && (
               <div className="flex flex-col gap-1">
-                <div className="font-bold text-accent uppercase tracking-widest text-[10px]">{'// '} {tMod('technicalSpecs')}</div>
+                <div className="font-bold text-accent uppercase tracking-widest text-[10px]">{'// '} Technical Specs</div>
                 <div className="text-fg-dim leading-relaxed">{machine.technicalSpecs}</div>
               </div>
             )}

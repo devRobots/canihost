@@ -2,16 +2,12 @@
 
 import Modal from '@/components/Modal';
 import { getServiceIcon } from '@/lib/icons';
-import { useTranslations } from 'next-intl';
+
 
 import { type AppSet } from '@/types';
 
 export default function AppSetModal({ set, onClose }: { set: AppSet | null, onClose: () => void }) {
-  const tSet = useTranslations('AppSets');
-  const tCat = useTranslations('Categories');
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const title = set ? (tSet(set.name as any) || set.name) : 'AppSet Details';
+  const title = set ? set.name : 'AppSet Details';
 
   return (
     <Modal
@@ -22,8 +18,7 @@ export default function AppSetModal({ set, onClose }: { set: AppSet | null, onCl
       {set && (
         <div className="flex flex-col gap-6 text-sm" style={{ color: 'var(--fg-muted)' }}>
           <p className="leading-relaxed" style={{ color: 'var(--fg)' }}>
-             {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-             {tSet(set.description as any) || set.description || 'No description available for this set.'}
+             {set.description || 'No description available for this set.'}
           </p>
 
           <div>
@@ -37,8 +32,7 @@ export default function AppSetModal({ set, onClose }: { set: AppSet | null, onCl
                          <span className="text-xl">{getServiceIcon(svc.name)}</span>
                          <span className="font-bold text-xs" style={{ color: 'var(--fg)' }}>{svc.name}</span>
                          <span className="text-[10px] ml-auto uppercase opacity-70" style={{ color: 'var(--fg-dim)' }}>
-                            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                            {tCat(svc.category as any) || svc.category}
+                            {svc.category}
                          </span>
                       </div>
                       <div className="text-[10px] uppercase font-bold tracking-widest mt-1 opacity-70" style={{ color: 'var(--fg-dim)' }}>

@@ -4,16 +4,12 @@ import { getMachineIcon } from '@/lib/icons';
 import { useAppStore } from '@/lib/store';
 import { type Machine } from '@/types';
 
-type Props = {
-  onSelect?: (id: string) => void;
-};
-
-export default function MachinePicker({ onSelect }: Props) {
+export default function MachinePicker() {
   const { selectedMachineId, setSelectedMachineId, machines } = useAppStore();
 
   const handleSelect = (id: string) => {
     setSelectedMachineId(id);
-    if (onSelect) onSelect(id);
+    setTimeout(() => document.getElementById('recommendations-section')?.scrollIntoView({ behavior: 'smooth' }), 100);
   };
 
   const excluded = [
