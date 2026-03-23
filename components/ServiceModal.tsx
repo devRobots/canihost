@@ -5,17 +5,7 @@ import Modal from './Modal';
 import { getServiceIcon } from '@/lib/icons';
 import { useTranslations } from 'next-intl';
 
-type Service = {
-  id: string;
-  name: string;
-  category: string;
-  cpuCost: number;
-  ramCostGb: number;
-  isCloudRecommended: boolean;
-  description: string | null;
-  minRequirements: string | null;
-  recRequirements: string | null;
-};
+import { type Service } from '@/types';
 
 export default function ServiceModal({ service, onClose }: { service: Service | null, onClose: () => void }) {
   const tCat = useTranslations('Categories');

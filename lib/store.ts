@@ -1,11 +1,18 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { type Machine, type AppSet, type Service } from '@/types';
 
 // ─── Types ─────────────────────────────────────────────────────────────────
 
 type Mode = 'normal' | 'expert';
 
 interface AppState {
+  /** Global Data */
+  machines: Machine[];
+  allSets: AppSet[];
+  allServices: Service[];
+  setInitialData: (data: { machines: Machine[], allSets: AppSet[], allServices: Service[] }) => void;
+
   /** UI mode: normal hides technical specs, expert shows full details */
   mode: Mode;
   setMode: (m: Mode) => void;
@@ -26,6 +33,12 @@ interface AppState {
 export const useAppStore = create<AppState>()(
   persist(
     (set, get) => ({
+      // Global Data
+      machines: [],
+      allSets: [],
+      allServices: [],
+      setInitialData: (data) => set(data),
+
       // Mode
       mode: 'normal',
       setMode: (m) => set({ mode: m }),

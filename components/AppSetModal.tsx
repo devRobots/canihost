@@ -5,24 +5,7 @@ import Modal from './Modal';
 import { getServiceIcon } from '@/lib/icons';
 import { useTranslations } from 'next-intl';
 
-type Service = {
-  id: string;
-  name: string;
-  category: string;
-  cpuCost: number;
-  ramCostGb: number;
-  isCloudRecommended: boolean;
-  description: string | null;
-  minRequirements: string | null;
-  recRequirements: string | null;
-};
-
-type AppSet = {
-  id: string;
-  name: string;
-  description: string | null;
-  services: Service[];
-};
+import { type AppSet } from '@/types';
 
 export default function AppSetModal({ set, onClose }: { set: AppSet | null, onClose: () => void }) {
   const tSet = useTranslations('AppSets');

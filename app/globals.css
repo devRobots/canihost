@@ -1,6 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=IBM+Plex+Mono:wght@300;400;500;600;700&display=swap');
 @import "tailwindcss";
 
+@theme {
+  --color-bg: var(--bg);
+  --color-bg-card: var(--bg-card);
+  --color-bg-input: var(--bg-input);
+  --color-border: var(--border);
+  --color-fg: var(--fg);
+  --color-fg-muted: var(--fg-muted);
+  --color-fg-dim: var(--fg-dim);
+  --color-accent: var(--accent);
+}
 /* ─── DARK THEME (default) ─── Solaris / Ubuntu terminal inspired */
 :root {
   --bg:          #0f0e0c;
@@ -137,4 +147,47 @@ body {
   font-size: 11px;
   font-family: var(--font-mono);
   border-radius: 2px;
+}
+
+/* ─── MODULAR UTILITIES ─── */
+.text-fg { color: var(--fg); }
+.text-fg-muted { color: var(--fg-muted); }
+.text-fg-dim { color: var(--fg-dim); }
+.text-accent { color: var(--accent); }
+.text-accent2 { color: var(--accent2); }
+
+.bg-page { background-color: var(--bg); }
+.bg-card { background-color: var(--bg-card); }
+.bg-input { background-color: var(--bg-input); }
+
+.border-default { border-color: var(--border); }
+.border-accent { border-color: var(--accent); }
+
+.border-line { border: 1px solid var(--border); }
+.border-line-accent { border: 1px solid var(--accent); }
+
+.divider-line {
+  flex: 1 1 0%;
+  height: 1px;
+  background-color: var(--border);
+}
+
+.btn-terminal {
+  background-color: var(--bg-input);
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  border-radius: 4px;
+}
+.btn-terminal:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+.btn-terminal:active {
+  transform: scale(0.95);
+}
+
+.badge-info {
+  background-color: var(--bg-input);
+  color: var(--fg-muted);
+  border: 1px solid var(--border);
+  border-radius: 3px;
 }

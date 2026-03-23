@@ -1,58 +1,60 @@
 'use client';
 
 export default function PieChart({
-  used,
-  total,
-  colorClass = 'accent',
+  cpuPct,
+  ramPct,
+  size = 180,
+  strokeWidth = 18,
 }: {
-  used: number;
-  total: number;
-  colorClass?: 'accent' | 'warn' | 'danger';
+  cpuPct: number;
+  ramPct: number;
+  size?: number;
+  strokeWidth?: number;
 }) {
-  const percentage = Math.min(Math.round((used / total) * 100), 100);
-  
-  // Calculate SVG stroke dashes for a pie chart effect
-  // Circle circumference: 2 * pi * r. With r=15.9155, C = ~100
-  const radius = 15.9155;
-  const circumference = 100;
-  const strokeDasharray = `${percentage} ${circumference - percentage}`;
+  const radius1 = 40;
+  const radius2 = 28;
+  const circumference1 = 2 * Math.PI * radius1;
+  const circumference2 = 2 * Math.PI * radius2;
 
-  let strokeColor = 'var(--accent)';
-  if (colorClass === 'warn') strokeColor = 'var(--yellow)';
-  if (colorClass === 'danger') strokeColor = 'var(--red)';
+  const dash1 = `${(cpuPct / 100) * circumference1} ${circumference1}`;
+  const dash2 = `${(ramPct / 100) * circumference2} ${circumference2}`;
+
+  const getStrokeClass = (pct: number) => {
+    if (pct > 85) return 'text-red-500';
+    if (pct > 70) return 'text-yellow-500';
+    return 'text-accent';
+  };
 
   return (
-    <div className="relative w-16 h-16 shrink-0" title={`${percentage}% used`}>
+    <div className="relative flex items-center justify-center" style={{ width: size, height: size }}>
       <svg
-        viewBox="0 0 32 32"
-        className="w-full h-full transform -rotate-90 rounded-full"
-        style={{
-          background: 'var(--bg-input)',
-          boxShadow: `inset 0 0 8px rgba(0,0,0,0.5), 0 0 10px ${
-            colorClass === 'accent' ? 'var(--accent-glow)' : 'transparent'
-          }`,
-        }}
+        viewBox="0 0 100 100"
+        className="transform -rotate-90 w-full h-full rounded-full bg-input shadow-inner drop-shadow-xl"
       >
-        {/* Background Circle */}
-        <circle r={radius} cx="16" cy="16" fill="transparent" stroke="var(--border)" strokeWidth="3" />
-        {/* Foreground (Used) Circle */}
+        {/* Backgrounds */}
+        <circle r={radius1} cx="50" cy="50" fill="transparent" stroke="currentColor" className="text-border" strokeWidth={strokeWidth} />
+        <circle r={radius2} cx="50" cy="50" fill="transparent" stroke="currentColor" className="text-border" strokeWidth={strokeWidth} />
+
+        {/* Foreground (Used) CPU */}
         <circle
-          r={radius}
-          cx="16"
-          cy="16"
-          fill="transparent"
-          stroke={strokeColor}
-          strokeWidth="3"
-          strokeDasharray={strokeDasharray}
-          style={{ transition: 'stroke-dasharray 0.5s ease' }}
+          r={radius1} cx="50" cy="50" fill="transparent"
+          stroke="currentColor" strokeWidth={strokeWidth}
+          strokeDasharray={dash1}
+          className={`transition-all duration-500 ease-out ${getStrokeClass(cpuPct)}`}
+        />
+
+        {/* Foreground (Used) RAM */}
+        <circle
+          r={radius2} cx="50" cy="50" fill="transparent"
+          stroke="currentColor" strokeWidth={strokeWidth}
+          strokeDasharray={dash2}
+          className={`transition-all duration-500 ease-out ${getStrokeClass(ramPct)}`}
         />
       </svg>
-      {/* Center Label (terminal vibe) */}
-      <div
-        className="absolute inset-0 flex items-center justify-center font-bold text-[10px]"
-        style={{ color: 'var(--fg)', fontFamily: 'var(--font-mono)' }}
-      >
-        {percentage}%
+      {/* Center Label */}
+      <div className="absolute inset-0 flex flex-col items-center justify-center font-bold font-mono text-fg">
+        <span className="text-xs">{cpuPct}%<span className="text-[8px] text-fg-dim">C</span></span>
+        <span className="text-xs">{ramPct}%<span className="text-[8px] text-fg-dim">R</span></span>
       </div>
     </div>
   );

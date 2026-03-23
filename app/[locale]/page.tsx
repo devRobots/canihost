@@ -2,6 +2,8 @@ import { getTranslations } from "next-intl/server";
 import prisma from "@/lib/prisma";
 import HomeClient from "@/components/HomeClient";
 
+import StoreInitializer from "@/components/StoreInitializer";
+
 export default async function Home() {
   const t = await getTranslations("Index");
 
@@ -23,5 +25,10 @@ export default async function Home() {
     cloudWarning: t("cloudWarning"),
   };
 
-  return <HomeClient machines={machines} allSets={allSets} allServices={allServices} t={translations} />;
+  return (
+    <>
+      <StoreInitializer machines={machines} allSets={allSets} allServices={allServices} />
+      <HomeClient t={translations} />
+    </>
+  );
 }

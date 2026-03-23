@@ -2,23 +2,14 @@
 
 import { getMachineIcon } from '@/lib/icons';
 import { useAppStore } from '@/lib/store';
-
-type Machine = {
-  id: string;
-  name: string;
-  type: string;
-  brand: string | null;
-  cpuCores: number;
-  memoryRamGb: number;
-};
+import { type Machine } from '@/types';
 
 type Props = {
-  machines: Machine[];
   onSelect?: (id: string) => void;
 };
 
-export default function MachinePicker({ machines, onSelect }: Props) {
-  const { selectedMachineId, setSelectedMachineId } = useAppStore();
+export default function MachinePicker({ onSelect }: Props) {
+  const { selectedMachineId, setSelectedMachineId, machines } = useAppStore();
 
   const handleSelect = (id: string) => {
     setSelectedMachineId(id);
