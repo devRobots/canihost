@@ -4,11 +4,8 @@ import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { routing } from "../../i18n/routing";
-import LanguageSwitcher from "@/components/LanguageSwitcher";
-import ThemeToggle from "@/components/ThemeToggle";
 import { ThemeProvider } from "@/components/ThemeProvider";
-import { ModeProvider } from "@/components/ModeContext";
-import ModeToggle from "@/components/ModeToggle";
+import Toolbar from "@/components/Toolbar";
 
 export const metadata: Metadata = {
   title: "CanIHost.tech",
@@ -32,7 +29,6 @@ export default async function RootLayout({
     <html lang={locale} suppressHydrationWarning>
       <body className="scanlines min-h-screen flex flex-col">
         <ThemeProvider>
-          <ModeProvider>
           <NextIntlClientProvider messages={messages}>
             {/* NAV */}
             <nav
@@ -56,11 +52,7 @@ export default async function RootLayout({
                 </div>
 
                 {/* Toolbar */}
-                <div className="flex items-center gap-2">
-                  <ModeToggle />
-                  <LanguageSwitcher />
-                  <ThemeToggle />
-                </div>
+                <Toolbar />
               </div>
             </nav>
 
@@ -69,7 +61,6 @@ export default async function RootLayout({
               {children}
             </div>
           </NextIntlClientProvider>
-          </ModeProvider>
         </ThemeProvider>
       </body>
     </html>

@@ -1,8 +1,7 @@
 'use client';
 
-import { useState, useTransition } from 'react';
 import { getMachineIcon } from '@/lib/icons';
-import { useMode } from './ModeContext';
+import { useAppStore } from '@/lib/store';
 
 type Machine = {
   id: string;
@@ -15,20 +14,16 @@ type Machine = {
 
 type Props = {
   machines: Machine[];
-  selectedId: string | null;
-  onSelect: (id: string) => void;
 };
 
-export default function MachinePicker({ machines, selectedId, onSelect }: Props) {
-  const [showAll, setShowAll] = useState(false);
-  const miniPcs = machines.filter(m => m.type !== 'VPS').sort((a,b) => a.name.localeCompare(b.name));
-  const vpss    = machines.filter(m => m.type === 'VPS').sort((a,b) => a.name.localeCompare(b.name));
+export default function MachinePicker({ machines }: Props) {
+  const { selectedMachineId, setSelectedMachineId } = useAppStore();
+
+  const miniPcs = machines.filter(m => m.type !== 'VPS').sort((a, b) => a.name.localeCompare(b.name));
+  const vpss    = machines.filter(m => m.type === 'VPS').sort((a, b) => a.name.localeCompare(b.name));
 
   return (
-    <div
-      className="w-full flex flex-col gap-6"
-      style={{ fontFamily: 'var(--font-mono)' }}
-    >
+    <div className="w-full flex flex-col gap-6" style={{ fontFamily: 'var(--font-mono)' }}>
 
       {/* ─── GROUP: Mini PCs ─── */}
       <div className="flex flex-col gap-2">
@@ -44,8 +39,8 @@ export default function MachinePicker({ machines, selectedId, onSelect }: Props)
             <MachineCard
               key={m.id}
               machine={m}
-              isSelected={selectedId === m.id}
-              onSelect={onSelect}
+              isSelected={selectedMachineId === m.id}
+              onSelect={setSelectedMachineId}
             />
           ))}
         </div>
@@ -68,8 +63,8 @@ export default function MachinePicker({ machines, selectedId, onSelect }: Props)
           <MachineCard
             key={m.id}
             machine={m}
-            isSelected={selectedId === m.id}
-            onSelect={onSelect}
+            isSelected={selectedMachineId === m.id}
+            onSelect={setSelectedMachineId}
           />
         ))}
       </div>
@@ -88,7 +83,7 @@ function MachineCard({
 }) {
   const icon = getMachineIcon(machine.brand);
   const isVps = machine.type === 'VPS';
-  const { mode } = useMode();
+  const { mode } = useAppStore();
   const isExpert = mode === 'expert';
 
   return (
@@ -106,10 +101,8 @@ function MachineCard({
       }}
       className="flex items-center gap-3 p-3 w-full cursor-pointer hover:brightness-110 active:scale-[0.98]"
     >
-      {/* Icon */}
       <span className="text-2xl leading-none shrink-0">{icon}</span>
 
-      {/* Info */}
       <div className="flex flex-col gap-0.5 min-w-0">
         <span
           className="font-bold text-xs leading-tight truncate"

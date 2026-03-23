@@ -16,6 +16,10 @@ model Machine {
   brand          String?
   cpuCores       Int
   memoryRamGb    Float
+  targetAudience String?  // para quien esta destinado
+  useCases       String?  // para que puede servir
+  specialTech    String?  // tecnologias especiales
+  technicalSpecs String?  // requisitos tecnicos
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 }
@@ -28,6 +32,8 @@ model Service {
   ramCostGb             Float    // RAM in GB it typically needs
   isCloudRecommended    Boolean  @default(true)
   description           String?
+  minRequirements       String?  // requisitos minimos
+  recRequirements       String?  // requisitos recomendados
   appSets               AppSet[] // Implicit m2m
   createdAt             DateTime @default(now())
   updatedAt             DateTime @updatedAt

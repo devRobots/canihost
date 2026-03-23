@@ -19,7 +19,8 @@
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "simple-icons": "^16.13.0",
-    "tailwind-merge": "^3.5.0"
+    "tailwind-merge": "^3.5.0",
+    "zustand": "^5.0.12"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
@@ -32,6 +33,7 @@
     "eslint-plugin-sonarjs": "^4.0.2",
     "prisma": "^5.22.0",
     "tailwindcss": "^4",
+    "tsx": "^4.21.0",
     "typescript": "^5"
   }
 }

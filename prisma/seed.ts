@@ -10,95 +10,184 @@ async function main() {
 
   console.log("Insertando Máquinas (Mini PCs y VPS CubePath)...");
   
-  // 15 Mini PCs
   const machinesData = [
-    { name: 'Zimaboard 2 (832)', type: 'MINI_PC', brand: 'ZimaBoard', cpuCores: 4, memoryRamGb: 8 },
-    { name: 'Zimaboard 2 (432)', type: 'MINI_PC', brand: 'ZimaBoard', cpuCores: 4, memoryRamGb: 4 },
-    { name: 'Chuwi Larkbox X', type: 'MINI_PC', brand: 'Chuwi', cpuCores: 4, memoryRamGb: 12 },
-    { name: 'Mac Mini M2', type: 'MINI_PC', brand: 'Apple', cpuCores: 8, memoryRamGb: 8 },
-    { name: 'Mac Mini M2 Pro', type: 'MINI_PC', brand: 'Apple', cpuCores: 10, memoryRamGb: 16 },
-    { name: 'Raspberry Pi 5 (8GB)', type: 'MINI_PC', brand: 'Raspberry Pi', cpuCores: 4, memoryRamGb: 8 },
-    { name: 'Raspberry Pi 4 (4GB)', type: 'MINI_PC', brand: 'Raspberry Pi', cpuCores: 4, memoryRamGb: 4 },
-    { name: 'Intel NUC 13 Pro', type: 'MINI_PC', brand: 'Intel', cpuCores: 12, memoryRamGb: 16 },
-    { name: 'Intel NUC 12 Enthusiast', type: 'MINI_PC', brand: 'Intel', cpuCores: 14, memoryRamGb: 16 },
-    { name: 'Beelink SER5 Pro', type: 'MINI_PC', brand: 'Beelink', cpuCores: 6, memoryRamGb: 16 },
-    { name: 'Beelink SER6 Max', type: 'MINI_PC', brand: 'Beelink', cpuCores: 8, memoryRamGb: 32 },
-    { name: 'Minisforum UM790 Pro', type: 'MINI_PC', brand: 'Minisforum', cpuCores: 8, memoryRamGb: 32 },
-    { name: 'Minisforum Venus NPB7', type: 'MINI_PC', brand: 'Minisforum', cpuCores: 14, memoryRamGb: 32 },
-    { name: 'Dell OptiPlex Micro Plus', type: 'MINI_PC', brand: 'Dell', cpuCores: 6, memoryRamGb: 16 },
-    { name: 'Lenovo ThinkCentre M70q', type: 'MINI_PC', brand: 'Lenovo', cpuCores: 6, memoryRamGb: 8 },
+    { 
+      name: 'Zimaboard 2 (832)', type: 'MINI_PC', brand: 'ZimaBoard', cpuCores: 4, memoryRamGb: 8,
+      targetAudience: 'Home Labbers, Makers, and Self-Hosters',
+      useCases: 'Personal Cloud, Media Server, Smart Home Automation',
+      specialTech: 'Dual PCIe, Intel Celeron N3450',
+      technicalSpecs: '4-Core 1.1-2.2GHz, 8GB LPDDR4, 32GB eMMC, 2x Gigabit LAN'
+    },
+    { 
+      name: 'Zimaboard 2 (432)', type: 'MINI_PC', brand: 'ZimaBoard', cpuCores: 4, memoryRamGb: 4,
+      targetAudience: 'Home Labbers, Makers',
+      useCases: 'Lightweight Automation, DNS Ad-Blocking, File Server',
+      specialTech: 'PCIe expansion slot',
+      technicalSpecs: '4-Core 1.1-2.2GHz, 4GB LPDDR4, 32GB eMMC'
+    },
+    { 
+      name: 'Chuwi Larkbox X', type: 'MINI_PC', brand: 'Chuwi', cpuCores: 4, memoryRamGb: 12,
+      targetAudience: 'Budget Home Server Enthusiasts',
+      useCases: 'Basic Media Streaming, Docker Containers',
+      specialTech: 'Intel N100 Alder Lake-N',
+      technicalSpecs: '4-Core up to 3.4GHz, 12GB LPDDR5, 512GB SSD, Wi-Fi 6'
+    },
+    { 
+      name: 'Mac Mini M2', type: 'MINI_PC', brand: 'Apple', cpuCores: 8, memoryRamGb: 8,
+      targetAudience: 'Apple Ecosystem Users, Developers',
+      useCases: 'CI/CD runner, Xcode Server, Plex Media Server',
+      specialTech: 'Apple Silicon M2, Hardware Video Encoding',
+      technicalSpecs: '8-Core CPU, 10-Core GPU, 8GB Unified Memory, ProRes Engine'
+    },
+    { 
+      name: 'Mac Mini M2 Pro', type: 'MINI_PC', brand: 'Apple', cpuCores: 10, memoryRamGb: 16,
+      targetAudience: 'Pro Developers, Video Editors',
+      useCases: 'Heavy Virtualization, High-end CI/CD, 4K Media Transcoding',
+      specialTech: 'Apple Silicon M2 Pro, Advanced Media Engine',
+      technicalSpecs: '10-Core CPU, 16-Core GPU, 16GB Unified Memory, Thunderbolt 4'
+    },
+    { 
+      name: 'Raspberry Pi 5 (8GB)', type: 'MINI_PC', brand: 'Raspberry Pi', cpuCores: 4, memoryRamGb: 8,
+      targetAudience: 'Tinkerers, IoT Enthusiasts',
+      useCases: 'Home Assistant, Ad-Blocking, Retro Gaming, Edge Computing',
+      specialTech: 'PCIe 2.0 interface, Custom Silicon RP1',
+      technicalSpecs: 'Quad-core ARM Cortex-A76 @ 2.4GHz, 8GB LPDDR4X, Dual Micro-HDMI'
+    },
+    { 
+      name: 'Raspberry Pi 4 (4GB)', type: 'MINI_PC', brand: 'Raspberry Pi', cpuCores: 4, memoryRamGb: 4,
+      targetAudience: 'Beginner Self-Hosters',
+      useCases: 'Pi-Hole, VPN Server, Simple Web Host',
+      specialTech: 'GPIO Pins',
+      technicalSpecs: 'Quad-core ARM Cortex-A72 @ 1.5GHz, 4GB LPDDR4'
+    },
+    { 
+      name: 'Intel NUC 13 Pro', type: 'MINI_PC', brand: 'Intel', cpuCores: 12, memoryRamGb: 16,
+      targetAudience: 'Business & Prosumers',
+      useCases: 'Proxmox Virtualization, Database Hosting, Edge AI',
+      specialTech: 'Intel vPro, Thunderbolt 4',
+      technicalSpecs: 'Intel Core i5/i7 13th Gen, 16GB DDR4, NVMe SSD'
+    },
+    { 
+      name: 'Intel NUC 12 Enthusiast', type: 'MINI_PC', brand: 'Intel', cpuCores: 14, memoryRamGb: 16,
+      targetAudience: 'Gamers, Content Creators',
+      useCases: 'Game Servers, Heavy Media Transcoding (Jellyfin)',
+      specialTech: 'Dedicated Intel Arc GPU',
+      technicalSpecs: 'Intel Core i7 12th Gen, 16GB RAM, Arc A770M 16GB'
+    },
+    { 
+      name: 'Beelink SER5 Pro', type: 'MINI_PC', brand: 'Beelink', cpuCores: 6, memoryRamGb: 16,
+      targetAudience: 'Value Seekers',
+      useCases: 'Homelab Starter, Docker Swarm node',
+      specialTech: 'AMD Ryzen 5800H',
+      technicalSpecs: '6-Core AMD Ryzen, 16GB DDR4, 500GB NVMe'
+    },
+    { 
+      name: 'Beelink SER6 Max', type: 'MINI_PC', brand: 'Beelink', cpuCores: 8, memoryRamGb: 32,
+      targetAudience: 'Prosumers',
+      useCases: 'Virtualization Node, Heavy Databases',
+      specialTech: 'Magnetic Power Supply, Vapor Chamber',
+      technicalSpecs: '8-Core AMD Ryzen 7735HS, 32GB DDR5, PCIe 4.0 SSD'
+    },
+    { 
+      name: 'Minisforum UM790 Pro', type: 'MINI_PC', brand: 'Minisforum', cpuCores: 8, memoryRamGb: 32,
+      targetAudience: 'Power Users',
+      useCases: 'High-Performance Proxmox, Enterprise App Testing',
+      specialTech: 'Cold Wave 2.0 Cooling',
+      technicalSpecs: 'AMD Ryzen 9 7940HS, 32GB DDR5 5600MHz, Dual PCIe 4.0 SSDs'
+    },
+    { 
+      name: 'Minisforum Venus NPB7', type: 'MINI_PC', brand: 'Minisforum', cpuCores: 14, memoryRamGb: 32,
+      targetAudience: 'Power Users',
+      useCases: 'Software Compilation, Massive Docker Stacks',
+      specialTech: 'Intel Core i7 13th Gen (Raptor Lake)',
+      technicalSpecs: '14-Core (6P+8E) up to 5.0GHz, 32GB DDR5, Dual 2.5G LAN'
+    },
+    { 
+      name: 'Dell OptiPlex Micro Plus', type: 'MINI_PC', brand: 'Dell', cpuCores: 6, memoryRamGb: 16,
+      targetAudience: 'Enterprise / Homelab Upgraders',
+      useCases: 'Reliable 24/7 Hosting, pfSense Firewall',
+      specialTech: 'Enterprise Management Features',
+      technicalSpecs: 'Intel Core 13th Gen T-series, 16GB DDR5'
+    },
+    { 
+      name: 'Lenovo ThinkCentre M70q', type: 'MINI_PC', brand: 'Lenovo', cpuCores: 6, memoryRamGb: 8,
+      targetAudience: 'Budget Homelabbers',
+      useCases: 'Kubernetes Nodes, Cluster Computing',
+      specialTech: 'Military-spec tested durability',
+      technicalSpecs: 'Intel Core i5, 8GB DDR4, Modular Expansion'
+    },
     // CubePath VPS
-    { name: 'CubePath VPS Starter', type: 'VPS', brand: 'CubePath', cpuCores: 1, memoryRamGb: 1 },
-    { name: 'CubePath VPS Developer', type: 'VPS', brand: 'CubePath', cpuCores: 2, memoryRamGb: 4 },
-    { name: 'CubePath VPS Dev Pro', type: 'VPS', brand: 'CubePath', cpuCores: 4, memoryRamGb: 8 },
-    { name: 'CubePath VPS Enterprise', type: 'VPS', brand: 'CubePath', cpuCores: 8, memoryRamGb: 16 },
+    { 
+      name: 'CubePath VPS Starter', type: 'VPS', brand: 'CubePath', cpuCores: 1, memoryRamGb: 1,
+      targetAudience: 'Beginners, Students',
+      useCases: 'Personal Blog, Static Websites, VPN Endpoint',
+      specialTech: 'KVM Virtualization, 1Gbps Network',
+      technicalSpecs: '1 vCPU, 1GB RAM, 25GB NVMe SSD, 1TB Bandwidth'
+    },
+    { 
+      name: 'CubePath VPS Developer', type: 'VPS', brand: 'CubePath', cpuCores: 2, memoryRamGb: 4,
+      targetAudience: 'Developers, Freelancers',
+      useCases: 'Docker Host, CI/CD Runner, Small E-commerce',
+      specialTech: 'DDoS Protection, Automated Backups',
+      technicalSpecs: '2 vCPU, 4GB RAM, 80GB NVMe SSD, 4TB Bandwidth'
+    },
+    { 
+      name: 'CubePath VPS Dev Pro', type: 'VPS', brand: 'CubePath', cpuCores: 4, memoryRamGb: 8,
+      targetAudience: 'Startups, Agencies',
+      useCases: 'High-Traffic Sites, SaaS Backend, Medium Database',
+      specialTech: 'Dedicated Resources, Custom ISO Support',
+      technicalSpecs: '4 vCPU, 8GB RAM, 160GB NVMe SSD, 8TB Bandwidth'
+    },
+    { 
+      name: 'CubePath VPS Enterprise', type: 'VPS', brand: 'CubePath', cpuCores: 8, memoryRamGb: 16,
+      targetAudience: 'Enterprises, Established SaaS',
+      useCases: 'Big Data Processing, Enterprise ERP, Game Servers',
+      specialTech: 'Premium Routing, SLA 99.99%',
+      technicalSpecs: '8 vCPU, 16GB RAM, 320GB NVMe SSD, Unmetered Bandwidth'
+    },
   ];
 
   await prisma.machine.createMany({ data: machinesData });
 
-  console.log("Insertando Servicios (>50 aplicaciones)...");
+  console.log("Insertando Servicios (>40 aplicaciones)...");
   
   const servicesData = [
     // Databases
-    { name: 'PostgreSQL', category: 'Database', cpuCost: 0.5, ramCostGb: 0.5, isCloudRecommended: true, description: 'Potente base de datos relacional open source.' },
-    { name: 'MySQL', category: 'Database', cpuCost: 0.5, ramCostGb: 0.5, isCloudRecommended: true, description: 'DB relacional estándar.' },
-    { name: 'MongoDB', category: 'Database', cpuCost: 0.5, ramCostGb: 1.0, isCloudRecommended: true, description: 'Base de datos NoSQL líder.' },
-    { name: 'Redis', category: 'Database', cpuCost: 0.2, ramCostGb: 0.2, isCloudRecommended: true, description: 'Caché y almacén clave-valor en memoria.' },
+    { name: 'PostgreSQL', category: 'Databases', cpuCost: 0.5, ramCostGb: 0.5, isCloudRecommended: true, description: 'desc_postgresql', minRequirements: '1 Core, 512MB RAM', recRequirements: '2 Cores, 2GB+ RAM' },
+    { name: 'MySQL', category: 'Databases', cpuCost: 0.5, ramCostGb: 0.5, isCloudRecommended: true, description: 'desc_mysql', minRequirements: '1 Core, 512MB RAM', recRequirements: '2 Cores, 2GB+ RAM' },
+    { name: 'MongoDB', category: 'Databases', cpuCost: 0.5, ramCostGb: 1.0, isCloudRecommended: true, description: 'desc_mongodb', minRequirements: '1 Core, 1GB RAM', recRequirements: '2 Cores, 4GB RAM' },
+    { name: 'Redis', category: 'Databases', cpuCost: 0.2, ramCostGb: 0.2, isCloudRecommended: true, description: 'desc_redis', minRequirements: '1 Core, 64MB RAM', recRequirements: '1 Core, 1GB RAM' },
     // Development & DevOps
-    { name: 'Gitlab', category: 'DevOps', cpuCost: 2.0, ramCostGb: 4.0, isCloudRecommended: true, description: 'Plataforma DevOps integral.' },
-    { name: 'Jenkins', category: 'DevOps', cpuCost: 1.0, ramCostGb: 1.5, isCloudRecommended: true, description: 'Servidor de automatización open source.' },
-    { name: 'Gitea', category: 'DevOps', cpuCost: 0.5, ramCostGb: 0.5, isCloudRecommended: true, description: 'Alternativa ligera a GitLab/GitHub.' },
-    { name: 'Drone CI', category: 'DevOps', cpuCost: 0.5, ramCostGb: 0.5, isCloudRecommended: true, description: 'Plataforma CI/CD nativa de contenedores.' },
-    { name: 'Portainer', category: 'DevOps', cpuCost: 0.2, ramCostGb: 0.2, isCloudRecommended: true, description: 'Gestión ligera de Docker/Kubernetes.' },
-    { name: 'Dokploy', category: 'DevOps', cpuCost: 0.5, ramCostGb: 0.5, isCloudRecommended: true, description: 'Alternativa a Vercel/Heroku self-hosted.' },
-    { name: 'Coolify', category: 'DevOps', cpuCost: 0.8, ramCostGb: 1.0, isCloudRecommended: true, description: 'Plataforma PAAS autoalojada moderna.' },
-    { name: 'Nginx Proxy Manager', category: 'Networking', cpuCost: 0.2, ramCostGb: 0.2, isCloudRecommended: true, description: 'Panel visual para proxy inverso Nginx.' },
-    { name: 'Traefik', category: 'Networking', cpuCost: 0.3, ramCostGb: 0.2, isCloudRecommended: true, description: 'Smart reverse proxy.' },
-    { name: 'Cloudflared', category: 'Networking', cpuCost: 0.1, ramCostGb: 0.1, isCloudRecommended: true, description: 'Túneles Cloudflare Zero Trust.' },
-    { name: 'Pi-Hole', category: 'Networking', cpuCost: 0.1, ramCostGb: 0.2, isCloudRecommended: false, description: 'Bloqueador de anuncios a nivel de red (DNS).' },
-    { name: 'AdGuard Home', category: 'Networking', cpuCost: 0.1, ramCostGb: 0.2, isCloudRecommended: false, description: 'Alternativa a Pi-Hole para bloqueo de ads.' },
-    { name: 'Wireguard (WG-Easy)', category: 'Networking', cpuCost: 0.2, ramCostGb: 0.2, isCloudRecommended: true, description: 'VPN rápida y moderna.' },
-    { name: 'Tailscale', category: 'Networking', cpuCost: 0.1, ramCostGb: 0.1, isCloudRecommended: true, description: 'Zero config VPN Mesh.' },
-    // CMS & Web
-    { name: 'Strapi', category: 'CMS', cpuCost: 0.8, ramCostGb: 1.0, isCloudRecommended: true, description: 'Headless CMS Node.js.' },
-    { name: 'Ghost', category: 'CMS', cpuCost: 0.5, ramCostGb: 0.5, isCloudRecommended: true, description: 'Plataforma de publicación profesional.' },
-    { name: 'WordPress', category: 'CMS', cpuCost: 0.5, ramCostGb: 0.5, isCloudRecommended: true, description: 'El CMS más popular del mundo.' },
-    // Productivity & Storage
-    { name: 'Nextcloud', category: 'Productivity', cpuCost: 1.0, ramCostGb: 1.5, isCloudRecommended: true, description: 'Suite completa de nube personal (archivos, contactos, etc.).' },
-    { name: 'Syncthing', category: 'Productivity', cpuCost: 0.5, ramCostGb: 0.5, isCloudRecommended: true, description: 'Sincronización P2P de archivos descentralizada.' },
-    { name: 'Vaultwarden', category: 'Security', cpuCost: 0.1, ramCostGb: 0.1, isCloudRecommended: true, description: 'Bitwarden ligero en Rust.' },
-    { name: 'Paperless-ngx', category: 'Productivity', cpuCost: 0.5, ramCostGb: 1.0, isCloudRecommended: true, description: 'Archivo digital de documentos con OCR.' },
-    { name: 'Focalboard', category: 'Productivity', cpuCost: 0.3, ramCostGb: 0.5, isCloudRecommended: true, description: 'Alternativa open source a Trello.' },
-    // Automation & IoT
-    { name: 'n8n', category: 'Automation', cpuCost: 0.5, ramCostGb: 1.0, isCloudRecommended: true, description: 'Herramienta de automatización tipo Zapier.' },
-    { name: 'Home Assistant', category: 'Smart Home', cpuCost: 1.0, ramCostGb: 1.0, isCloudRecommended: false, description: 'Control domótico total del hogar. (NO RECOMENDADO EN LA NUBE)' },
-    { name: 'Zigbee2MQTT', category: 'Smart Home', cpuCost: 0.3, ramCostGb: 0.3, isCloudRecommended: false, description: 'Puente Zigbee a MQTT. Requiere hardware local.' },
-    { name: 'Frigate NVR', category: 'Media', cpuCost: 2.0, ramCostGb: 2.0, isCloudRecommended: false, description: 'NVR con detección de IA. Requiere hardware Coral/GPU.' },
-    { name: 'Node-RED', category: 'Automation', cpuCost: 0.3, ramCostGb: 0.5, isCloudRecommended: true, description: 'Programación visual para IoT.' },
-    { name: 'Mosquitto MQTT', category: 'Smart Home', cpuCost: 0.1, ramCostGb: 0.1, isCloudRecommended: true, description: 'Broker MQTT ligero.' },
+    { name: 'Gitlab', category: 'DevOps', cpuCost: 2.0, ramCostGb: 4.0, isCloudRecommended: true, description: 'desc_gitlab', minRequirements: '4 Cores, 4GB RAM', recRequirements: '8 Cores, 8GB RAM' },
+    { name: 'Jenkins', category: 'DevOps', cpuCost: 1.0, ramCostGb: 1.5, isCloudRecommended: true, description: 'desc_jenkins', minRequirements: '1 Core, 1GB RAM', recRequirements: '4 Cores, 4GB RAM' },
+    { name: 'Gitea', category: 'DevOps', cpuCost: 0.5, ramCostGb: 0.5, isCloudRecommended: true, description: 'desc_gitea', minRequirements: '1 Core, 512MB RAM', recRequirements: '2 Cores, 1GB RAM' },
+    { name: 'Portainer', category: 'DevOps', cpuCost: 0.2, ramCostGb: 0.2, isCloudRecommended: true, description: 'desc_portainer', minRequirements: '1 Core, 256MB RAM', recRequirements: '1 Core, 512MB RAM' },
+    { name: 'Coolify', category: 'DevOps', cpuCost: 0.8, ramCostGb: 1.0, isCloudRecommended: true, description: 'desc_coolify', minRequirements: '2 Cores, 2GB RAM', recRequirements: '4 Cores, 4GB RAM' },
+    // Networking
+    { name: 'Nginx Proxy Manager', category: 'Networking', cpuCost: 0.2, ramCostGb: 0.2, isCloudRecommended: true, description: 'desc_nginxpm', minRequirements: '1 Core, 256MB RAM', recRequirements: '1 Core, 512MB RAM' },
+    { name: 'Traefik', category: 'Networking', cpuCost: 0.3, ramCostGb: 0.2, isCloudRecommended: true, description: 'desc_traefik', minRequirements: '1 Core, 256MB RAM', recRequirements: '2 Cores, 1GB RAM' },
+    { name: 'Pi-Hole', category: 'Networking', cpuCost: 0.1, ramCostGb: 0.2, isCloudRecommended: false, description: 'desc_pihole', minRequirements: '1 Core, 512MB RAM', recRequirements: '1 Core, 1GB RAM' },
+    { name: 'Wireguard (WG-Easy)', category: 'Networking', cpuCost: 0.2, ramCostGb: 0.2, isCloudRecommended: true, description: 'desc_wireguard', minRequirements: '1 Core, 256MB RAM', recRequirements: '1 Core, 512MB RAM' },
+    // CMS
+    { name: 'Strapi', category: 'CMS', cpuCost: 0.8, ramCostGb: 1.0, isCloudRecommended: true, description: 'desc_strapi', minRequirements: '1 Core, 1GB RAM', recRequirements: '2 Cores, 2GB RAM' },
+    { name: 'WordPress', category: 'CMS', cpuCost: 0.5, ramCostGb: 0.5, isCloudRecommended: true, description: 'desc_wordpress', minRequirements: '1 Core, 512MB RAM', recRequirements: '2 Cores, 1GB RAM' },
+    // Productivity
+    { name: 'Nextcloud', category: 'Productivity', cpuCost: 1.0, ramCostGb: 1.5, isCloudRecommended: true, description: 'desc_nextcloud', minRequirements: '1 Core, 1GB RAM', recRequirements: '4 Cores, 4GB RAM' },
+    { name: 'Vaultwarden', category: 'Security', cpuCost: 0.1, ramCostGb: 0.1, isCloudRecommended: true, description: 'desc_vaultwarden', minRequirements: '1 Core, 128MB RAM', recRequirements: '1 Core, 512MB RAM' },
+    { name: 'Paperless-ngx', category: 'Productivity', cpuCost: 0.5, ramCostGb: 1.0, isCloudRecommended: true, description: 'desc_paperless', minRequirements: '1 Core, 1GB RAM', recRequirements: '2 Cores, 2GB RAM' },
+    // Smart Home & IoT
+    { name: 'n8n', category: 'Automation', cpuCost: 0.5, ramCostGb: 1.0, isCloudRecommended: true, description: 'desc_n8n', minRequirements: '1 Core, 1GB RAM', recRequirements: '2 Cores, 2GB RAM' },
+    { name: 'Home Assistant', category: 'Smart Home', cpuCost: 1.0, ramCostGb: 1.0, isCloudRecommended: false, description: 'desc_homeassistant', minRequirements: '2 Cores, 2GB RAM', recRequirements: '4 Cores, 4GB RAM' },
+    { name: 'Frigate NVR', category: 'Media', cpuCost: 2.0, ramCostGb: 2.0, isCloudRecommended: false, description: 'desc_frigate', minRequirements: '2 Cores, 2GB RAM (Hardware Acceleration needed)', recRequirements: '4 Cores, 4GB RAM + Google Coral TPU' },
     // Media & Entertainment
-    { name: 'Plex', category: 'Media', cpuCost: 1.5, ramCostGb: 2.0, isCloudRecommended: false, description: 'Centro multimedia (streaming). Mejor con GPU local.' },
-    { name: 'Jellyfin', category: 'Media', cpuCost: 1.5, ramCostGb: 2.0, isCloudRecommended: false, description: 'Software de medios libre sin telemetría.' },
-    { name: 'Immich', category: 'Media', cpuCost: 2.0, ramCostGb: 3.0, isCloudRecommended: true, description: 'Respaldo de fotos autoalojado de alto rendimiento.' },
-    { name: 'PhotoPrism', category: 'Media', cpuCost: 1.5, ramCostGb: 4.0, isCloudRecommended: true, description: 'IA para gestionar fotos.' },
-    { name: 'Audiobookshelf', category: 'Media', cpuCost: 0.3, ramCostGb: 0.5, isCloudRecommended: true, description: 'Servidor de audiolibros y podcasts.' },
-    { name: 'Navidrome', category: 'Media', cpuCost: 0.2, ramCostGb: 0.2, isCloudRecommended: true, description: 'Servidor de música ligero.' },
-    { name: 'Minecraft Server', category: 'Gaming', cpuCost: 1.5, ramCostGb: 2.5, isCloudRecommended: true, description: 'Servidor del famoso juego (Java/Bedrock).' },
-    { name: 'Palworld Server', category: 'Gaming', cpuCost: 4.0, ramCostGb: 8.0, isCloudRecommended: true, description: 'Servidor de Palworld (alto consumo RAM).' },
+    { name: 'Plex', category: 'Media', cpuCost: 1.5, ramCostGb: 2.0, isCloudRecommended: false, description: 'desc_plex', minRequirements: '2 Cores, 2GB RAM', recRequirements: '4 Cores, 4GB RAM + Intel QuickSync/Nvidia GPU' },
+    { name: 'Jellyfin', category: 'Media', cpuCost: 1.5, ramCostGb: 2.0, isCloudRecommended: false, description: 'desc_jellyfin', minRequirements: '2 Cores, 1GB RAM', recRequirements: '4 Cores, 4GB RAM + Hardware Transcoding' },
+    { name: 'Immich', category: 'Media', cpuCost: 2.0, ramCostGb: 3.0, isCloudRecommended: true, description: 'desc_immich', minRequirements: '2 Cores, 4GB RAM', recRequirements: '4 Cores, 8GB RAM + Redis/PostgreSQL' },
+    { name: 'Minecraft Server', category: 'Gaming', cpuCost: 1.5, ramCostGb: 2.5, isCloudRecommended: true, description: 'desc_minecraft', minRequirements: '1 Core, 2GB RAM', recRequirements: '2 Cores, 4GB+ RAM (High Clock Speed)' },
     // Monitoring
-    { name: 'Grafana', category: 'Monitoring', cpuCost: 0.5, ramCostGb: 0.5, isCloudRecommended: true, description: 'Dashboards y analíticas visuales.' },
-    { name: 'Prometheus', category: 'Monitoring', cpuCost: 0.5, ramCostGb: 1.0, isCloudRecommended: true, description: 'Monitoreo y alertas métricas.' },
-    { name: 'Uptime Kuma', category: 'Monitoring', cpuCost: 0.2, ramCostGb: 0.2, isCloudRecommended: true, description: 'Herramienta de monitoreo de uptime visual.' },
-    { name: 'Netdata', category: 'Monitoring', cpuCost: 0.5, ramCostGb: 0.5, isCloudRecommended: true, description: 'Monitoreo de infraestructura en tiempo real.' },
-    // Others
-    { name: 'SearXNG', category: 'Utility', cpuCost: 0.5, ramCostGb: 1.0, isCloudRecommended: true, description: 'Motor de metabúsqueda que respeta tu privacidad.' },
-    { name: 'Kasm Workspaces', category: 'Utility', cpuCost: 2.0, ramCostGb: 4.0, isCloudRecommended: true, description: 'Espacios de trabajo en streaming (Browser isolation).' },
-    { name: 'Mealie', category: 'Productivity', cpuCost: 0.3, ramCostGb: 0.5, isCloudRecommended: true, description: 'Gestor de recetas y planificador de comidas.' },
-    { name: 'Trilium Notes', category: 'Productivity', cpuCost: 0.2, ramCostGb: 0.5, isCloudRecommended: true, description: 'Base de conocimiento personal jerárquica.' },
-    { name: 'Kavita', category: 'Media', cpuCost: 0.3, ramCostGb: 0.5, isCloudRecommended: true, description: 'Servidor de lectura Manga/Comics.' },
-    { name: 'Prowlarr', category: 'Media', cpuCost: 0.2, ramCostGb: 0.2, isCloudRecommended: true, description: 'Gestor de indexadores (Arr suite).' },
-    { name: 'Radarr', category: 'Media', cpuCost: 0.5, ramCostGb: 0.5, isCloudRecommended: true, description: 'Gestión de películas (Arr suite).' },
-    { name: 'Sonarr', category: 'Media', cpuCost: 0.5, ramCostGb: 0.5, isCloudRecommended: true, description: 'Gestión de series (Arr suite).' }
+    { name: 'Grafana', category: 'Monitoring', cpuCost: 0.5, ramCostGb: 0.5, isCloudRecommended: true, description: 'desc_grafana', minRequirements: '1 Core, 512MB RAM', recRequirements: '2 Cores, 1GB RAM' },
+    { name: 'Prometheus', category: 'Monitoring', cpuCost: 0.5, ramCostGb: 1.0, isCloudRecommended: true, description: 'desc_prometheus', minRequirements: '1 Core, 1GB RAM', recRequirements: '4 Cores, 4GB RAM' },
+    { name: 'Uptime Kuma', category: 'Monitoring', cpuCost: 0.2, ramCostGb: 0.2, isCloudRecommended: true, description: 'desc_uptimekuma', minRequirements: '1 Core, 256MB RAM', recRequirements: '1 Core, 1GB RAM' },
   ];
 
   await prisma.service.createMany({ data: servicesData });
@@ -106,35 +195,33 @@ async function main() {
   console.log("Insertando AppSets...");
   
   const allServices = await prisma.service.findMany();
-  
-  // Helpers para buscar servicios rápido
   const findSvc = (name: string) => allServices.find(s => s.name === name);
 
   const sets = [
     {
-      name: 'Stack Desarrollo Básico',
-      description: 'Herramientas esenciales para cualquier equipo de desarrollo.',
+      name: 'set_basic_dev',
+      description: 'set_basic_dev_desc',
       services: ['PostgreSQL', 'Redis', 'Gitlab', 'Nginx Proxy Manager']
     },
     {
-      name: 'Web Hosting Pro',
-      description: 'Todo lo necesario para hospedar sitios web y blogs con analíticas.',
+      name: 'set_web_hosting',
+      description: 'set_web_hosting_desc',
       services: ['WordPress', 'MySQL', 'Nginx Proxy Manager', 'Uptime Kuma', 'Grafana']
     },
     {
-      name: 'Entretenimiento Doméstico',
-      description: 'Centro multimedia autoalojado (restringido a equipos locales/GPU).',
-      services: ['Jellyfin', 'Nextcloud', 'Radarr', 'Sonarr', 'Prowlarr']
+      name: 'set_home_media',
+      description: 'set_home_media_desc',
+      services: ['Jellyfin', 'Nextcloud']
     },
     {
-       name: 'Mi Nube Personal (Segura)',
-       description: 'Reemplaza a Google Drive / Fotos con privacidad absoluta.',
+       name: 'set_personal_cloud',
+       description: 'set_personal_cloud_desc',
        services: ['Nextcloud', 'Immich', 'Vaultwarden', 'Nginx Proxy Manager']
     },
     {
-      name: 'Smart Home Maestro',
-      description: 'Control local total de tu casa inteligente sin depender de la nube.',
-      services: ['Home Assistant', 'Zigbee2MQTT', 'Mosquitto MQTT', 'Node-RED', 'Frigate NVR']
+      name: 'set_smart_home',
+      description: 'set_smart_home_desc',
+      services: ['Home Assistant', 'Frigate NVR']
     }
   ];
 

@@ -1,14 +1,14 @@
 'use client';
 
-import { useMode } from './ModeContext';
+import { useAppStore } from '@/lib/store';
 
 export default function ModeToggle() {
-  const { mode, setMode } = useMode();
+  const { mode, toggleMode } = useAppStore();
+
   const isExpert = mode === 'expert';
 
   return (
     <div className="flex items-center gap-2">
-      {/* Label */}
       <span
         className="text-xs font-bold hidden sm:block"
         style={{
@@ -21,11 +21,10 @@ export default function ModeToggle() {
         {isExpert ? 'Expert' : 'Simple'}
       </span>
 
-      {/* Android-style toggle */}
       <button
         role="switch"
         aria-checked={isExpert}
-        onClick={() => setMode(isExpert ? 'normal' : 'expert')}
+        onClick={toggleMode}
         title={isExpert ? 'Switch to Simple mode' : 'Switch to Expert mode'}
         style={{
           position: 'relative',
@@ -33,9 +32,7 @@ export default function ModeToggle() {
           height: 28,
           borderRadius: 4,
           border: `1px solid ${isExpert ? 'var(--accent)' : 'var(--border)'}`,
-          background: isExpert
-            ? 'var(--accent-glow)'
-            : 'var(--bg-input)',
+          background: isExpert ? 'var(--accent-glow)' : 'var(--bg-input)',
           cursor: 'pointer',
           padding: 0,
           flexShrink: 0,
@@ -73,13 +70,11 @@ export default function ModeToggle() {
           }}
         >
           {isExpert ? (
-            /* Terminal > _ icon */
             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="var(--bg)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
               <polyline points="4 17 10 11 4 5" />
               <line x1="12" y1="19" x2="20" y2="19" />
             </svg>
           ) : (
-            /* Person icon */
             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="var(--bg)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
               <circle cx="12" cy="8" r="4" />
               <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" />

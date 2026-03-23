@@ -1,9 +1,8 @@
 'use client';
 
-import { useState } from 'react';
 import MachinePicker from '@/components/MachinePicker';
 import { getServiceIcon } from '@/lib/icons';
-import { useMode } from './ModeContext';
+import { useAppStore } from '@/lib/store';
 
 type Machine = {
   id: string;
@@ -48,11 +47,12 @@ type Props = {
 };
 
 export default function HomeClient({ machines, allSets, t }: Props) {
-  const [selectedId, setSelectedId] = useState<string | null>(null);
-  const { mode } = useMode();
+  const { selectedMachineId, mode } = useAppStore();
   const isExpert = mode === 'expert';
 
-  const machine = selectedId ? machines.find(m => m.id === selectedId) ?? null : null;
+  const machine = selectedMachineId
+    ? machines.find(m => m.id === selectedMachineId) ?? null
+    : null;
 
   const recommendedSets = machine
     ? allSets.filter((set) => {
@@ -107,27 +107,24 @@ export default function HomeClient({ machines, allSets, t }: Props) {
             className="flex items-center gap-3 text-xs font-bold uppercase tracking-widest"
             style={{ color: 'var(--fg-muted)' }}
           >
-            <span style={{ color: 'var(--accent)' }}>//</span>
+            <span style={{ color: 'var(--accent)' }}>{'//'}</span>
             {t.selectMachine}
           </div>
 
-          <MachinePicker
-            machines={machines}
-            selectedId={selectedId}
-            onSelect={setSelectedId}
-          />
+          <MachinePicker machines={machines} />
         </section>
 
-        {/* SECTION: Recommendations (appears once machine is selected) */}
+        {/* SECTION: Recommendations */}
         {machine && (
           <section className="flex flex-col gap-6">
-            {/* Machine Summary Bar */}
+            {/* Machine summary bar */}
             <div
               className="p-4 rounded flex flex-col sm:flex-row sm:items-center justify-between gap-4"
               style={{
                 background: 'var(--bg-card)',
                 border: '1px solid var(--accent)',
                 boxShadow: '0 0 20px var(--accent-glow)',
+                borderRadius: 4,
               }}
             >
               <div className="flex flex-col gap-1">
@@ -137,8 +134,13 @@ export default function HomeClient({ machines, allSets, t }: Props) {
                     {machine.name}
                   </span>
                   <span
-                    className="text-xs px-2 py-0.5 rounded"
-                    style={{ background: 'var(--bg-input)', color: 'var(--fg-muted)', border: '1px solid var(--border)' }}
+                    className="text-xs px-2 py-0.5"
+                    style={{
+                      background: 'var(--bg-input)',
+                      color: 'var(--fg-muted)',
+                      border: '1px solid var(--border)',
+                      borderRadius: 3,
+                    }}
                   >
                     {machine.type === 'VPS' ? 'Cloud VPS' : 'Mini PC'}
                   </span>
@@ -152,13 +154,14 @@ export default function HomeClient({ machines, allSets, t }: Props) {
               </div>
               <a
                 href={`/builder?machineId=${machine.id}`}
-                className="text-xs font-bold px-4 py-2 rounded transition-all"
+                className="text-xs font-bold px-4 py-2 transition-all"
                 style={{
                   background: 'var(--bg-input)',
                   border: '1px solid var(--accent)',
                   color: 'var(--accent)',
                   textDecoration: 'none',
                   whiteSpace: 'nowrap',
+                  borderRadius: 4,
                 }}
               >
                 ⚡ {t.builder}
@@ -170,18 +173,19 @@ export default function HomeClient({ machines, allSets, t }: Props) {
               className="flex items-center gap-3 text-xs font-bold uppercase tracking-widest"
               style={{ color: 'var(--fg-muted)' }}
             >
-              <span style={{ color: 'var(--accent)' }}>//</span>
+              <span style={{ color: 'var(--accent)' }}>{'//'}</span>
               {t.recommendations}
             </div>
 
             {/* AppSets Grid */}
             {recommendedSets.length === 0 ? (
               <div
-                className="py-12 text-center rounded text-sm"
+                className="py-12 text-center text-sm"
                 style={{
                   background: 'var(--bg-card)',
                   border: '1px solid var(--border)',
                   color: 'var(--fg-muted)',
+                  borderRadius: 4,
                 }}
               >
                 <div className="text-3xl mb-4">⚠</div>
@@ -194,12 +198,20 @@ export default function HomeClient({ machines, allSets, t }: Props) {
                   const totalRam = set.services.reduce((acc, s) => acc + s.ramCostGb, 0);
                   const cpuPct = Math.min(Math.round((totalCpu / machine.cpuCores) * 100), 100);
                   const ramPct = Math.min(Math.round((totalRam / machine.memoryRamGb) * 100), 100);
-                  const cpuClass = cpuPct > 85 ? 'danger' : cpuPct > 60 ? 'warn' : '';
-                  const ramClass = ramPct > 85 ? 'danger' : ramPct > 60 ? 'warn' : '';
+                  let cpuClass: 'danger' | 'warn' | '' = '';
+                  if (cpuPct > 85) cpuClass = 'danger';
+                  else if (cpuPct > 60) cpuClass = 'warn';
+
+                  let ramClass: 'danger' | 'warn' | '' = '';
+                  if (ramPct > 85) ramClass = 'danger';
+                  else if (ramPct > 60) ramClass = 'warn';
+
+                  const classColorMap = { danger: 'var(--red)', warn: 'var(--yellow)', '': 'var(--fg-muted)' };
+                  const cpuColor = classColorMap[cpuClass];
+                  const ramColor = classColorMap[ramClass];
 
                   return (
-                    <div key={set.id} className="card flex flex-col gap-4 p-5 rounded">
-                      {/* Header */}
+                    <div key={set.id} className="card flex flex-col gap-4 p-5" style={{ borderRadius: 4 }}>
                       <div>
                         <div className="flex items-center gap-2 mb-1">
                           <span style={{ color: 'var(--accent)' }}>◈</span>
@@ -212,12 +224,12 @@ export default function HomeClient({ machines, allSets, t }: Props) {
                         </p>
                       </div>
 
-                      {/* CPU bar - expert only */}
+                      {/* CPU bar — expert only */}
                       {isExpert && (
                         <div className="flex flex-col gap-1">
                           <div className="flex justify-between text-xs" style={{ color: 'var(--fg-dim)' }}>
                             <span>CPU</span>
-                            <span style={{ color: cpuClass === 'danger' ? 'var(--red)' : cpuClass === 'warn' ? 'var(--yellow)' : 'var(--fg-muted)' }}>
+                            <span style={{ color: cpuColor }}>
                               {totalCpu}c / {machine.cpuCores}c ({cpuPct}%)
                             </span>
                           </div>
@@ -227,12 +239,12 @@ export default function HomeClient({ machines, allSets, t }: Props) {
                         </div>
                       )}
 
-                      {/* RAM bar - expert only */}
+                      {/* RAM bar — expert only */}
                       {isExpert && (
                         <div className="flex flex-col gap-1">
                           <div className="flex justify-between text-xs" style={{ color: 'var(--fg-dim)' }}>
                             <span>RAM</span>
-                            <span style={{ color: ramClass === 'danger' ? 'var(--red)' : ramClass === 'warn' ? 'var(--yellow)' : 'var(--fg-muted)' }}>
+                            <span style={{ color: ramColor }}>
                               {totalRam}GB / {machine.memoryRamGb}GB ({ramPct}%)
                             </span>
                           </div>
@@ -242,14 +254,10 @@ export default function HomeClient({ machines, allSets, t }: Props) {
                         </div>
                       )}
 
-                      {/* Services list */}
+                      {/* Services tags */}
                       <div className="flex flex-wrap gap-1 pt-1">
                         {set.services.map((s) => (
-                          <span
-                            key={s.id}
-                            className="tag flex items-center gap-1"
-                            title={s.description ?? s.name}
-                          >
+                          <span key={s.id} className="tag flex items-center gap-1" title={s.description ?? s.name}>
                             {getServiceIcon(s.name)} {s.name}
                           </span>
                         ))}
@@ -262,12 +270,9 @@ export default function HomeClient({ machines, allSets, t }: Props) {
           </section>
         )}
 
-        {/* Placeholder when no machine selected */}
+        {/* Placeholder when nothing selected */}
         {!machine && (
-          <div
-            className="text-center py-16 text-sm"
-            style={{ color: 'var(--fg-dim)' }}
-          >
+          <div className="text-center py-16 text-sm" style={{ color: 'var(--fg-dim)' }}>
             <div className="text-4xl mb-4">_</div>
             <span className="prompt">Select a machine above to see recommendations</span>
           </div>
