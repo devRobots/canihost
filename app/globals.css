@@ -1,26 +1,140 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=IBM+Plex+Mono:wght@300;400;500;600;700&display=swap');
 @import "tailwindcss";
 
+/* ─── DARK THEME (default) ─── Solaris / Ubuntu terminal inspired */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg:          #0f0e0c;
+  --bg-card:     #18160f;
+  --bg-input:    #1e1b12;
+  --border:      #2e2a1a;
+  --border-glow: #c96a0060;
+
+  --fg:          #e8d5a0;
+  --fg-muted:    #7a7060;
+  --fg-dim:      #4d4638;
+
+  --accent:      #e87c2a;    /* Solaris orange */
+  --accent2:     #d4460a;
+  --accent-glow: #e87c2a30;
+
+  --green:       #7ec45a;
+  --red:         #e84040;
+  --yellow:      #e8b42a;
+  --cyan:        #5abec4;
+
+  --font-mono: 'JetBrains Mono', 'IBM Plex Mono', 'Fira Code', monospace;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* ─── LIGHT THEME ─── Ubuntu-inspired warm terminal */
+.light {
+  --bg:          #faf5e8;
+  --bg-card:     #f0e9d5;
+  --bg-input:    #ede6d0;
+  --border:      #c8b878;
+  --border-glow: #c96a0040;
+
+  --fg:          #2c2010;
+  --fg-muted:    #6a5840;
+  --fg-dim:      #b0966a;
+
+  --accent:      #c96010;
+  --accent2:     #a84010;
+  --accent-glow: #c9601020;
+
+  --green:       #458a28;
+  --red:         #c03030;
+  --yellow:      #b08020;
+  --cyan:        #1e7e84;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  box-sizing: border-box;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-mono);
+  font-size: 14px;
+  line-height: 1.6;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* ─── SCROLLBAR ─── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--fg-dim); }
+
+/* ─── SELECTION ─── */
+::selection { background: var(--accent-glow); color: var(--accent); }
+
+/* ─── CARD ─── */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.card:hover {
+  border-color: var(--accent);
+  box-shadow: 0 0 12px var(--accent-glow);
+}
+
+/* ─── PROMPT PREFIX ─── */
+.prompt::before {
+  content: '$ ';
+  color: var(--accent);
+}
+
+/* ─── GLOW TEXT ─── */
+.glow-text {
+  text-shadow: 0 0 18px var(--accent-glow);
+}
+
+/* ─── SCANLINE FX ─── subtle crt feel */
+@keyframes scanline {
+  0%   { transform: translateY(-100%); }
+  100% { transform: translateY(100vh); }
+}
+.scanlines::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent 3px,
+    rgba(0,0,0,0.06) 3px,
+    rgba(0,0,0,0.06) 4px
+  );
+  z-index: 9998;
+}
+
+/* ─── PROGRESS BAR ─── */
+.bar-track {
+  background: var(--border);
+  border-radius: 2px;
+  height: 6px;
+  overflow: hidden;
+}
+.bar-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.4s ease, background-color 0.3s;
+  background: var(--accent);
+}
+.bar-fill.warn  { background: var(--yellow); }
+.bar-fill.danger { background: var(--red); }
+
+/* ─── TAG BADGE ─── */
+.tag {
+  display: inline-block;
+  padding: 2px 8px;
+  border: 1px solid var(--border);
+  background: var(--bg-input);
+  color: var(--fg-muted);
+  font-size: 11px;
+  font-family: var(--font-mono);
+  border-radius: 2px;
 }

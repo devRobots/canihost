@@ -1,9 +1,11 @@
 {
   "Index": {
     "title": "CanIHost.tech",
-    "subtitle": "Check what services can run on your Machine or VPS",
-    "selectMachine": "Where do you want to host?",
-    "recommendations": "View Recommendations",
-    "builder": "Build my Server"
+    "subtitle": "Check what services can run on your Machine or VPS — self-hosting made simple.",
+    "selectMachine": "Select your hardware",
+    "recommendations": "Recommended AppSets",
+    "builder": "Build my server manually",
+    "noRecommendations": "No pre-built sets fit this machine or environment. The machine may have limited resources, or it's a VPS and the sets include local-only apps (like Home Assistant). Try the manual builder instead.",
+    "cloudWarning": "Cloud environment warning"
   }
 }

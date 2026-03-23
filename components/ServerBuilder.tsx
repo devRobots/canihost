@@ -1,13 +1,15 @@
 'use client';
 
 import { useState } from 'react';
+import { getServiceIcon } from '@/lib/icons';
+import MachinePicker from '@/components/MachinePicker';
 
-type Machine = { id: string, name: string, type: string, cpuCores: number, memoryRamGb: number };
+type Machine = { id: string, name: string, type: string, brand: string | null, cpuCores: number, memoryRamGb: number };
 type Service = { id: string, name: string, category: string, cpuCost: number, ramCostGb: number, isCloudRecommended: boolean, description: string | null };
 
 export default function ServerBuilder({ machine, allServices }: { machine: Machine, allServices: Service[] }) {
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
-  
+
   const toggleService = (id: string) => {
     const next = new Set(selectedIds);
     if (next.has(id)) next.delete(id);
@@ -19,100 +21,210 @@ export default function ServerBuilder({ machine, allServices }: { machine: Machi
   const totalCpu = selectedServices.reduce((acc, s) => acc + s.cpuCost, 0);
   const totalRam = selectedServices.reduce((acc, s) => acc + s.ramCostGb, 0);
 
-  const cpuPercent = Math.round((totalCpu / machine.cpuCores) * 100);
-  const ramPercent = Math.round((totalRam / machine.memoryRamGb) * 100);
+  const cpuPct = Math.min(Math.round((totalCpu / machine.cpuCores) * 100), 999);
+  const ramPct = Math.min(Math.round((totalRam / machine.memoryRamGb) * 100), 999);
 
-  const isCpuExceeded = totalCpu > machine.cpuCores;
-  const isRamExceeded = totalRam > machine.memoryRamGb;
-  
+  const isCpuOver = totalCpu > machine.cpuCores;
+  const isRamOver = totalRam > machine.memoryRamGb;
   const cloudWarnings = selectedServices.filter(s => !s.isCloudRecommended && machine.type === 'VPS');
 
-  const categories = Array.from(new Set(allServices.map(s => s.category)));
+  const categories = Array.from(new Set(allServices.map(s => s.category))).sort();
+
+  const style = (obj: Record<string, string>) => obj;
 
   return (
-    <div className="flex flex-col md:flex-row w-full max-w-screen-2xl mx-auto p-4 md:p-8 gap-8 h-[calc(100vh-4rem)]">
-      <div className="flex-1 flex flex-col gap-6 overflow-y-auto pr-4 pb-20 md:pb-0">
-        <h2 className="text-3xl font-extrabold tracking-tight">Catálogo de Servicios</h2>
-        <p className="text-zinc-400">Selecciona los servicios que deseas instalar en {machine.name}.</p>
+    <div
+      className="flex flex-col lg:flex-row w-full max-w-screen-2xl mx-auto min-h-[calc(100vh-56px)]"
+      style={{ fontFamily: 'var(--font-mono)', background: 'var(--bg)' }}
+    >
 
+      {/* ─── LEFT: Catalog ─── */}
+      <div
+        className="flex-1 flex flex-col gap-6 p-6 overflow-y-auto"
+        style={{ borderRight: '1px solid var(--border)' }}
+      >
+        {/* Header */}
+        <div>
+          <div className="flex items-center gap-2 mb-1">
+            <span style={{ color: 'var(--accent)' }}>▶</span>
+            <span className="font-bold" style={{ color: 'var(--accent)' }}>{machine.name}</span>
+            <span className="tag">{machine.type === 'VPS' ? 'Cloud VPS' : 'Mini PC'}</span>
+          </div>
+          <p className="text-xs" style={{ color: 'var(--fg-muted)' }}>
+            {machine.cpuCores} cores · {machine.memoryRamGb} GB RAM — Select services below
+          </p>
+        </div>
+
+        {/* Categories */}
         {categories.map(cat => (
-          <div key={cat} className="flex flex-col gap-3">
-            <h3 className="text-xl font-bold text-indigo-400 sticky top-0 bg-zinc-950/90 py-2 backdrop-blur-md z-10">{cat}</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+          <div key={cat}>
+            <div
+              className="text-xs font-bold uppercase tracking-widest mb-3 flex items-center gap-2"
+              style={{ color: 'var(--fg-muted)' }}
+            >
+              <span style={{ color: 'var(--accent)' }}>▸</span>
+              {cat}
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-2">
               {allServices.filter(s => s.category === cat).map(svc => {
                 const isSelected = selectedIds.has(svc.id);
+                const isLocalOnly = !svc.isCloudRecommended && machine.type === 'VPS';
+                const icon = getServiceIcon(svc.name);
+
                 return (
-                  <button 
+                  <button
                     key={svc.id}
                     onClick={() => toggleService(svc.id)}
-                    className={`relative p-4 rounded-xl text-left transition-all border ${isSelected ? 'bg-indigo-600/20 border-indigo-500 shadow-lg shadow-indigo-500/10' : 'bg-zinc-900 border-zinc-800 hover:border-zinc-700 hover:bg-zinc-800'}`}
+                    className="text-left p-3 rounded flex items-start gap-3 transition-all active:scale-[0.98] cursor-pointer"
+                    style={{
+                      background: isSelected ? 'var(--accent-glow)' : 'var(--bg-card)',
+                      border: `1px solid ${isSelected ? 'var(--accent)' : isLocalOnly ? 'var(--yellow)' : 'var(--border)'}`,
+                      boxShadow: isSelected ? '0 0 10px var(--accent-glow)' : 'none',
+                      opacity: isLocalOnly && !isSelected ? 0.7 : 1,
+                    }}
                   >
-                    <div className="flex justify-between items-start mb-2">
-                       <h4 className="font-bold">{svc.name}</h4>
-                       {isSelected && <span className="text-indigo-400 ml-2">✓</span>}
-                    </div>
-                    <p className="text-xs text-zinc-400 line-clamp-2 mb-3 h-8">{svc.description}</p>
-                    <div className="flex gap-2 text-xs font-semibold text-zinc-500">
-                      <span className="bg-zinc-950 px-2 py-1 rounded">💻 {svc.cpuCost}c</span>
-                      <span className="bg-zinc-950 px-2 py-1 rounded">📱 {svc.ramCostGb}GB</span>
+                    <span className="text-xl leading-none mt-0.5 shrink-0">{icon}</span>
+                    <div className="flex flex-col gap-0.5 min-w-0">
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        <span
+                          className="font-bold text-xs"
+                          style={{ color: isSelected ? 'var(--accent)' : 'var(--fg)' }}
+                        >
+                          {svc.name}
+                        </span>
+                        {isSelected && (
+                          <span className="text-xs" style={{ color: 'var(--accent)' }}>✓</span>
+                        )}
+                        {isLocalOnly && (
+                          <span className="text-xs" style={{ color: 'var(--yellow)' }}>⚠ local only</span>
+                        )}
+                      </div>
+                      <p
+                        className="text-xs line-clamp-2"
+                        style={{ color: 'var(--fg-muted)' }}
+                      >
+                        {svc.description}
+                      </p>
+                      <div className="flex gap-2 text-xs mt-1" style={{ color: 'var(--fg-dim)' }}>
+                        <span>cpu: {svc.cpuCost}c</span>
+                        <span>ram: {svc.ramCostGb}GB</span>
+                      </div>
                     </div>
                   </button>
-                )
+                );
               })}
             </div>
           </div>
         ))}
       </div>
 
-      <div className="w-full md:w-96 bg-zinc-900 border border-zinc-800 rounded-2xl p-6 flex flex-col gap-6 shadow-2xl h-fit sticky bottom-4 md:top-24 max-h-[85vh] overflow-y-auto z-20">
-        <div>
-          <h3 className="text-2xl font-bold bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">{machine.name}</h3>
-          <p className="text-zinc-400 text-sm mt-1">{machine.type === 'VPS' ? '☁️ Servidor Cloud (VPS)' : '🏠 Local Mini PC'}</p>
+      {/* ─── RIGHT: Gauge Panel ─── */}
+      <div
+        className="w-full lg:w-80 flex flex-col gap-5 p-6 sticky bottom-0 lg:top-14 lg:h-[calc(100vh-56px)] overflow-y-auto z-10"
+        style={{ background: 'var(--bg-card)', borderTop: '1px solid var(--border)' }}
+      >
+        <div
+          className="text-xs font-bold uppercase tracking-widest"
+          style={{ color: 'var(--fg-muted)' }}
+        >
+          <span style={{ color: 'var(--accent)' }}>// </span>
+          Resource Monitor
         </div>
 
-        <div className="flex flex-col gap-4">
-          <div className="flex flex-col gap-1">
-            <div className="flex justify-between text-sm font-semibold">
-               <span>CPU Cores</span>
-               <span className={isCpuExceeded ? 'text-red-400' : 'text-zinc-300'}>{totalCpu} / {machine.cpuCores} ({cpuPercent}%)</span>
-            </div>
-            <div className="w-full bg-zinc-800 rounded-full h-3 overflow-hidden">
-               <div className={`h-full transition-all duration-300 ${isCpuExceeded ? 'bg-red-500' : 'bg-indigo-500'}`} style={{width: `${Math.min(cpuPercent, 100)}%`}}></div>
-            </div>
-          </div>
-
-          <div className="flex flex-col gap-1">
-            <div className="flex justify-between text-sm font-semibold">
-               <span>Memoria RAM</span>
-               <span className={isRamExceeded ? 'text-red-400' : 'text-zinc-300'}>{totalRam} / {machine.memoryRamGb}GB ({ramPercent}%)</span>
-            </div>
-            <div className="w-full bg-zinc-800 rounded-full h-3 overflow-hidden">
-               <div className={`h-full transition-all duration-300 ${isRamExceeded ? 'bg-red-500' : 'bg-purple-500'}`} style={{width: `${Math.min(ramPercent, 100)}%`}}></div>
-            </div>
-          </div>
-        </div>
-
+        {/* CPU Gauge */}
         <div className="flex flex-col gap-2">
-          {cloudWarnings.length > 0 && (
-            <div className="p-3 bg-yellow-500/10 border border-yellow-500/50 rounded-lg text-yellow-200 text-sm">
-              ⚠️ <strong>Advertencia Cloud:</strong> Estás instalando {cloudWarnings.map(c=>c.name).join(', ')} en un VPS. Estos servicios están diseñados para hardware o redes locales.
-            </div>
-          )}
-          {(isCpuExceeded || isRamExceeded) && (
-            <div className="p-3 bg-red-500/10 border border-red-500/50 rounded-lg text-red-200 text-sm">
-              🚨 <strong>Recursos Excedidos:</strong> Tu servidor no tiene capacidad suficiente.
-            </div>
-          )}
+          <div className="flex justify-between text-xs" style={{ color: 'var(--fg-dim)' }}>
+            <span>CPU Cores</span>
+            <span style={{ color: isCpuOver ? 'var(--red)' : 'var(--fg)' }}>
+              {totalCpu} / {machine.cpuCores} ({cpuPct}%)
+            </span>
+          </div>
+          <div className="bar-track">
+            <div
+              className={`bar-fill ${isCpuOver ? 'danger' : cpuPct > 70 ? 'warn' : ''}`}
+              style={{ width: `${Math.min(cpuPct, 100)}%` }}
+            />
+          </div>
         </div>
 
-        <div className="flex-1 overflow-y-auto">
-          <h4 className="text-sm font-bold text-zinc-500 uppercase tracking-wider mb-3">Seleccionadas ({selectedServices.length})</h4>
-          {selectedServices.length === 0 ? <p className="text-zinc-600 text-sm">No has seleccionado ningún servicio.</p> : (
-            <ul className="flex flex-col gap-2">
+        {/* RAM Gauge */}
+        <div className="flex flex-col gap-2">
+          <div className="flex justify-between text-xs" style={{ color: 'var(--fg-dim)' }}>
+            <span>Memory RAM</span>
+            <span style={{ color: isRamOver ? 'var(--red)' : 'var(--fg)' }}>
+              {totalRam}GB / {machine.memoryRamGb}GB ({ramPct}%)
+            </span>
+          </div>
+          <div className="bar-track">
+            <div
+              className={`bar-fill ${isRamOver ? 'danger' : ramPct > 70 ? 'warn' : ''}`}
+              style={{ width: `${Math.min(ramPct, 100)}%` }}
+            />
+          </div>
+        </div>
+
+        {/* Warnings */}
+        {(isCpuOver || isRamOver || cloudWarnings.length > 0) && (
+          <div className="flex flex-col gap-2 pt-1">
+            {isCpuOver && (
+              <div
+                className="text-xs p-3 rounded"
+                style={{ background: 'color-mix(in srgb, var(--red) 10%, transparent)', border: '1px solid var(--red)', color: 'var(--red)' }}
+              >
+                🚨 CPU limit exceeded
+              </div>
+            )}
+            {isRamOver && (
+              <div
+                className="text-xs p-3 rounded"
+                style={{ background: 'color-mix(in srgb, var(--red) 10%, transparent)', border: '1px solid var(--red)', color: 'var(--red)' }}
+              >
+                🚨 RAM limit exceeded
+              </div>
+            )}
+            {cloudWarnings.length > 0 && (
+              <div
+                className="text-xs p-3 rounded"
+                style={{ background: 'color-mix(in srgb, var(--yellow) 10%, transparent)', border: '1px solid var(--yellow)', color: 'var(--yellow)' }}
+              >
+                ⚠ Cloud warning: {cloudWarnings.map(s => s.name).join(', ')} not suited for VPS
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Selected list */}
+        <div className="flex-1 flex flex-col gap-2">
+          <div
+            className="text-xs font-bold uppercase tracking-widest"
+            style={{ color: 'var(--fg-muted)' }}
+          >
+            <span style={{ color: 'var(--accent)' }}>// </span>
+            Stack ({selectedServices.length})
+          </div>
+          {selectedServices.length === 0 ? (
+            <p className="text-xs prompt" style={{ color: 'var(--fg-dim)' }}>
+              no services selected
+            </p>
+          ) : (
+            <ul className="flex flex-col gap-1">
               {selectedServices.map(s => (
-                <li key={s.id} className="flex justify-between items-center text-sm border-b border-zinc-800/50 pb-2">
-                  <span>{s.name}</span>
-                  <button onClick={() => toggleService(s.id)} className="text-zinc-500 hover:text-red-400 p-1">✕</button>
+                <li
+                  key={s.id}
+                  className="flex items-center justify-between text-xs py-1.5"
+                  style={{ borderBottom: '1px solid var(--border)' }}
+                >
+                  <span className="flex items-center gap-1.5">
+                    <span>{getServiceIcon(s.name)}</span>
+                    <span style={{ color: 'var(--fg)' }}>{s.name}</span>
+                  </span>
+                  <button
+                    onClick={() => toggleService(s.id)}
+                    className="text-xs transition-colors"
+                    style={{ color: 'var(--fg-dim)' }}
+                  >
+                    ✕
+                  </button>
                 </li>
               ))}
             </ul>
