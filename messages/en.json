@@ -1,0 +1,9 @@
+{
+  "Index": {
+    "title": "CanIHost.tech",
+    "subtitle": "Check what services can run on your Machine or VPS",
+    "selectMachine": "Where do you want to host?",
+    "recommendations": "View Recommendations",
+    "builder": "Build my Server"
+  }
+}

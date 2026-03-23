@@ -1,0 +1,43 @@
+// This is your Prisma schema file
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Machine {
+  id             String   @id @default(cuid())
+  name           String
+  type           String   // 'MINI_PC' | 'VPS'
+  brand          String?
+  cpuCores       Int
+  memoryRamGb    Float
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model Service {
+  id                    String   @id @default(cuid())
+  name                  String
+  category              String
+  cpuCost               Float    // Cores it typically uses actively
+  ramCostGb             Float    // RAM in GB it typically needs
+  isCloudRecommended    Boolean  @default(true)
+  description           String?
+  appSets               AppSet[] // Implicit m2m
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+}
+
+model AppSet {
+  id          String    @id @default(cuid())
+  name        String
+  description String?
+  services    Service[] // Implicit m2m
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
