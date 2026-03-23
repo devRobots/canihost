@@ -18,7 +18,7 @@ export default function StoreInitializer({
     // We silently hydrate the store on mount to avoid the "Cannot update a component while rendering" warning in React 18+
     const state = useAppStore.getState();
     if (state.machines.length === 0) {
-      Object.assign(state, { machines, allSets, allServices });
+      state.setInitialData({ machines, allSets, allServices });
     }
     initialized.current = true;
   }

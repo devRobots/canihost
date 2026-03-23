@@ -13,6 +13,10 @@ interface AppState {
   allServices: Service[];
   setInitialData: (data: { machines: Machine[], allSets: AppSet[], allServices: Service[] }) => void;
 
+  /** Custom resources overrides per machine ID */
+  customResources: Record<string, { cpuCores?: number; memoryRamGb?: number }>;
+  updateMachineResources: (id: string, overrides: { cpuCores?: number; memoryRamGb?: number }) => void;
+
   /** UI mode: normal hides technical specs, expert shows full details */
   mode: Mode;
   setMode: (m: Mode) => void;
@@ -37,7 +41,30 @@ export const useAppStore = create<AppState>()(
       machines: [],
       allSets: [],
       allServices: [],
-      setInitialData: (data) => set(data),
+      setInitialData: (data) => set((state) => {
+        const custMachines = data.machines.map(m => state.customResources[m.id] ? { ...m, ...state.customResources[m.id] } : m);
+        let id = state.selectedMachineId;
+        // Verify if previous ID still exists (in case of DB re-seeds)
+        if (id && !custMachines.find(m => m.id === id)) {
+          id = null;
+        }
+        
+        const defaultId = id || custMachines.find(m => !['Beelink SER5', 'Intel NUC 12', 'Dell', 'Venus', 'Raspberry Pi 4', '432'].some(ex => m.name.toLowerCase().includes(ex.toLowerCase())))?.id || custMachines[0]?.id || null;
+        
+        return {
+          ...data,
+          machines: custMachines,
+          selectedMachineId: defaultId,
+        };
+      }),
+
+      // Custom Overrides
+      customResources: {},
+      updateMachineResources: (id, overrides) => set(state => {
+        const newCustom = { ...state.customResources, [id]: { ...(state.customResources[id] || {}), ...overrides } };
+        const newMachines = state.machines.map(m => m.id === id ? { ...m, ...overrides } : m);
+        return { customResources: newCustom, machines: newMachines };
+      }),
 
       // Mode
       mode: 'normal',
@@ -66,6 +93,7 @@ export const useAppStore = create<AppState>()(
         mode: state.mode,
         selectedMachineId: state.selectedMachineId,
         selectedServiceIds: Array.from(state.selectedServiceIds),
+        customResources: state.customResources,
       }),
       merge: (persisted, current) => ({
         ...current,

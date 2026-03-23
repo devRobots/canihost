@@ -17,13 +17,7 @@ export default async function Home() {
       <div className="min-h-screen flex flex-col font-mono bg-page">
         <Hero />
         <div className="container mx-auto px-4 sm:px-8 py-8 flex flex-col gap-10">
-          <section>
-            <div className="flex items-center gap-3 text-xs font-bold uppercase tracking-widest mb-4 text-fg-muted">
-              <span className="text-accent">{'//'}</span>
-              Select your hardware
-            </div>
-            <MachinePicker />
-          </section>
+          <MachinePicker />
           <RecommendationsPanel />
         </div>
       </div>
