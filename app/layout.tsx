@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import "@/app/globals.css";
-import Toolbar from "@/components/Toolbar";
 
 export const metadata: Metadata = {
   title: "CanIHost.tech",
@@ -15,36 +14,25 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning className="dark">
       <body className="scanlines min-h-screen flex flex-col">
-          {/* NAV */}
-          <nav
-            className="sticky top-0 z-50 w-full"
-            style={{
-              background: 'var(--bg)',
-              borderBottom: '1px solid var(--border)',
-              fontFamily: 'var(--font-mono)',
-            }}
-          >
-            <div className="container mx-auto flex h-14 items-center justify-between px-4 sm:px-8">
-              {/* Logo */}
-              <div className="flex items-center gap-3">
-                <span style={{ color: 'var(--accent)', fontSize: 18, fontWeight: 700 }}>▶</span>
-                <span
-                  className="font-bold tracking-widest text-sm uppercase glow-text"
-                  style={{ color: 'var(--fg)', letterSpacing: '0.12em' }}
-                >
-                  CanIHost<span style={{ color: 'var(--accent)' }}>.tech</span>
-                </span>
-              </div>
-
-              {/* Toolbar */}
-              <Toolbar />
-            </div>
-          </nav>
-
-          {/* CONTENT */}
           <div className="flex-1 flex flex-col">
             {children}
           </div>
+
+          {/* FOOTER */}
+          <footer className="w-full py-6 mt-10 border-t border-line-accent/30 bg-card/30 flex justify-center items-center font-mono text-[10px] sm:text-xs text-fg-dim tracking-widest uppercase relative z-10 backdrop-blur-sm">
+            <div className="flex items-center">
+              Made with <span className="text-accent font-bold mx-2">code</span> by 
+              <a
+                href="https://github.com/devRobots"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-bold text-fg hover:text-accent transition-all duration-300 ml-2 relative group"
+              >
+                devRobots
+                <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-accent transition-all duration-300 group-hover:w-full"></span>
+              </a>
+            </div>
+          </footer>
       </body>
     </html>
   );

@@ -2,10 +2,10 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { useAppStore } from '@/lib/store';
-import { Cpu, MemoryStick, Cloud, Server, ChevronDown } from 'lucide-react';
+import { Cpu, MemoryStick, Cloud, Server, ChevronDown, LayoutDashboard } from 'lucide-react';
 
 export default function MachinePicker() {
-  const { selectedMachineId, setSelectedMachineId, machines, updateMachineResources } = useAppStore();
+  const { selectedMachineId, setSelectedMachineId, machines, updateMachineResources, mode, toggleMode } = useAppStore();
   
   const [openDropdown, setOpenDropdown] = useState<'machine' | 'cpu' | 'ram' | null>(null);
   const containerRef = useRef<HTMLDivElement>(null); // Close the custom select when clicking outside
@@ -43,10 +43,12 @@ export default function MachinePicker() {
   const RAM_OPTIONS = [1, 2, 4, 6, 8, 12, 16, 24, 32, 64, 128];
 
   return (
-    <div className="w-full flex justify-center font-mono">
+    <div className="w-full flex flex-col md:flex-row justify-center items-center gap-4 font-mono">
+
+      {/* ─── MAIN MACHINE SELECTOR BAR ─── */}
       <div 
         ref={containerRef}
-        className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-2 sm:gap-4 py-3 sm:py-2 px-4 rounded-md border border-line-accent bg-card w-full sm:w-auto"
+        className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-2 sm:gap-4 py-3 sm:py-2 px-4 rounded-md border border-line-accent bg-card w-full md:w-auto"
       >
         {/* ─── MACHINE SELECTOR ─── */}
         <div className="relative flex-1 sm:flex-none">
@@ -189,6 +191,40 @@ export default function MachinePicker() {
             </div>
           </>
         )}
+      </div>
+
+
+      
+      {/* ─── SEPARATED MODE TOGGLE ─── */}
+      <div className="flex items-center justify-center gap-4 py-2 px-5 rounded-md border border-line-accent bg-card w-full md:w-auto">
+        <button
+          onClick={toggleMode}
+          className="flex items-center justify-center gap-4 py-1 group transition-colors text-left w-full"
+          title="Toggle Expert Mode"
+        >
+          <div className="flex items-center gap-3">
+            <div className="flex flex-col items-center justify-center opacity-70 group-hover:opacity-100 transition-opacity">
+              <LayoutDashboard size={20} />
+              <span className="text-[8px] mt-1 font-bold tracking-widest uppercase text-fg-dim">Mode</span>
+            </div>
+
+            {/* Toggle visual */}
+            <div className="flex flex-col items-center justify-center gap-1.5 ml-1">
+              <div className="w-8 h-4 flex items-center bg-input rounded-full p-0.5 border border-default transition-all shadow-inner">
+                <div
+                  className={`h-2.5 w-2.5 rounded-full transition-transform duration-300 shadow-sm ${
+                    mode === 'expert'
+                      ? 'bg-accent transform translate-x-4'
+                      : 'bg-fg-dim'
+                  }`}
+                />
+              </div>
+              <span className={`text-[9px] font-bold tracking-widest uppercase ${mode === 'expert' ? 'text-accent' : 'text-fg'}`}>
+                {mode === 'expert' ? 'Expert' : 'Basic'}
+              </span>
+            </div>
+          </div>
+        </button>
       </div>
     </div>
   );
