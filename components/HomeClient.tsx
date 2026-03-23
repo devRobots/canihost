@@ -1,8 +1,12 @@
 'use client';
 
+import * as React from 'react';
 import MachinePicker from '@/components/MachinePicker';
 import { getServiceIcon } from '@/lib/icons';
 import { useAppStore } from '@/lib/store';
+import { useTranslations } from 'next-intl';
+import Link from 'next/link';
+import ServiceModal from './ServiceModal';
 
 type Machine = {
   id: string;
@@ -21,6 +25,8 @@ type Service = {
   ramCostGb: number;
   isCloudRecommended: boolean;
   description: string | null;
+  minRequirements: string | null;
+  recRequirements: string | null;
 };
 
 type AppSet = {
@@ -47,8 +53,19 @@ type Props = {
 };
 
 export default function HomeClient({ machines, allSets, t }: Props) {
-  const { selectedMachineId, mode } = useAppStore();
+  const { selectedMachineId, mode, setSelectedMachineId } = useAppStore();
+  const tSet = useTranslations('AppSets');
+  const [serviceModalData, setServiceModalData] = React.useState<Service | null>(null);
   const isExpert = mode === 'expert';
+
+  React.useEffect(() => {
+    if (!selectedMachineId) {
+      const topVps = machines.find((m) => m.name === 'CubePath VPS Enterprise');
+      if (topVps) {
+        setSelectedMachineId(topVps.id);
+      }
+    }
+  }, [selectedMachineId, machines, setSelectedMachineId]);
 
   const machine = selectedMachineId
     ? machines.find(m => m.id === selectedMachineId) ?? null
@@ -78,23 +95,40 @@ export default function HomeClient({ machines, allSets, t }: Props) {
         className="w-full border-b"
         style={{ borderColor: 'var(--border)', background: 'var(--bg-card)' }}
       >
-        <div className="container mx-auto px-4 sm:px-8 py-10">
-          <div
-            className="text-xs uppercase tracking-widest mb-3 prompt"
-            style={{ color: 'var(--fg-muted)' }}
-          >
-            v1.0.0 — self-hosting compatibility checker
+        <div className="container mx-auto px-4 sm:px-8 py-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+          <div>
+            <div
+              className="text-xs uppercase tracking-widest mb-3 prompt"
+              style={{ color: 'var(--fg-muted)' }}
+            >
+              v1.0.0 — self-hosting compatibility checker
+            </div>
+            <h1
+              className="text-3xl sm:text-5xl font-black tracking-tight glow-text mb-3"
+              style={{ color: 'var(--fg)' }}
+            >
+              Can<span style={{ color: 'var(--accent)' }}>I</span>Host
+              <span style={{ color: 'var(--fg-muted)' }}>.tech</span>
+            </h1>
+            <p className="text-sm max-w-xl" style={{ color: 'var(--fg-muted)' }}>
+              {t.subtitle}
+            </p>
           </div>
-          <h1
-            className="text-3xl sm:text-5xl font-black tracking-tight glow-text mb-3"
-            style={{ color: 'var(--fg)' }}
-          >
-            Can<span style={{ color: 'var(--accent)' }}>I</span>Host
-            <span style={{ color: 'var(--fg-muted)' }}>.tech</span>
-          </h1>
-          <p className="text-sm max-w-xl" style={{ color: 'var(--fg-muted)' }}>
-            {t.subtitle}
-          </p>
+          <div>
+            <Link
+              href="/builder"
+              className="inline-block text-xs font-bold px-6 py-4 transition-all hover:bg-white/5 active:scale-95 cursor-pointer shadow-lg"
+              style={{
+                background: 'var(--bg-input)',
+                border: '1px solid var(--accent)',
+                color: 'var(--accent)',
+                textDecoration: 'none',
+                borderRadius: 4,
+              }}
+            >
+              ⚡ {t.builder}
+            </Link>
+          </div>
         </div>
       </header>
 
@@ -117,56 +151,6 @@ export default function HomeClient({ machines, allSets, t }: Props) {
         {/* SECTION: Recommendations */}
         {machine && (
           <section className="flex flex-col gap-6">
-            {/* Machine summary bar */}
-            <div
-              className="p-4 rounded flex flex-col sm:flex-row sm:items-center justify-between gap-4"
-              style={{
-                background: 'var(--bg-card)',
-                border: '1px solid var(--accent)',
-                boxShadow: '0 0 20px var(--accent-glow)',
-                borderRadius: 4,
-              }}
-            >
-              <div className="flex flex-col gap-1">
-                <div className="flex items-center gap-2">
-                  <span style={{ color: 'var(--accent)' }}>▶</span>
-                  <span className="font-bold" style={{ color: 'var(--accent)' }}>
-                    {machine.name}
-                  </span>
-                  <span
-                    className="text-xs px-2 py-0.5"
-                    style={{
-                      background: 'var(--bg-input)',
-                      color: 'var(--fg-muted)',
-                      border: '1px solid var(--border)',
-                      borderRadius: 3,
-                    }}
-                  >
-                    {machine.type === 'VPS' ? 'Cloud VPS' : 'Mini PC'}
-                  </span>
-                </div>
-                {isExpert && (
-                  <div className="flex gap-4 text-xs" style={{ color: 'var(--fg-muted)' }}>
-                    <span>CPU: <strong style={{ color: 'var(--fg)' }}>{machine.cpuCores} cores</strong></span>
-                    <span>RAM: <strong style={{ color: 'var(--fg)' }}>{machine.memoryRamGb} GB</strong></span>
-                  </div>
-                )}
-              </div>
-              <a
-                href={`/builder?machineId=${machine.id}`}
-                className="text-xs font-bold px-4 py-2 transition-all"
-                style={{
-                  background: 'var(--bg-input)',
-                  border: '1px solid var(--accent)',
-                  color: 'var(--accent)',
-                  textDecoration: 'none',
-                  whiteSpace: 'nowrap',
-                  borderRadius: 4,
-                }}
-              >
-                ⚡ {t.builder}
-              </a>
-            </div>
 
             {/* Section header */}
             <div
@@ -216,11 +200,13 @@ export default function HomeClient({ machines, allSets, t }: Props) {
                         <div className="flex items-center gap-2 mb-1">
                           <span style={{ color: 'var(--accent)' }}>◈</span>
                           <h4 className="font-bold text-sm" style={{ color: 'var(--fg)' }}>
-                            {set.name}
+                            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                            {tSet(set.name as any) || set.name}
                           </h4>
                         </div>
                         <p className="text-xs leading-relaxed" style={{ color: 'var(--fg-muted)' }}>
-                          {set.description}
+                          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                          {tSet(set.description as any) || set.description}
                         </p>
                       </div>
 
@@ -257,9 +243,14 @@ export default function HomeClient({ machines, allSets, t }: Props) {
                       {/* Services tags */}
                       <div className="flex flex-wrap gap-1 pt-1">
                         {set.services.map((s) => (
-                          <span key={s.id} className="tag flex items-center gap-1" title={s.description ?? s.name}>
+                          <button 
+                            key={s.id} 
+                            onClick={() => setServiceModalData(s)} 
+                            className="tag flex items-center gap-1 transition-all hover:brightness-125 active:scale-95 cursor-pointer" 
+                            title={s.name}
+                          >
                             {getServiceIcon(s.name)} {s.name}
-                          </span>
+                          </button>
                         ))}
                       </div>
                     </div>
@@ -278,6 +269,7 @@ export default function HomeClient({ machines, allSets, t }: Props) {
           </div>
         )}
       </div>
+      <ServiceModal service={serviceModalData} onClose={() => setServiceModalData(null)} />
     </div>
   );
 }

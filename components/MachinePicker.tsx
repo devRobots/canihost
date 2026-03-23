@@ -19,23 +19,38 @@ type Props = {
 export default function MachinePicker({ machines }: Props) {
   const { selectedMachineId, setSelectedMachineId } = useAppStore();
 
-  const miniPcs = machines.filter(m => m.type !== 'VPS').sort((a, b) => a.name.localeCompare(b.name));
-  const vpss    = machines.filter(m => m.type === 'VPS').sort((a, b) => a.name.localeCompare(b.name));
+  const excluded = [
+    'Beelink SER5',
+    'Intel NUC 12',
+    'Dell',
+    'Venus',
+    'Raspberry Pi 4',
+    '432',
+  ];
+
+  const activeMachines = machines.filter(
+    (m) => !excluded.some((ex) => m.name.toLowerCase().includes(ex.toLowerCase()))
+  );
+
+  const miniPcs = activeMachines.filter(m => m.type !== 'VPS').sort((a, b) => a.name.localeCompare(b.name));
+  const vpss    = activeMachines.filter(m => m.type === 'VPS').sort((a, b) => a.name.localeCompare(b.name));
 
   return (
-    <div className="w-full flex flex-col gap-6" style={{ fontFamily: 'var(--font-mono)' }}>
+    <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-8" style={{ fontFamily: 'var(--font-mono)' }}>
 
-      {/* ─── GROUP: Mini PCs ─── */}
+      {/* ─── GROUP: VPS (LEFT) ─── */}
       <div className="flex flex-col gap-2">
         <div
-          className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest mb-1"
-          style={{ color: 'var(--fg-muted)' }}
+          className="flex items-center gap-3 text-xs font-bold uppercase tracking-widest mb-2 mt-2"
+          style={{ color: 'var(--fg-dim)' }}
         >
-          <span style={{ color: 'var(--accent)' }}>▸</span>
-          Mini PCs &amp; SBCs
+          <div className="flex-1" style={{ height: 1, background: 'var(--border)' }} />
+          <span style={{ color: 'var(--accent)' }}>☁</span>
+          Cloud VPS
+          <div className="flex-1" style={{ height: 1, background: 'var(--border)' }} />
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
-          {miniPcs.map(m => (
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-2">
+          {vpss.map(m => (
             <MachineCard
               key={m.id}
               machine={m}
@@ -46,27 +61,27 @@ export default function MachinePicker({ machines }: Props) {
         </div>
       </div>
 
-      {/* ─── DIVIDER ─── */}
-      <div
-        className="flex items-center gap-3 text-xs font-bold uppercase tracking-widest"
-        style={{ color: 'var(--fg-dim)' }}
-      >
-        <div className="flex-1" style={{ height: 1, background: 'var(--border)' }} />
-        <span style={{ color: 'var(--accent)' }}>☁</span>
-        Cloud VPS
-        <div className="flex-1" style={{ height: 1, background: 'var(--border)' }} />
-      </div>
-
-      {/* ─── GROUP: VPS ─── */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
-        {vpss.map(m => (
-          <MachineCard
-            key={m.id}
-            machine={m}
-            isSelected={selectedMachineId === m.id}
-            onSelect={setSelectedMachineId}
-          />
-        ))}
+      {/* ─── GROUP: Mini PCs (RIGHT) ─── */}
+      <div className="flex flex-col gap-2">
+        <div
+          className="flex items-center gap-3 text-xs font-bold uppercase tracking-widest mb-2 mt-2"
+          style={{ color: 'var(--fg-dim)' }}
+        >
+          <div className="flex-1" style={{ height: 1, background: 'var(--border)' }} />
+          <span style={{ color: 'var(--accent)' }}>💻</span>
+          Mini PCs
+          <div className="flex-1" style={{ height: 1, background: 'var(--border)' }} />
+        </div>
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-2">
+          {miniPcs.map(m => (
+            <MachineCard
+              key={m.id}
+              machine={m}
+              isSelected={selectedMachineId === m.id}
+              onSelect={setSelectedMachineId}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );

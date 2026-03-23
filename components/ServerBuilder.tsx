@@ -4,6 +4,7 @@ import * as React from 'react';
 import { getServiceIcon } from '@/lib/icons';
 import { useAppStore } from '@/lib/store';
 import Modal from './Modal';
+import ServiceModal from './ServiceModal';
 import PieChart from './PieChart';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
@@ -15,7 +16,6 @@ type Service = { id: string, name: string, category: string, cpuCost: number, ra
 export default function ServerBuilder({ machine, allServices }: { machine: Machine, allServices: Service[] }) {
   const { selectedServiceIds, toggleServiceId, mode } = useAppStore();
   const tCat = useTranslations('Categories');
-  const tSvc = useTranslations('Services');
   const tIdx = useTranslations('Index');
   const tMod = useTranslations('Modal');
 
@@ -363,48 +363,7 @@ export default function ServerBuilder({ machine, allServices }: { machine: Machi
         </div>
       </Modal>
 
-      <Modal
-        isOpen={!!serviceModalData}
-        onClose={() => setServiceModalData(null)}
-        title={tMod('serviceDetails')}
-      >
-        {serviceModalData && (
-          <div className="flex flex-col gap-4 text-sm" style={{ color: 'var(--fg-muted)' }}>
-            <div className="flex items-center gap-3 border-b pb-4" style={{ borderColor: 'var(--border)' }}>
-               <span className="text-4xl">{getServiceIcon(serviceModalData.name)}</span>
-               <div>
-                 <h3 className="font-bold text-lg" style={{ color: 'var(--fg)' }}>{serviceModalData.name}</h3>
-                 {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                 <p className="text-xs uppercase tracking-widest" style={{ color: 'var(--accent)' }}>{tCat(serviceModalData.category as any) || serviceModalData.category}</p>
-               </div>
-            </div>
-            
-            <p className="leading-relaxed" style={{ color: 'var(--fg)' }}>
-               {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-               {tSvc(serviceModalData.description as any) || serviceModalData.description || 'No description available.'}
-            </p>
-
-            <div className="grid grid-cols-2 gap-4 mt-2">
-              <div className="p-3 rounded" style={{ background: 'var(--bg-input)', border: '1px solid var(--border)' }}>
-                 <div className="text-[10px] uppercase font-bold tracking-widest mb-1" style={{ color: 'var(--accent)' }}>{tMod('minRequirements')}</div>
-                 <div className="text-xs">{serviceModalData.minRequirements || 'N/A'}</div>
-              </div>
-              <div className="p-3 rounded" style={{ background: 'var(--bg-input)', border: '1px solid var(--border)' }}>
-                 <div className="text-[10px] uppercase font-bold tracking-widest mb-1" style={{ color: 'var(--accent)' }}>{tMod('recRequirements')}</div>
-                 <div className="text-xs">{serviceModalData.recRequirements || 'N/A'}</div>
-              </div>
-              <div>
-                 <div className="text-[10px] uppercase font-bold tracking-widest mb-1" style={{ color: 'var(--fg-dim)' }}>{tMod('cpuCost')}</div>
-                 <div className="font-bold" style={{ color: 'var(--fg)' }}>{serviceModalData.cpuCost.toFixed(2)} cores</div>
-              </div>
-              <div>
-                 <div className="text-[10px] uppercase font-bold tracking-widest mb-1" style={{ color: 'var(--fg-dim)' }}>{tMod('ramCost')}</div>
-                 <div className="font-bold" style={{ color: 'var(--fg)' }}>{serviceModalData.ramCostGb.toFixed(2)} GB</div>
-              </div>
-            </div>
-          </div>
-        )}
-      </Modal>
+      <ServiceModal service={serviceModalData} onClose={() => setServiceModalData(null)} />
     </div>
   );
 }
