@@ -1,5 +1,7 @@
+import { Service } from '@prisma/client';
+
 import { getServiceIcon } from '@/lib/icons';
-import { type AppBundle, type Service, type ActiveMachine } from '@/types';
+import { type ActiveMachine,type AppBundle } from '@/types';
 
 interface Props {
   bundle: AppBundle;

@@ -1,14 +1,15 @@
 'use client';
 
+import { Service } from '@prisma/client';
+import { MachineType } from '@prisma/enums';
 import { useState } from 'react';
-import { useAppStore } from '@/lib/store';
-import Modal from '@/components/Modal';
-import ServiceModal from '@/components/ServiceModal';
 
 import BuilderCatalog from '@/components/BuilderCatalog';
 import BuilderMonitor from '@/components/BuilderMonitor';
-import { type Service, type Machine, type ActiveMachine } from '@/types';
-import { MachineType } from '@/prisma/generated/prisma/enums';
+import Modal from '@/components/Modal';
+import ServiceModal from '@/components/ServiceModal';
+import { useAppStore } from '@/lib/store';
+import { type ActiveMachine,type Machine } from '@/types';
 
 export default function ServerBuilder() {
   const { machines, selectedMachineId, selectedVariantId, customVariantCores, customVariantRam } = useAppStore();

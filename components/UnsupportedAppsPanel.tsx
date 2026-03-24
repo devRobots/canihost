@@ -1,14 +1,14 @@
-import { type Service, type ActiveMachine } from '@/types';
+import { Service } from '@prisma/client';
+
 import IndividualAppCard from '@/components/IndividualAppCard';
 
 interface Props {
   apps: Service[];
-  machine: ActiveMachine;
   isExpert: boolean;
   onServiceClick: (service: Service) => void;
 }
 
-export default function UnsupportedAppsPanel({ apps, machine, isExpert, onServiceClick }: Props) {
+export default function UnsupportedAppsPanel({ apps, isExpert, onServiceClick }: Props) {
   if (apps.length === 0) return null;
 
   return (
@@ -24,7 +24,6 @@ export default function UnsupportedAppsPanel({ apps, machine, isExpert, onServic
           <div key={svc.id} className="opacity-50 grayscale hover:grayscale-[50%] hover:opacity-80 transition-all w-full h-full cursor-not-allowed">
             <IndividualAppCard 
               service={svc} 
-              machine={machine} 
               isExpert={isExpert} 
               onServiceClick={onServiceClick} 
             />

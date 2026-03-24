@@ -1,9 +1,9 @@
 'use client';
 
+import { Service } from '@prisma/client';
+
 import Modal from '@/components/Modal';
 import { getServiceIcon } from '@/lib/icons';
-
-import { type Service } from '@/types';
 
 export default function ServiceModal({ service, onClose }: { service: Service | null, onClose: () => void }) {
   return (

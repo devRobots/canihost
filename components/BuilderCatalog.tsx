@@ -1,12 +1,13 @@
 'use client';
 
-import { useState } from 'react';
-import { useAppStore } from '@/lib/store';
-import { getServiceIcon } from '@/lib/icons';
-
+import { Service } from '@prisma/client';
+import { MachineType } from '@prisma/enums';
 import Link from 'next/link';
-import { type ActiveMachine, type Service } from '@/types';
-import { MachineType } from '@/prisma/generated/prisma/enums';
+import { useState } from 'react';
+
+import { getServiceIcon } from '@/lib/icons';
+import { useAppStore } from '@/lib/store';
+import { type ActiveMachine } from '@/types';
 
 type Props = {
   machine: ActiveMachine;

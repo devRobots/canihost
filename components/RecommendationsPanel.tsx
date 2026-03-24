@@ -1,15 +1,17 @@
 'use client';
 
-import { useState, useMemo } from 'react';
-import { useAppStore } from '@/lib/store';
-import ServiceModal from '@/components/ServiceModal';
+import { Service } from '@prisma/client';
+import { MachineType } from '@prisma/enums';
+import { useMemo,useState } from 'react';
+
 import AppBundleModal from '@/components/AppBundleModal';
 import AppBundlesPanel from '@/components/AppBundlesPanel';
-import RecommendedAppsPanel from '@/components/RecommendedAppsPanel';
 import BarelyUsableAppsPanel from '@/components/BarelyUsableAppsPanel';
+import RecommendedAppsPanel from '@/components/RecommendedAppsPanel';
+import ServiceModal from '@/components/ServiceModal';
 import UnsupportedAppsPanel from '@/components/UnsupportedAppsPanel';
-import { type Service, type AppBundle, type ActiveMachine } from '@/types';
-import { MachineType } from '@/prisma/generated/prisma/enums';
+import { useAppStore } from '@/lib/store';
+import { type ActiveMachine,type AppBundle } from '@/types';
 
 export default function RecommendationsPanel() {
   const { machines, allBundles, allServices, selectedMachineId, selectedVariantId, customVariantCores, customVariantRam, mode } = useAppStore();
@@ -111,7 +113,6 @@ export default function RecommendationsPanel() {
         <div id="section-recommended" className="scroll-mt-24">
           <RecommendedAppsPanel
             apps={recommendedApps}
-            machine={activeMachine}
             isExpert={isExpert}
             onServiceClick={setServiceModalData}
           />
@@ -121,7 +122,6 @@ export default function RecommendationsPanel() {
         <div id="section-barely-usable" className="scroll-mt-24">
           <BarelyUsableAppsPanel
             apps={barelyUsableApps}
-            machine={activeMachine}
             isExpert={isExpert}
             onServiceClick={setServiceModalData}
           />
@@ -131,7 +131,6 @@ export default function RecommendationsPanel() {
         <div id="section-unsupported" className="scroll-mt-24">
           <UnsupportedAppsPanel
             apps={unsupportedApps}
-            machine={activeMachine}
             isExpert={isExpert}
             onServiceClick={setServiceModalData}
           />

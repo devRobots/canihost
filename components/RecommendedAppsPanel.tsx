@@ -1,14 +1,14 @@
-import { type Service, type ActiveMachine } from '@/types';
+import { Service } from '@prisma/client';
+
 import IndividualAppCard from '@/components/IndividualAppCard';
 
 interface Props {
   apps: Service[];
-  machine: ActiveMachine;
   isExpert: boolean;
   onServiceClick: (service: Service) => void;
 }
 
-export default function RecommendedAppsPanel({ apps, machine, isExpert, onServiceClick }: Props) {
+export default function RecommendedAppsPanel({ apps, isExpert, onServiceClick }: Props) {
   if (apps.length === 0) return null;
 
   return (
@@ -23,7 +23,6 @@ export default function RecommendedAppsPanel({ apps, machine, isExpert, onServic
           <IndividualAppCard 
             key={svc.id} 
             service={svc} 
-            machine={machine} 
             isExpert={isExpert} 
             onServiceClick={onServiceClick} 
           />

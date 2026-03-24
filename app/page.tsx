@@ -1,8 +1,8 @@
-import prisma from "@/lib/prisma";
-import StoreInitializer from "@/components/StoreInitializer";
 import Hero from "@/components/Hero";
 import MachinePicker from "@/components/MachinePicker";
 import RecommendationsPanel from "@/components/RecommendationsPanel";
+import StoreInitializer from "@/components/StoreInitializer";
+import prisma from "@/lib/prisma";
 
 export default async function Home() {
   const [machines, allBundles, allServices] = await Promise.all([

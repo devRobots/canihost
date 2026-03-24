@@ -1,4 +1,4 @@
-import { Prisma } from "@/prisma/generated/prisma/client";
+import { Prisma } from "@prisma/client";
 
 export type ActiveMachine = Machine & {
   cpuCores: number;
@@ -8,12 +8,6 @@ export type ActiveMachine = Machine & {
 export type Machine = Prisma.MachineGetPayload<{
   include: {
     variants: true;
-  };
-}>;
-
-export type Service = Prisma.ServiceGetPayload<{
-  include: {
-    appBundles: true;
   };
 }>;
 

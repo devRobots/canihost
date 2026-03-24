@@ -1,9 +1,10 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { MachineType } from '@prisma/enums';
+import { Box,ChevronDown, Cloud, Cpu, LayoutDashboard, MemoryStick, Server, Settings } from 'lucide-react';
+import { useEffect,useRef, useState } from 'react';
+
 import { useAppStore } from '@/lib/store';
-import { Cpu, MemoryStick, Cloud, Server, ChevronDown, LayoutDashboard, Settings, Box } from 'lucide-react';
-import { MachineType } from '@/prisma/generated/prisma/enums';
 
 const getMachineTypeIcon = (type?: string) => {
   if (type === 'VPS') return <Cloud size={20} />;

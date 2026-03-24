@@ -1,8 +1,10 @@
 'use client';
 
+import { Service } from '@prisma/client';
 import { useRef } from 'react';
+
 import { useAppStore } from '@/lib/store';
-import { type Machine, type AppBundle, type Service } from '@/types';
+import { type AppBundle,type Machine } from '@/types';
 
 export default function StoreInitializer({ 
   machines, 

@@ -2,8 +2,6 @@
 
 import Modal from '@/components/Modal';
 import { getServiceIcon } from '@/lib/icons';
-
-
 import { type AppBundle } from '@/types';
 
 export default function AppBundleModal({ bundle, onClose }: { bundle: AppBundle | null, onClose: () => void }) {

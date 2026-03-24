@@ -1,10 +1,12 @@
 'use client';
 
-import { useAppStore } from '@/lib/store';
+import { Service } from '@prisma/client';
+import { MachineType } from '@prisma/enums';
+
 import PieChart from '@/components/PieChart';
-import { type ActiveMachine, type Service } from '@/types';
 import { getServiceIcon } from '@/lib/icons';
-import { MachineType } from '@/prisma/generated/prisma/enums';
+import { useAppStore } from '@/lib/store';
+import { type ActiveMachine } from '@/types';
 
 type Props = {
   machine: ActiveMachine;

@@ -1,5 +1,7 @@
-import { type AppBundle, type Service, type ActiveMachine } from '@/types';
+import { Service } from '@prisma/client';
+
 import AppBundleCard from '@/components/AppBundleCard';
+import { type ActiveMachine,type AppBundle } from '@/types';
 
 interface Props {
   bundles: AppBundle[];

@@ -1,6 +1,7 @@
-import { getServiceIcon } from '@/lib/icons';
-import { type Service } from '@/types';
+import { Service } from '@prisma/client';
 import { Cpu, MemoryStick } from 'lucide-react';
+
+import { getServiceIcon } from '@/lib/icons';
 
 interface Props {
   service: Service;
