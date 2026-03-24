@@ -19,7 +19,7 @@ export default function BarelyUsableAppsPanel({ apps, machine, isExpert, onServi
       </div>
       <p className="text-xs text-fg-dim -mt-2">These apps can run on the machine, but might encounter performance constraints or leave little room for other services.</p>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
         {apps.map(svc => (
           <div key={svc.id} className="opacity-80 grayscale-[30%] hover:grayscale-0 hover:opacity-100 transition-all w-full h-full">
             <IndividualAppCard 

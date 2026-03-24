@@ -18,7 +18,7 @@ export default function RecommendedAppsPanel({ apps, machine, isExpert, onServic
         Recommended Apps
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
         {apps.map(svc => (
           <IndividualAppCard 
             key={svc.id} 

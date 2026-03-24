@@ -29,28 +29,21 @@ export default function IndividualAppCard({ service, machine, isExpert, onServic
           {service.name}
         </span>
       </div>
-      
-      <div className="flex justify-center mt-auto pt-2 text-[10px] font-mono w-full border-t border-default text-fg-dim">
-        {isExpert ? (
+      {isExpert && (
+        <div className="flex justify-center mt-auto pt-2 text-[10px] font-mono w-full border-t border-default text-fg-dim">
           <div className="flex gap-3 w-full justify-center items-center">
-            <span className="flex items-center gap-1">
+            <span className="flex items-center gap-1 whitespace-nowrap">
               <Cpu size={12} />
-              {service.minCPU === service.recommendedCPU ? service.recommendedCPU : `${service.minCPU}-${service.recommendedCPU}`}c
+              {service.minCPU === service.recommendedCPU ? service.recommendedCPU : `${service.minCPU}`} cores
             </span>
             <span className="opacity-50">|</span>
-            <span className="flex items-center gap-1">
+            <span className="flex items-center gap-1 whitespace-nowrap">
               <MemoryStick size={12} />
-              {service.minRAM === service.recommendedRAM ? service.recommendedRAM : `${service.minRAM}-${service.recommendedRAM}`}G
+              {service.minRAM === service.recommendedRAM ? service.recommendedRAM : `${service.minRAM}`} GB
             </span>
           </div>
-        ) : (
-          <div className="flex gap-2 w-full justify-center">
-            <span>{Math.min(100, cpuPct).toFixed(0)}%C</span>
-            <span>|</span>
-            <span>{Math.min(100, ramPct).toFixed(0)}%R</span>
-          </div>
-        )}
-      </div>
+        </div>
+      )}
     </button>
   );
 }

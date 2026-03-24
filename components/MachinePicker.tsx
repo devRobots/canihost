@@ -82,7 +82,7 @@ export default function MachinePicker() {
                 </span>
               </div>
               
-              <span className="font-bold text-sm text-fg sm:min-w-[140px] truncate max-w-[200px]">
+              <span className="font-bold text-sm text-fg pl-4 truncate max-w-[200px]">
                 {selectedMachine ? selectedMachine.name : 'Choose...'}
               </span>
             </div>
@@ -139,7 +139,7 @@ export default function MachinePicker() {
                   <Box size={20} />
                   <span className="text-[8px] mt-1 uppercase font-bold text-fg-dim">Model</span>
                 </div>
-                <span className="font-bold text-sm text-fg max-w-[120px] truncate">
+                <span className="font-bold text-sm text-fg pl-4">
                   {selectedVariant?.name || 'Standard'}
                 </span>
                 {selectedMachine.variants.length > 1 && !isCustom && (
@@ -148,7 +148,7 @@ export default function MachinePicker() {
               </button>
 
               {openDropdown === 'variant' && selectedMachine.variants.length > 1 && !isCustom && (
-                <div className="absolute top-full left-0 mt-3 w-full sm:w-48 bg-card border border-default rounded-md shadow-2xl z-50">
+                <div className="absolute top-full left-0 mt-3 w-full sm:min-w-max bg-card border border-default rounded-md shadow-2xl z-50">
                   <div className="p-1 px-1.5 flex flex-col gap-0.5">
                     {selectedMachine.variants.map(v => (
                       <button
@@ -179,7 +179,7 @@ export default function MachinePicker() {
                   <Cpu size={20} />
                   <span className="text-[8px] mt-1 font-bold tracking-widest uppercase text-fg-dim">CPU</span>
                 </div>
-                <span className="font-bold text-sm text-fg">
+                <span className="font-bold text-sm text-fg pl-4">
                   {currentCores} <span className="text-xs text-fg-dim">Cores</span>
                 </span>
                 {isCustom && <ChevronDown size={14} className={`text-fg-dim transition-transform ${openDropdown === 'cpu' ? 'rotate-180' : ''}`} />}
@@ -217,7 +217,7 @@ export default function MachinePicker() {
                   <MemoryStick size={20} />
                   <span className="text-[8px] mt-1 font-bold tracking-widest uppercase text-fg-dim">RAM</span>
                 </div>
-                <span className="font-bold text-sm text-fg pr-2">
+                <span className="font-bold text-sm text-fg pl-4">
                   {currentRam} <span className="text-xs text-fg-dim">GB</span>
                 </span>
                 {isCustom && <ChevronDown size={14} className={`text-fg-dim transition-transform ${openDropdown === 'ram' ? 'rotate-180' : ''}`} />}

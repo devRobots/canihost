@@ -19,7 +19,7 @@ export default function UnsupportedAppsPanel({ apps, machine, isExpert, onServic
       </div>
       <p className="text-xs text-fg-dim -mt-2">These apps require more resources than the current machine can provide or are incompatible with the environment.</p>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
         {apps.map(svc => (
           <div key={svc.id} className="opacity-50 grayscale hover:grayscale-[50%] hover:opacity-80 transition-all w-full h-full cursor-not-allowed">
             <IndividualAppCard 
