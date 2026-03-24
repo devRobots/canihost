@@ -1,5 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=IBM+Plex+Mono:wght@300;400;500;600;700&display=swap');
-@import "tailwindcss";
+@import 'tailwindcss';
 
 @theme {
   --color-bg: var(--bg);
@@ -13,48 +13,48 @@
 }
 /* ─── DARK THEME (default) ─── Solaris / Ubuntu terminal inspired */
 :root {
-  --bg:          #0f0e0c;
-  --bg-card:     #18160f;
-  --bg-input:    #1e1b12;
-  --border:      #2e2a1a;
+  --bg: #0f0e0c;
+  --bg-card: #18160f;
+  --bg-input: #1e1b12;
+  --border: #2e2a1a;
   --border-glow: #c96a0060;
 
-  --fg:          #e8d5a0;
-  --fg-muted:    #7a7060;
-  --fg-dim:      #4d4638;
+  --fg: #e8d5a0;
+  --fg-muted: #7a7060;
+  --fg-dim: #4d4638;
 
-  --accent:      #e87c2a;    /* Solaris orange */
-  --accent2:     #d4460a;
+  --accent: #e87c2a; /* Solaris orange */
+  --accent2: #d4460a;
   --accent-glow: #e87c2a30;
 
-  --green:       #7ec45a;
-  --red:         #e84040;
-  --yellow:      #e8b42a;
-  --cyan:        #5abec4;
+  --green: #7ec45a;
+  --red: #e84040;
+  --yellow: #e8b42a;
+  --cyan: #5abec4;
 
   --font-mono: 'JetBrains Mono', 'IBM Plex Mono', 'Fira Code', monospace;
 }
 
 /* ─── LIGHT THEME ─── Ubuntu-inspired warm terminal */
 .light {
-  --bg:          #faf5e8;
-  --bg-card:     #f0e9d5;
-  --bg-input:    #ede6d0;
-  --border:      #c8b878;
+  --bg: #faf5e8;
+  --bg-card: #f0e9d5;
+  --bg-input: #ede6d0;
+  --border: #c8b878;
   --border-glow: #c96a0040;
 
-  --fg:          #2c2010;
-  --fg-muted:    #6a5840;
-  --fg-dim:      #b0966a;
+  --fg: #2c2010;
+  --fg-muted: #6a5840;
+  --fg-dim: #b0966a;
 
-  --accent:      #c96010;
-  --accent2:     #a84010;
+  --accent: #c96010;
+  --accent2: #a84010;
   --accent-glow: #c9601020;
 
-  --green:       #458a28;
-  --red:         #c03030;
-  --yellow:      #b08020;
-  --cyan:        #1e7e84;
+  --green: #458a28;
+  --red: #c03030;
+  --yellow: #b08020;
+  --cyan: #1e7e84;
 }
 
 * {
@@ -67,23 +67,40 @@ body {
   font-family: var(--font-mono);
   font-size: 14px;
   line-height: 1.6;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
 }
 
 /* ─── SCROLLBAR ─── */
-::-webkit-scrollbar { width: 6px; height: 6px; }
-::-webkit-scrollbar-track { background: var(--bg); }
-::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: var(--fg-dim); }
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--fg-dim);
+}
 
 /* ─── SELECTION ─── */
-::selection { background: var(--accent-glow); color: var(--accent); }
+::selection {
+  background: var(--accent-glow);
+  color: var(--accent);
+}
 
 /* ─── CARD ─── */
 .card {
   background: var(--bg-card);
   border: 1px solid var(--border);
-  transition: border-color 0.2s, box-shadow 0.2s;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
 }
 .card:hover {
   border-color: var(--accent);
@@ -103,8 +120,12 @@ body {
 
 /* ─── SCANLINE FX ─── subtle crt feel */
 @keyframes scanline {
-  0%   { transform: translateY(-100%); }
-  100% { transform: translateY(100vh); }
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(100vh);
+  }
 }
 .scanlines::after {
   content: '';
@@ -115,8 +136,8 @@ body {
     to bottom,
     transparent 0,
     transparent 3px,
-    rgba(0,0,0,0.06) 3px,
-    rgba(0,0,0,0.06) 4px
+    rgba(0, 0, 0, 0.06) 3px,
+    rgba(0, 0, 0, 0.06) 4px
   );
   z-index: 9998;
 }
@@ -131,11 +152,17 @@ body {
 .bar-fill {
   height: 100%;
   border-radius: 2px;
-  transition: width 0.4s ease, background-color 0.3s;
+  transition:
+    width 0.4s ease,
+    background-color 0.3s;
   background: var(--accent);
 }
-.bar-fill.warn  { background: var(--yellow); }
-.bar-fill.danger { background: var(--red); }
+.bar-fill.warn {
+  background: var(--yellow);
+}
+.bar-fill.danger {
+  background: var(--red);
+}
 
 /* ─── TAG BADGE ─── */
 .tag {
@@ -150,21 +177,45 @@ body {
 }
 
 /* ─── MODULAR UTILITIES ─── */
-.text-fg { color: var(--fg); }
-.text-fg-muted { color: var(--fg-muted); }
-.text-fg-dim { color: var(--fg-dim); }
-.text-accent { color: var(--accent); }
-.text-accent2 { color: var(--accent2); }
+.text-fg {
+  color: var(--fg);
+}
+.text-fg-muted {
+  color: var(--fg-muted);
+}
+.text-fg-dim {
+  color: var(--fg-dim);
+}
+.text-accent {
+  color: var(--accent);
+}
+.text-accent2 {
+  color: var(--accent2);
+}
 
-.bg-page { background-color: var(--bg); }
-.bg-card { background-color: var(--bg-card); }
-.bg-input { background-color: var(--bg-input); }
+.bg-page {
+  background-color: var(--bg);
+}
+.bg-card {
+  background-color: var(--bg-card);
+}
+.bg-input {
+  background-color: var(--bg-input);
+}
 
-.border-default { border-color: var(--border); }
-.border-accent { border-color: var(--accent); }
+.border-default {
+  border-color: var(--border);
+}
+.border-accent {
+  border-color: var(--accent);
+}
 
-.border-line { border: 1px solid var(--border); }
-.border-line-accent { border: 1px solid var(--accent); }
+.border-line {
+  border: 1px solid var(--border);
+}
+.border-line-accent {
+  border: 1px solid var(--accent);
+}
 
 .divider-line {
   flex: 1 1 0%;

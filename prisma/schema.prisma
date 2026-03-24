@@ -13,41 +13,41 @@ enum MachineType {
   CUSTOM
 }
 
-model Machine { 
-  id        String   @id @default(cuid())
+model Machine {
+  id        String           @id @default(cuid())
   name      String
   type      MachineType
   variants  MachineVariant[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
 }
 
 model MachineVariant {
-  id          String   @id @default(cuid())
+  id          String  @id @default(cuid())
   name        String
   cpuCores    Int
   memoryRamGb Float
   machineId   String
-  machine     Machine  @relation(fields: [machineId], references: [id], onDelete: Cascade)
+  machine     Machine @relation(fields: [machineId], references: [id], onDelete: Cascade)
 }
 
 model Service {
-  id                 String   @id @default(cuid())
+  id                 String      @id @default(cuid())
   name               String
   category           String
   minCPU             Float
   recommendedCPU     Float
   minRAM             Float
   recommendedRAM     Float
-  isCloudRecommended Boolean  @default(true)
+  isCloudRecommended Boolean     @default(true)
   description        String?
   longDescription    String?
   officialUrl        String?
   cubepathUrl        String?
   dockerRegistryUrl  String?
   appBundles         AppBundle[]
-  createdAt          DateTime @default(now())
-  updatedAt          DateTime @updatedAt
+  createdAt          DateTime    @default(now())
+  updatedAt          DateTime    @updatedAt
 }
 
 model AppBundle {

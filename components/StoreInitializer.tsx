@@ -4,16 +4,16 @@ import { Service } from '@prisma/client';
 import { useRef } from 'react';
 
 import { useAppStore } from '@/lib/store';
-import { type AppBundle,type Machine } from '@/types';
+import { type AppBundle, type Machine } from '@/types';
 
-export default function StoreInitializer({ 
-  machines, 
-  allBundles, 
-  allServices 
-}: { 
-  machines: Machine[]; 
-  allBundles: AppBundle[]; 
-  allServices: Service[]; 
+export default function StoreInitializer({
+  machines,
+  allBundles,
+  allServices,
+}: {
+  machines: Machine[];
+  allBundles: AppBundle[];
+  allServices: Service[];
 }) {
   const initialized = useRef(false);
   if (!initialized.current) {

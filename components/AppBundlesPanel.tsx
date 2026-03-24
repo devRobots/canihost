@@ -1,7 +1,7 @@
 import { Service } from '@prisma/client';
 
 import AppBundleCard from '@/components/AppBundleCard';
-import { type ActiveMachine,type AppBundle } from '@/types';
+import { type ActiveMachine, type AppBundle } from '@/types';
 
 interface Props {
   bundles: AppBundle[];
@@ -11,29 +11,38 @@ interface Props {
   onServiceClick: (service: Service) => void;
 }
 
-export default function AppBundlesPanel({ bundles, machine, isExpert, onBundleClick, onServiceClick }: Props) {
+export default function AppBundlesPanel({
+  bundles,
+  machine,
+  isExpert,
+  onBundleClick,
+  onServiceClick,
+}: Props) {
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex items-center gap-3 text-xs font-bold uppercase tracking-widest text-fg-muted">
-         <span className="text-accent">{'//'}</span>
-         Recommended App Bundles
+      <div className="text-fg-muted flex items-center gap-3 text-xs font-bold tracking-widest uppercase">
+        <span className="text-accent">{'//'}</span>
+        Recommended App Bundles
       </div>
 
       {bundles.length === 0 ? (
-        <div className="py-6 flex flex-col sm:flex-row items-center justify-center gap-3 text-xs text-fg-dim border border-dashed border-border rounded-md bg-transparent">
+        <div className="text-fg-dim border-border flex flex-col items-center justify-center gap-3 rounded-md border border-dashed bg-transparent py-6 text-xs sm:flex-row">
           <span className="text-lg opacity-70">ℹ</span>
-          <span className="opacity-80">The selected machine lacks the resources to run app bundles. Try an individual app below.</span>
+          <span className="opacity-80">
+            The selected machine lacks the resources to run app bundles. Try an
+            individual app below.
+          </span>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {bundles.map(bundle => (
-            <AppBundleCard 
-              key={bundle.id} 
-              bundle={bundle} 
-              machine={machine} 
-              isExpert={isExpert} 
-              onBundleClick={onBundleClick} 
-              onServiceClick={onServiceClick} 
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {bundles.map((bundle) => (
+            <AppBundleCard
+              key={bundle.id}
+              bundle={bundle}
+              machine={machine}
+              isExpert={isExpert}
+              onBundleClick={onBundleClick}
+              onServiceClick={onServiceClick}
             />
           ))}
         </div>

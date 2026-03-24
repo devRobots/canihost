@@ -10,7 +10,12 @@ interface ModalProps {
   children: React.ReactNode;
 }
 
-export default function Modal({ isOpen, onClose, title, children }: ModalProps) {
+export default function Modal({
+  isOpen,
+  onClose,
+  title,
+  children,
+}: ModalProps) {
   const [mounted, setMounted] = React.useState(false);
 
   React.useEffect(() => {
@@ -43,7 +48,7 @@ export default function Modal({ isOpen, onClose, title, children }: ModalProps) 
       }}
     >
       <div
-        className="relative w-full max-w-lg max-h-[90vh] flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200"
+        className="animate-in fade-in zoom-in-95 relative flex max-h-[90vh] w-full max-w-lg flex-col overflow-hidden duration-200"
         style={{
           background: 'var(--bg-card)',
           border: '1px solid var(--accent)',
@@ -54,10 +59,16 @@ export default function Modal({ isOpen, onClose, title, children }: ModalProps) 
       >
         {/* Header */}
         <div
-          className="flex items-center justify-between p-4 border-b"
-          style={{ borderColor: 'var(--border)', background: 'var(--bg-input)' }}
+          className="flex items-center justify-between border-b p-4"
+          style={{
+            borderColor: 'var(--border)',
+            background: 'var(--bg-input)',
+          }}
         >
-          <div className="flex items-center gap-2 font-bold tracking-widest text-xs uppercase" style={{ color: 'var(--fg)' }}>
+          <div
+            className="flex items-center gap-2 text-xs font-bold tracking-widest uppercase"
+            style={{ color: 'var(--fg)' }}
+          >
             <span style={{ color: 'var(--accent)' }}>▶</span> {title}
           </div>
           <button
@@ -71,11 +82,11 @@ export default function Modal({ isOpen, onClose, title, children }: ModalProps) 
         </div>
 
         {/* Body */}
-        <div className="p-5 overflow-y-auto flex-1 custom-scrollbar">
+        <div className="custom-scrollbar flex-1 overflow-y-auto p-5">
           {children}
         </div>
       </div>
     </div>,
-    document.body
+    document.body,
   );
 }

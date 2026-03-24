@@ -1,13 +1,16 @@
-import { notFound } from "next/navigation";
+import { notFound } from 'next/navigation';
 
-import ServerBuilder from "@/components/ServerBuilder";
-import StoreInitializer from "@/components/StoreInitializer";
-import prisma from "@/lib/prisma";
-import { type Machine } from "@/types";
+import ServerBuilder from '@/components/ServerBuilder';
+import StoreInitializer from '@/components/StoreInitializer';
+import prisma from '@/lib/prisma';
+import { type Machine } from '@/types';
 
 export default async function BuilderPage() {
   const [machines, allBundles, allServices] = await Promise.all([
-    prisma.machine.findMany({ orderBy: { name: 'asc' }, include: { variants: true } }),
+    prisma.machine.findMany({
+      orderBy: { name: 'asc' },
+      include: { variants: true },
+    }),
     prisma.appBundle.findMany({ include: { services: true } }),
     prisma.service.findMany({ orderBy: { name: 'asc' } }),
   ]);
@@ -18,7 +21,11 @@ export default async function BuilderPage() {
 
   return (
     <>
-      <StoreInitializer machines={machines} allBundles={allBundles} allServices={allServices} />
+      <StoreInitializer
+        machines={machines}
+        allBundles={allBundles}
+        allServices={allServices}
+      />
       <ServerBuilder />
     </>
   );
