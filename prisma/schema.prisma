@@ -9,15 +9,10 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Machine {
+model Machine { 
   id             String   @id @default(cuid())
   name           String
   type           String   // 'MINI_PC' | 'VPS' | 'CUSTOM'
-  brand          String?
-  targetAudience String?  // para quien esta destinado
-  useCases       String?  // para que puede servir
-  specialTech    String?  // tecnologias especiales
-  technicalSpecs String?  // requisitos tecnicos
   variants       MachineVariant[]
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
@@ -46,8 +41,6 @@ model Service {
   officialUrl           String?
   cubepathUrl           String?
   dockerRegistryUrl     String?
-  minRequirements       String?  // requisitos minimos
-  recRequirements       String?  // requisitos recomendados
   appBundles            AppBundle[] // Implicit m2m
   createdAt             DateTime @default(now())
   updatedAt             DateTime @updatedAt

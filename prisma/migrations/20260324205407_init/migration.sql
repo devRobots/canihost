@@ -3,15 +3,18 @@ CREATE TABLE "Machine" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "name" TEXT NOT NULL,
     "type" TEXT NOT NULL,
-    "brand" TEXT,
-    "cpuCores" INTEGER NOT NULL,
-    "memoryRamGb" REAL NOT NULL,
-    "targetAudience" TEXT,
-    "useCases" TEXT,
-    "specialTech" TEXT,
-    "technicalSpecs" TEXT,
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" DATETIME NOT NULL
+);
+
+-- CreateTable
+CREATE TABLE "MachineVariant" (
+    "id" TEXT NOT NULL PRIMARY KEY,
+    "name" TEXT NOT NULL,
+    "cpuCores" REAL NOT NULL,
+    "memoryRamGb" REAL NOT NULL,
+    "machineId" TEXT NOT NULL,
+    CONSTRAINT "MachineVariant_machineId_fkey" FOREIGN KEY ("machineId") REFERENCES "Machine" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- CreateTable
@@ -19,12 +22,16 @@ CREATE TABLE "Service" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "name" TEXT NOT NULL,
     "category" TEXT NOT NULL,
-    "cpuCost" REAL NOT NULL,
-    "ramCostGb" REAL NOT NULL,
+    "minCPU" REAL NOT NULL,
+    "recommendedCPU" REAL NOT NULL,
+    "minRAM" REAL NOT NULL,
+    "recommendedRAM" REAL NOT NULL,
     "isCloudRecommended" BOOLEAN NOT NULL DEFAULT true,
     "description" TEXT,
-    "minRequirements" TEXT,
-    "recRequirements" TEXT,
+    "longDescription" TEXT,
+    "officialUrl" TEXT,
+    "cubepathUrl" TEXT,
+    "dockerRegistryUrl" TEXT,
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" DATETIME NOT NULL
 );

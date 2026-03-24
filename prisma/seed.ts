@@ -13,34 +13,27 @@ async function main() {
   
   const machinesData = [
     { 
-      name: 'Zimaboard 2', type: 'MINI_PC', brand: 'ZimaBoard', 
-      targetAudience: 'Home Labbers, Makers', useCases: 'Personal Cloud, Home Automation',
-      technicalSpecs: 'Intel Celeron N3450 PCIe 4.0',
-      variants: [ { name: '832', cpuCores: 4, memoryRamGb: 8 }, { name: '432', cpuCores: 4, memoryRamGb: 4 } ]
+      name: 'Zimaboard 2', type: 'MINI_PC',
+      variants: [ { name: '832', cpuCores: 4, memoryRamGb: 8 }, { name: '1664', cpuCores: 4, memoryRamGb: 16 } ]
     },
     { 
-      name: 'Chuwi Larkbox X', type: 'MINI_PC', brand: 'Chuwi', 
-      targetAudience: 'Budget Seekers', useCases: 'Basic Media Server',
+      name: 'Chuwi Larkbox X', type: 'MINI_PC', 
       variants: [ { name: 'N100 12GB', cpuCores: 4, memoryRamGb: 12 } ]
     },
     { 
-      name: 'Mac Mini M2', type: 'MINI_PC', brand: 'Apple',
-      targetAudience: 'Ecosystem Users', useCases: 'CI/CD, Xcode Server',
+      name: 'Mac Mini M2', type: 'MINI_PC', 
       variants: [ { name: 'Base', cpuCores: 8, memoryRamGb: 8 }, { name: 'Pro', cpuCores: 10, memoryRamGb: 16 } ]
     },
     { 
-      name: 'Raspberry Pi 5', type: 'MINI_PC', brand: 'Raspberry Pi',
-      targetAudience: 'Tinkerers', useCases: 'Edge Computing, Smart Home',
+      name: 'Raspberry Pi 5', type: 'MINI_PC', 
       variants: [ { name: '8GB', cpuCores: 4, memoryRamGb: 8 }, { name: '4GB', cpuCores: 4, memoryRamGb: 4 } ]
     },
     { 
-      name: 'Intel NUC 13 Pro', type: 'MINI_PC', brand: 'Intel',
-      targetAudience: 'Business & Prosumers', useCases: 'Proxmox Virtualization',
+      name: 'Intel NUC 13 Pro', type: 'MINI_PC', 
       variants: [ { name: 'i7 16GB', cpuCores: 12, memoryRamGb: 16 } ]
     },
     {
-      name: 'CubePath VPS', type: 'VPS', brand: 'CubePath',
-      targetAudience: 'Beginners to Pros', useCases: 'VPN, Remote Server, Public Facing apps',
+      name: 'CubePath VPS', type: 'VPS',
       variants: [ 
         { name: 'Starter (1vCPU/1GB)', cpuCores: 1, memoryRamGb: 1 },
         { name: 'Developer (2vCPU/4GB)', cpuCores: 2, memoryRamGb: 4 },
@@ -48,8 +41,7 @@ async function main() {
       ]
     },
     {
-      name: 'Custom Server', type: 'CUSTOM', brand: 'Any',
-      targetAudience: 'Power Users', useCases: 'Any',
+      name: 'Custom Server', type: 'CUSTOM',
       variants: [ { name: 'Customized', cpuCores: 4, memoryRamGb: 8 } ]
     }
   ];
@@ -59,10 +51,6 @@ async function main() {
       data: {
         name: mData.name,
         type: mData.type,
-        brand: mData.brand,
-        targetAudience: mData.targetAudience,
-        useCases: mData.useCases,
-        technicalSpecs: mData.technicalSpecs || null,
         variants: {
           create: mData.variants
         }

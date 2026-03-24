@@ -3,7 +3,6 @@
 import Modal from '@/components/Modal';
 import { getServiceIcon } from '@/lib/icons';
 
-
 import { type Service } from '@/types';
 
 export default function ServiceModal({ service, onClose }: { service: Service | null, onClose: () => void }) {
@@ -38,13 +37,11 @@ export default function ServiceModal({ service, onClose }: { service: Service | 
                <div className="text-[10px] uppercase font-bold tracking-widest mb-1" style={{ color: 'var(--accent)' }}>Minimum Requirements</div>
                <div className="text-xs">{service.minCPU} Cores</div>
                <div className="text-xs">{service.minRAM} GB RAM</div>
-               {service.minRequirements && <div className="text-[10px] mt-1 opacity-70">({service.minRequirements})</div>}
             </div>
             <div className="p-3 rounded" style={{ background: 'var(--bg-input)', border: '1px solid var(--border)' }}>
                <div className="text-[10px] uppercase font-bold tracking-widest mb-1" style={{ color: 'var(--accent)' }}>Recommended</div>
                <div className="text-xs">{service.recommendedCPU} Cores</div>
                <div className="text-xs">{service.recommendedRAM} GB RAM</div>
-               {service.recRequirements && <div className="text-[10px] mt-1 opacity-70">({service.recRequirements})</div>}
             </div>
           </div>
           

@@ -10,11 +10,6 @@ export type Machine = {
   id: string;
   name: string;
   type: string;
-  brand: string | null;
-  targetAudience: string | null;
-  useCases: string | null;
-  specialTech: string | null;
-  technicalSpecs: string | null;
   variants: MachineVariant[];
 };
 
@@ -32,8 +27,6 @@ export type Service = {
   officialUrl: string | null;
   cubepathUrl: string | null;
   dockerRegistryUrl: string | null;
-  minRequirements: string | null;
-  recRequirements: string | null;
 };
 
 export type ActiveMachine = Machine & {
