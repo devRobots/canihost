@@ -2,15 +2,15 @@
 
 import { useRef } from 'react';
 import { useAppStore } from '@/lib/store';
-import { type Machine, type AppSet, type Service } from '@/types';
+import { type Machine, type AppBundle, type Service } from '@/types';
 
 export default function StoreInitializer({ 
   machines, 
-  allSets, 
+  allBundles, 
   allServices 
 }: { 
   machines: Machine[]; 
-  allSets: AppSet[]; 
+  allBundles: AppBundle[]; 
   allServices: Service[]; 
 }) {
   const initialized = useRef(false);
@@ -18,7 +18,7 @@ export default function StoreInitializer({
     // We silently hydrate the store on mount to avoid the "Cannot update a component while rendering" warning in React 18+
     const state = useAppStore.getState();
     if (state.machines.length === 0) {
-      state.setInitialData({ machines, allSets, allServices });
+      state.setInitialData({ machines, allBundles, allServices });
     }
     initialized.current = true;
   }

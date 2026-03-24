@@ -23,7 +23,7 @@ export type Service = {
   recRequirements: string | null;
 };
 
-export type AppSet = {
+export type AppBundle = {
   id: string;
   name: string;
   description: string | null;

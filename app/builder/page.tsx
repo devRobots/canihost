@@ -11,9 +11,9 @@ export default async function BuilderPage({
 }) {
   const { machineId } = await searchParams;
 
-  const [machines, allSets, allServices] = await Promise.all([
+  const [machines, allBundles, allServices] = await Promise.all([
     prisma.machine.findMany({ orderBy: { name: 'asc' } }),
-    prisma.appSet.findMany({ include: { services: true } }),
+    prisma.appBundle.findMany({ include: { services: true } }),
     prisma.service.findMany({ orderBy: { name: 'asc' } }),
   ]);
 
@@ -23,7 +23,7 @@ export default async function BuilderPage({
 
   return (
     <>
-      <StoreInitializer machines={machines} allSets={allSets} allServices={allServices} />
+      <StoreInitializer machines={machines} allBundles={allBundles} allServices={allServices} />
       <ServerBuilder />
     </>
   );

@@ -1,6 +1,6 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
-import { type Machine, type AppSet, type Service } from '@/types';
+import { persist, createJSONStorage } from 'zustand/middleware';
+import { type Machine, type AppBundle, type Service } from '@/types';
 
 // ─── Types ─────────────────────────────────────────────────────────────────
 
@@ -9,9 +9,9 @@ type Mode = 'normal' | 'expert';
 interface AppState {
   /** Global Data */
   machines: Machine[];
-  allSets: AppSet[];
+  allBundles: AppBundle[];
   allServices: Service[];
-  setInitialData: (data: { machines: Machine[], allSets: AppSet[], allServices: Service[] }) => void;
+  setInitialData: (data: { machines: Machine[], allBundles: AppBundle[], allServices: Service[] }) => void;
 
   /** Custom resources overrides per machine ID */
   customResources: Record<string, { cpuCores?: number; memoryRamGb?: number }>;
@@ -39,7 +39,7 @@ export const useAppStore = create<AppState>()(
     (set, get) => ({
       // Global Data
       machines: [],
-      allSets: [],
+      allBundles: [],
       allServices: [],
       setInitialData: (data) => set((state) => {
         const custMachines = data.machines.map(m => state.customResources[m.id] ? { ...m, ...state.customResources[m.id] } : m);
@@ -88,6 +88,11 @@ export const useAppStore = create<AppState>()(
     }),
     {
       name: 'canihost-store',
+      storage: createJSONStorage(() => typeof window !== 'undefined' ? window.localStorage : {
+        getItem: () => null,
+        setItem: () => {},
+        removeItem: () => {},
+      }),
       // Set is not JSON-serialisable by default — convert to/from array
       partialize: (state) => ({
         mode: state.mode,

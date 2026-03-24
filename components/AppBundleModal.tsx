@@ -4,21 +4,21 @@ import Modal from '@/components/Modal';
 import { getServiceIcon } from '@/lib/icons';
 
 
-import { type AppSet } from '@/types';
+import { type AppBundle } from '@/types';
 
-export default function AppSetModal({ set, onClose }: { set: AppSet | null, onClose: () => void }) {
-  const title = set ? set.name : 'AppSet Details';
+export default function AppBundleModal({ bundle, onClose }: { bundle: AppBundle | null, onClose: () => void }) {
+  const title = bundle ? bundle.name : 'App Bundle Details';
 
   return (
     <Modal
-      isOpen={!!set}
+      isOpen={!!bundle}
       onClose={onClose}
       title={title}
     >
-      {set && (
+      {bundle && (
         <div className="flex flex-col gap-6 text-sm" style={{ color: 'var(--fg-muted)' }}>
           <p className="leading-relaxed" style={{ color: 'var(--fg)' }}>
-             {set.description || 'No description available for this set.'}
+             {bundle.description || 'No description available for this bundle.'}
           </p>
 
           <div>
@@ -26,7 +26,7 @@ export default function AppSetModal({ set, onClose }: { set: AppSet | null, onCl
                 {'// '} Individual Application Roles & Costs
              </div>
              <div className="flex flex-col gap-2 max-h-64 overflow-y-auto pr-2">
-                {set.services.map(svc => (
+                {bundle.services.map(svc => (
                    <div key={svc.id} className="p-3 rounded flex flex-col gap-1" style={{ background: 'var(--bg-card)', border: '1px solid var(--border)' }}>
                       <div className="flex items-center gap-2">
                          <span className="text-xl">{getServiceIcon(svc.name)}</span>

@@ -4,13 +4,13 @@ import { useState } from 'react';
 import { useAppStore } from '@/lib/store';
 import { getServiceIcon } from '@/lib/icons';
 import ServiceModal from '@/components/ServiceModal';
-import AppSetModal from '@/components/AppSetModal';
-import { type Service, type AppSet } from '@/types';
+import AppBundleModal from '@/components/AppBundleModal';
+import { type Service, type AppBundle } from '@/types';
 
 export default function RecommendationsPanel() {
-  const { machines, allSets, allServices, selectedMachineId, mode } = useAppStore();
+  const { machines, allBundles, allServices, selectedMachineId, mode } = useAppStore();
   const [serviceModalData, setServiceModalData] = useState<Service | null>(null);
-  const [appSetModalData, setAppSetModalData] = useState<AppSet | null>(null);
+  const [appBundleModalData, setAppBundleModalData] = useState<AppBundle | null>(null);
 
   const isExpert = mode === 'expert';
   const machine = selectedMachineId ? machines.find(m => m.id === selectedMachineId) ?? null : null;
@@ -24,18 +24,18 @@ export default function RecommendationsPanel() {
     );
   }
 
-  const maxSets = 3;
-  const recommendedSets = allSets.filter((set) => {
+  const maxBundles = 3;
+  const recommendedBundles = allBundles.filter((bundle) => {
     let totalCpu = 0;
     let totalRam = 0;
     let cloudSafe = true;
-    for (const svc of set.services) {
+    for (const svc of bundle.services) {
       totalCpu += svc.cpuCost;
       totalRam += svc.ramCostGb;
       if (!svc.isCloudRecommended && machine.type === 'VPS') cloudSafe = false;
     }
     return totalCpu <= machine.cpuCores && totalRam <= machine.memoryRamGb * 0.9 && cloudSafe;
-  }).slice(0, maxSets);
+  }).slice(0, maxBundles);
 
   const maxIndividualApps = 6;
   const recommendedApps = allServices.filter(svc => 
@@ -51,44 +51,44 @@ export default function RecommendationsPanel() {
       {/* Section header */}
       <div className="flex items-center gap-3 text-xs font-bold uppercase tracking-widest text-fg-muted">
          <span className="text-accent">{'//'}</span>
-         Recommended AppSets
+         Recommended App Bundles
       </div>
 
-      {/* AppSets Grid */}
-      {recommendedSets.length === 0 ? (
+      {/* App Bundles Grid */}
+      {recommendedBundles.length === 0 ? (
         <div className="py-12 text-center text-sm card text-fg-muted">
           <div className="text-3xl mb-4">⚠</div>
-          No sets fit this machine or environment. Limited resources, or perhaps it's a VPS and the sets include local-only apps (like Home Assistant). Try the manual builder.
+          No bundles fit this machine or environment. Limited resources, or perhaps it's a VPS and the bundles include local-only apps. Try the manual builder.
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {recommendedSets.map((set) => {
-            const totalCpu = set.services.reduce((acc, s) => acc + s.cpuCost, 0);
-            const totalRam = set.services.reduce((acc, s) => acc + s.ramCostGb, 0);
+          {recommendedBundles.map((bundle) => {
+            const totalCpu = bundle.services.reduce((acc, s) => acc + s.cpuCost, 0);
+            const totalRam = bundle.services.reduce((acc, s) => acc + s.ramCostGb, 0);
             const cpuPct = Math.min(Math.round((totalCpu / machine.cpuCores) * 100), 999);
             const ramPct = Math.min(Math.round((totalRam / machine.memoryRamGb) * 100), 999);
             const cpuClass = cpuPct > 70 ? 'warn' : 'accent';
             const ramClass = ramPct > 70 ? 'warn' : 'accent';
 
             return (
-              <div key={set.id} className="card flex flex-col gap-4 p-5 rounded">
+              <div key={bundle.id} className="card flex flex-col gap-4 p-5 rounded">
                 {/* Card Header & Button */}
                 <div className="flex justify-between items-start">
                       <div>
                         <div className="flex items-center gap-2 mb-1">
                           <span className="text-accent">◈</span>
                           <h4 className="font-bold text-sm text-fg">
-                            {set.name}
+                            {bundle.name}
                           </h4>
                         </div>
                         <p className="text-xs leading-relaxed text-fg-muted">
-                          {set.description}
+                          {bundle.description}
                         </p>
                       </div>
                   <button
-                    onClick={() => setAppSetModalData(set)}
+                    onClick={() => setAppBundleModalData(bundle)}
                     className="w-6 h-6 shrink-0 flex items-center justify-center text-[10px] font-bold transition-all btn-terminal ml-2"
-                    title="View Set Details"
+                    title="View Bundle Details"
                   >
                     i
                   </button>
@@ -122,7 +122,7 @@ export default function RecommendationsPanel() {
 
                 {/* Services list */}
                 <div className="flex flex-wrap gap-2 mt-2">
-                  {set.services.map((svc) => (
+                  {bundle.services.map((svc) => (
                     <button
                       key={svc.id}
                       onClick={() => setServiceModalData(svc)}
@@ -182,7 +182,7 @@ export default function RecommendationsPanel() {
       </div>
 
       <ServiceModal service={serviceModalData} onClose={() => setServiceModalData(null)} />
-      <AppSetModal set={appSetModalData} onClose={() => setAppSetModalData(null)} />
+      <AppBundleModal bundle={appBundleModalData} onClose={() => setAppBundleModalData(null)} />
     </section>
   );
 }

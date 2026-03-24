@@ -4,7 +4,7 @@ const prisma = new PrismaClient();
 
 async function main() {
   console.log("Limpiando DB...");
-  await prisma.appSet.deleteMany({});
+  await prisma.appBundle.deleteMany({});
   await prisma.service.deleteMany({});
   await prisma.machine.deleteMany({});
 
@@ -192,7 +192,7 @@ async function main() {
 
   await prisma.service.createMany({ data: servicesData });
 
-  console.log("Insertando AppSets...");
+  console.log("Insertando AppBundles...");
   
   const allServices = await prisma.service.findMany();
   const findSvc = (name: string) => allServices.find(s => s.name === name);
@@ -225,13 +225,13 @@ async function main() {
     }
   ];
 
-  for (const set of sets) {
-    const svcs = set.services.map(findSvc).filter(Boolean);
+  for (const bundle of sets) {
+    const svcs = bundle.services.map(findSvc).filter(Boolean);
     if(svcs.length > 0) {
-      await prisma.appSet.create({
+      await prisma.appBundle.create({
         data: {
-          name: set.name,
-          description: set.description,
+          name: bundle.name,
+          description: bundle.description,
           services: {
              connect: svcs.map(s => ({ id: s!.id }))
           }
