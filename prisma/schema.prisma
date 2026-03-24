@@ -1,56 +1,54 @@
-// This is your Prisma schema file
-
 generator client {
-  provider = "prisma-client-js"
+  provider = "prisma-client"
+  output   = "./generated/prisma"
 }
 
 datasource db {
   provider = "sqlite"
-  url      = env("DATABASE_URL")
 }
 
 model Machine { 
-  id             String   @id @default(cuid())
-  name           String
-  type           String   // 'MINI_PC' | 'VPS' | 'CUSTOM'
-  variants       MachineVariant[]
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  id        String   @id @default(cuid())
+  name      String
+  type      String
+  variants  MachineVariant[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model MachineVariant {
   id          String   @id @default(cuid())
-  name        String   // e.g. "832", "1664"
-  cpuCores    Float
+  name        String
+  cpuCores    Int
   memoryRamGb Float
   machineId   String
   machine     Machine  @relation(fields: [machineId], references: [id], onDelete: Cascade)
 }
 
 model Service {
-  id                    String   @id @default(cuid())
-  name                  String
-  category              String
-  minCPU                Float    // Minimum Cores required
-  recommendedCPU        Float    // Recommended Cores for optimal use
-  minRAM                Float    // Minimum RAM required in GB
-  recommendedRAM        Float    // Recommended RAM for optimal use
-  isCloudRecommended    Boolean  @default(true)
-  description           String?  // Short description
-  longDescription       String?  // Extended details for modals
-  officialUrl           String?
-  cubepathUrl           String?
-  dockerRegistryUrl     String?
-  appBundles            AppBundle[] // Implicit m2m
-  createdAt             DateTime @default(now())
-  updatedAt             DateTime @updatedAt
+  id                 String   @id @default(cuid())
+  name               String
+  category           String
+  minCPU             Float
+  recommendedCPU     Float
+  minRAM             Float
+  recommendedRAM     Float
+  isCloudRecommended Boolean  @default(true)
+  description        String?
+  longDescription    String?
+  officialUrl        String?
+  cubepathUrl        String?
+  dockerRegistryUrl  String?
+  appBundles         AppBundle[]
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
 }
 
 model AppBundle {
   id          String    @id @default(cuid())
   name        String
   description String?
-  services    Service[] // Implicit m2m
+  services    Service[]
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 }

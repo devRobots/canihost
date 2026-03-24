@@ -11,7 +11,7 @@ CREATE TABLE "Machine" (
 CREATE TABLE "MachineVariant" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "name" TEXT NOT NULL,
-    "cpuCores" REAL NOT NULL,
+    "cpuCores" INTEGER NOT NULL,
     "memoryRamGb" REAL NOT NULL,
     "machineId" TEXT NOT NULL,
     CONSTRAINT "MachineVariant_machineId_fkey" FOREIGN KEY ("machineId") REFERENCES "Machine" ("id") ON DELETE CASCADE ON UPDATE CASCADE
