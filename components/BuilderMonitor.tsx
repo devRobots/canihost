@@ -114,7 +114,7 @@ export default function BuilderMonitor({
             <span className="animate-pulse">⚠</span> Overloaded
           </div>
           <p className="font-sans leading-relaxed opacity-90">
-            Your machine cannot handle this stack. Consider removing some apps
+            Your host cannot handle this stack. Consider removing some apps
             or returning to Home to upgrade your hardware.
           </p>
         </div>

@@ -1,5 +1,5 @@
 import Hero from '@/components/Hero';
-import MachinePicker from '@/components/HostPicker';
+import HostPicker from '@/components/HostPicker';
 import RecommendationsPanel from '@/components/RecommendationsPanel';
 import StoreInitializer from '@/components/StoreInitializer';
 import prisma from '@/lib/prisma';
@@ -24,7 +24,7 @@ export default async function Home() {
       <div className="bg-page flex min-h-screen flex-col font-mono">
         <Hero />
         <div className="container mx-auto flex flex-col gap-10 px-4 py-8 sm:px-8">
-          <MachinePicker />
+          <HostPicker />
           <RecommendationsPanel />
         </div>
       </div>

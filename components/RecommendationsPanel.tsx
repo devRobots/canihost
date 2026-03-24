@@ -138,7 +138,7 @@ export default function RecommendationsPanel() {
       <div className="text-fg-dim py-16 text-center text-sm">
         <div className="mb-4 text-4xl">_</div>
         <span className="prompt">
-          Select a machine above to see recommendations
+          Select a host above to see recommendations
         </span>
       </div>
     );

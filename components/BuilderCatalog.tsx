@@ -38,7 +38,7 @@ export default function BuilderCatalog({
 
   return (
     <div className="border-default flex flex-1 flex-col gap-6 overflow-y-auto border-r p-6">
-      {/* Machine Header */}
+      {/* Host Header */}
       <div className="bg-card border-line-accent pulse-glow flex flex-col justify-between gap-4 rounded p-4 sm:flex-row sm:items-center">
         <div className="flex flex-col gap-1.5">
           <div className="flex items-center gap-2">
@@ -68,7 +68,7 @@ export default function BuilderCatalog({
           href="/"
           className="btn-terminal px-4 py-2 text-center text-xs font-bold transition-all"
         >
-          ↶ Change Machine
+          ↶ Change Host
         </Link>
       </div>
       {categories.map((cat) => {

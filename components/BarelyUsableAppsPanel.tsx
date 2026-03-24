@@ -22,7 +22,7 @@ export default function BarelyUsableAppsPanel({
         Barely Usable Apps
       </div>
       <p className="text-fg-dim -mt-2 text-xs">
-        These apps can run on the machine, but might encounter performance
+        These apps can run on the host, but might encounter performance
         constraints or leave little room for other services.
       </p>
 

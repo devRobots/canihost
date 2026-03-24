@@ -19,7 +19,7 @@ interface AppState {
     allApps: App[];
   }) => void;
 
-  /** Custom resources overrides exclusively for the CUSTOM machine */
+  /** Custom resources overrides exclusively for the CUSTOM host */
   customVariantCores: number;
   customVariantRam: number;
   setCustomResources: (cores: number, ram: number) => void;
@@ -29,7 +29,7 @@ interface AppState {
   setMode: (m: Mode) => void;
   toggleMode: () => void;
 
-  /** Currently selected machine and its specific variant */
+  /** Currently selected host and its specific variant */
   selectedHostId: string | null;
   selectedVariantId: string | null;
   setSelectedHostId: (id: string | null) => void;
@@ -55,18 +55,18 @@ export const useAppStore = create<AppState>()(
           let hostId = state.selectedHostId;
           let variantId = state.selectedVariantId;
 
-          // Ensure machine exists
-          const machineExists = data.hosts.find((m) => m.id === hostId);
-          if (!machineExists) {
+          // Ensure host exists
+          const hostExists = data.hosts.find((m) => m.id === hostId);
+          if (!hostExists) {
             hostId = data.hosts[0]?.id || null;
             variantId = data.hosts[0]?.variants[0]?.id || null;
           } else {
-            // Check if variant exists in that machine
-            const variantExists = machineExists.variants.find(
+            // Check if variant exists in that host
+            const variantExists = hostExists.variants.find(
               (v) => v.id === variantId,
             );
             if (!variantExists) {
-              variantId = machineExists.variants[0]?.id || null;
+              variantId = hostExists.variants[0]?.id || null;
             }
           }
 
@@ -90,15 +90,15 @@ export const useAppStore = create<AppState>()(
       toggleMode: () =>
         set({ mode: get().mode === 'expert' ? 'normal' : 'expert' }),
 
-      // Machine selection
+      // Host selection
       selectedHostId: null,
       selectedVariantId: null,
       setSelectedHostId: (id) =>
         set((state) => {
-          const machine = state.hosts.find((m) => m.id === id);
+          const host = state.hosts.find((m) => m.id === id);
           return {
-            selectedMachineId: id,
-            selectedVariantId: machine?.variants[0]?.id || null,
+            selectedHostId: id,
+            selectedVariantId: host?.variants[0]?.id || null,
           };
         }),
       setSelectedVariantId: (id) => set({ selectedVariantId: id }),

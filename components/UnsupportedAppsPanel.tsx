@@ -22,7 +22,7 @@ export default function UnsupportedAppsPanel({
         Not Supported Apps
       </div>
       <p className="text-fg-dim -mt-2 text-xs">
-        These apps require more resources than the current machine can provide
+        These apps require more resources than the current host can provide
         or are incompatible with the environment.
       </p>
 

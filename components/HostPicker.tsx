@@ -84,12 +84,12 @@ export default function HostPicker() {
     .sort((a, b) => a.name.localeCompare(b.name));
   const customs = hosts.filter((m) => m.type === HostType.CUSTOM);
 
-  const selectedMachine = hosts.find((m) => m.id === selectedHostId);
+  const selectedHost = hosts.find((m) => m.id === selectedHostId);
   const selectedVariant =
-    selectedMachine?.variants.find((v) => v.id === selectedVariantId) ||
-    selectedMachine?.variants[0];
+    selectedHost?.variants.find((v) => v.id === selectedVariantId) ||
+    selectedHost?.variants[0];
 
-  const isCustom = selectedMachine?.type === HostType.CUSTOM;
+  const isCustom = selectedHost?.type === HostType.CUSTOM;
   const currentCores = isCustom
     ? customVariantCores
     : selectedVariant?.cpuCores || 0;
@@ -117,14 +117,14 @@ export default function HostPicker() {
           >
             <div className="flex items-center gap-3">
               <div className="flex flex-col items-center justify-center opacity-70 transition-opacity group-hover:opacity-100">
-                {getHostTypeIcon(selectedMachine?.type)}
+                {getHostTypeIcon(selectedHost?.type)}
                 <span className="text-fg-dim mt-1 text-[8px] font-bold tracking-widest uppercase">
-                  {getHostTypeLabel(selectedMachine?.type)}
+                  {getHostTypeLabel(selectedHost?.type)}
                 </span>
               </div>
 
               <span className="text-fg max-w-[200px] truncate pl-4 text-sm font-bold">
-                {selectedMachine ? selectedMachine.name : 'Choose...'}
+                {selectedHost ? selectedHost.name : 'Choose...'}
               </span>
             </div>
             <ChevronDown
@@ -179,7 +179,7 @@ export default function HostPicker() {
           )}
         </div>
 
-        {selectedMachine && (
+        {selectedHost && (
           <>
             <div className="bg-border my-1 h-[1px] w-full opacity-50 sm:mx-2 sm:my-0 sm:h-8 sm:w-[1px]" />
 
@@ -187,12 +187,12 @@ export default function HostPicker() {
             <div className="relative flex-1 sm:flex-none">
               <button
                 onClick={() => {
-                  if (selectedMachine.variants.length > 1 && !isCustom)
+                  if (selectedHost.variants.length > 1 && !isCustom)
                     setOpenDropdown(
                       openDropdown === 'variant' ? null : 'variant',
                     );
                 }}
-                className={`flex w-full items-center gap-2 py-1 text-left ${selectedMachine.variants.length > 1 && !isCustom ? 'group cursor-pointer transition-colors' : 'cursor-default'}`}
+                className={`flex w-full items-center gap-2 py-1 text-left ${selectedHost.variants.length > 1 && !isCustom ? 'group cursor-pointer transition-colors' : 'cursor-default'}`}
               >
                 <div className="flex flex-col items-center justify-center opacity-70">
                   <Box size={20} />
@@ -203,7 +203,7 @@ export default function HostPicker() {
                 <span className="text-fg pl-4 text-sm font-bold">
                   {selectedVariant?.name || 'Standard'}
                 </span>
-                {selectedMachine.variants.length > 1 && !isCustom && (
+                {selectedHost.variants.length > 1 && !isCustom && (
                   <ChevronDown
                     size={14}
                     className={`text-fg-dim transition-transform ${openDropdown === 'variant' ? 'rotate-180' : ''}`}
@@ -212,11 +212,11 @@ export default function HostPicker() {
               </button>
 
               {openDropdown === 'variant' &&
-                selectedMachine.variants.length > 1 &&
+                selectedHost.variants.length > 1 &&
                 !isCustom && (
                   <div className="bg-card border-default absolute top-full left-0 z-50 mt-3 w-full rounded-md border shadow-2xl sm:min-w-max">
                     <div className="flex flex-col gap-0.5 p-1 px-1.5">
-                      {selectedMachine.variants.map((v) => (
+                      {selectedHost.variants.map((v) => (
                         <button
                           key={v.id}
                           onClick={() => {

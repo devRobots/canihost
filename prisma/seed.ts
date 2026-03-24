@@ -16,7 +16,7 @@ async function main() {
 
   console.log('Insertando Hosts y Variantes...');
 
-  const machinesData = [
+  const hostsData = [
     {
       name: 'Zimaboard 2',
       type: HostType.MINI_PC,
@@ -67,13 +67,13 @@ async function main() {
     },
   ];
 
-  for (const mData of machinesData) {
+  for (const hData of hostsData) {
     await prisma.host.create({
       data: {
-        name: mData.name,
-        type: mData.type,
+        name: hData.name,
+        type: hData.type,
         variants: {
-          create: mData.variants,
+          create: hData.variants,
         },
       },
     });

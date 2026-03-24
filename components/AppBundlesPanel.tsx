@@ -29,8 +29,7 @@ export default function AppBundlesPanel({
         <div className="text-fg-dim border-border flex flex-col items-center justify-center gap-3 rounded-md border border-dashed bg-transparent py-6 text-xs sm:flex-row">
           <span className="text-lg opacity-70">ℹ</span>
           <span className="opacity-80">
-            The selected machine lacks the resources to run app bundles. Try an
-            individual app below.
+            The selected host lacks the resources to run the selected app bundle. Try an individual app below.
           </span>
         </div>
       ) : (

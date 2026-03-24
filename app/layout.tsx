@@ -4,7 +4,7 @@ import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'CanIHost.tech',
-  description: 'Check what services can run on your Machine or VPS',
+  description: 'Check what services can run on your host',
 };
 
 export default function RootLayout({
