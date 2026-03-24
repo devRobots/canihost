@@ -10,20 +10,18 @@ import AppModal from '@/components/AppModal';
 import BarelyUsableAppsPanel from '@/components/BarelyUsableAppsPanel';
 import RecommendedAppsPanel from '@/components/RecommendedAppsPanel';
 import UnsupportedAppsPanel from '@/components/UnsupportedAppsPanel';
-import { useAppStore } from '@/lib/store';
+import { useDbStore, useHostStore, useModeStore } from '@/lib/store';
 import { type ActiveHost, type AppBundle } from '@/types';
 
 export default function RecommendationsPanel() {
+  const { hosts, bundles: allBundles, apps: allApps } = useDbStore();
   const {
-    hosts,
-    allBundles,
-    allApps,
     selectedHostId,
     selectedVariantId,
-    customVariantCores,
-    customVariantRam,
-    mode,
-  } = useAppStore();
+    core,
+    ram,
+  } = useHostStore();
+  const { mode } = useModeStore();
   const [appModalData, setAppModalData] = useState<App | null>(null);
   const [appBundleModalData, setAppBundleModalData] =
     useState<AppBundle | null>(null);
@@ -56,9 +54,9 @@ export default function RecommendationsPanel() {
 
     const activeHost: ActiveHost = {
       ...host,
-      cpuCores: isCustom ? customVariantCores : selectedVariant?.cpuCores || 0,
+      cpuCores: isCustom ? core : selectedVariant?.cpuCores || 0,
       memoryRamGb: isCustom
-        ? customVariantRam
+        ? ram
         : selectedVariant?.memoryRamGb || 0,
     };
 
@@ -128,8 +126,8 @@ export default function RecommendationsPanel() {
     allApps,
     selectedHostId,
     selectedVariantId,
-    customVariantCores,
-    customVariantRam,
+    core,
+    ram,
     hosts,
   ]);
 

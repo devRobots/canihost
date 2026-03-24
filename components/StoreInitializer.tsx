@@ -3,7 +3,7 @@
 import { App } from '@prisma/client';
 import { useRef } from 'react';
 
-import { useAppStore } from '@/lib/store';
+import { useDbStore, useHostStore } from '@/lib/store';
 import { type AppBundle, type Host } from '@/types';
 
 export default function StoreInitializer({
@@ -17,10 +17,24 @@ export default function StoreInitializer({
 }) {
   const initialized = useRef(false);
   if (!initialized.current) {
-    // We silently hydrate the store on mount to avoid the "Cannot update a component while rendering" warning in React 18+
-    const state = useAppStore.getState();
-    if (state.hosts.length === 0) {
-      state.setInitialData({ hosts, allBundles, allApps });
+    const dbState = useDbStore.getState();
+    const hostState = useHostStore.getState();
+
+    if (dbState.hosts.length === 0) {
+      dbState.setInitialData({ hosts, bundles: allBundles, apps: allApps });
+
+      const hostId = hostState.selectedHostId;
+      const variantId = hostState.selectedVariantId;
+
+      const hostExists = hosts.find((m) => m.id === hostId);
+      if (!hostExists) {
+        hostState.setSelectedHostId(hosts[0]?.id || null, hosts);
+      } else {
+        const variantExists = hostExists.variants.find((v) => v.id === variantId);
+        if (!variantExists) {
+          useHostStore.setState({ selectedVariantId: hostExists.variants[0]?.id || null });
+        }
+      }
     }
     initialized.current = true;
   }

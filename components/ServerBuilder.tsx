@@ -8,17 +8,17 @@ import AppModal from '@/components/AppModal';
 import BuilderCatalog from '@/components/BuilderCatalog';
 import BuilderMonitor from '@/components/BuilderMonitor';
 import Modal from '@/components/Modal';
-import { useAppStore } from '@/lib/store';
+import { useDbStore, useHostStore } from '@/lib/store';
 import { type ActiveHost, type Host } from '@/types';
 
 export default function ServerBuilder() {
+  const { hosts } = useDbStore();
   const {
-    hosts,
     selectedHostId,
     selectedVariantId,
-    customVariantCores,
-    customVariantRam,
-  } = useAppStore();
+    core,
+    ram,
+  } = useHostStore();
   const host =
     hosts.find((h: Host) => h.id === selectedHostId) || hosts[0];
 
@@ -43,9 +43,9 @@ export default function ServerBuilder() {
 
   const activeHost: ActiveHost = {
     ...host,
-    cpuCores: isCustom ? customVariantCores : selectedVariant?.cpuCores || 0,
+    cpuCores: isCustom ? core : selectedVariant?.cpuCores || 0,
     memoryRamGb: isCustom
-      ? customVariantRam
+      ? ram
       : selectedVariant?.memoryRamGb || 0,
   };
 

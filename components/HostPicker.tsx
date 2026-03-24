@@ -13,7 +13,7 @@ import {
 } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 
-import { useAppStore } from '@/lib/store';
+import { useDbStore, useHostStore, useModeStore } from '@/lib/store';
 
 const getHostTypeIcon = (type?: string) => {
   if (type === 'VPS') return <Cloud size={20} />;
@@ -28,18 +28,17 @@ const getHostTypeLabel = (type?: string) => {
 };
 
 export default function HostPicker() {
+  const { hosts } = useDbStore();
   const {
     selectedHostId,
     selectedVariantId,
     setSelectedHostId,
     setSelectedVariantId,
-    hosts,
-    customVariantCores,
-    customVariantRam,
+    core,
+    ram,
     setCustomResources,
-    mode,
-    toggleMode,
-  } = useAppStore();
+  } = useHostStore();
+  const { mode, toggleMode } = useModeStore();
 
   const [openDropdown, setOpenDropdown] = useState<
     'host' | 'variant' | 'cpu' | 'ram' | null
@@ -65,7 +64,7 @@ export default function HostPicker() {
   }, []);
 
   const handleSelectHost = (id: string) => {
-    setSelectedHostId(id);
+    setSelectedHostId(id, hosts);
     setOpenDropdown(null);
     setTimeout(
       () =>
@@ -91,10 +90,10 @@ export default function HostPicker() {
 
   const isCustom = selectedHost?.type === HostType.CUSTOM;
   const currentCores = isCustom
-    ? customVariantCores
+    ? core
     : selectedVariant?.cpuCores || 0;
   const currentRam = isCustom
-    ? customVariantRam
+    ? ram
     : selectedVariant?.memoryRamGb || 0;
 
   const CPU_OPTIONS = [1, 2, 4, 6, 8, 10, 12, 14, 16, 24, 32, 64];

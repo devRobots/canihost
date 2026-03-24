@@ -5,7 +5,7 @@ import { HostType } from '@prisma/enums';
 
 import PieChart from '@/components/PieChart';
 import { getAppIcon } from '@/lib/icons';
-import { useAppStore } from '@/lib/store';
+import { useBuilderStore, useDbStore, useModeStore } from '@/lib/store';
 import { type ActiveHost } from '@/types';
 
 type Props = {
@@ -17,7 +17,9 @@ export default function BuilderMonitor({
   host,
   setAppModalData,
 }: Props) {
-  const { allApps, selectedAppIds, mode } = useAppStore();
+  const { apps: allApps } = useDbStore();
+  const { selectedAppIds } = useBuilderStore();
+  const { mode } = useModeStore();
   const isExpert = mode === 'expert';
 
   const selectedApps = allApps.filter((s) => selectedAppIds.has(s.id));

@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 
 import { getAppIcon } from '@/lib/icons';
-import { useAppStore } from '@/lib/store';
+import { useBuilderStore, useDbStore, useModeStore } from '@/lib/store';
 import { type ActiveHost } from '@/types';
 
 type Props = {
@@ -20,8 +20,9 @@ export default function BuilderCatalog({
   setAppModalData,
   setHostModalOpen,
 }: Props) {
-  const { allApps, selectedAppIds, toggleAppId, mode } =
-    useAppStore();
+  const { apps } = useDbStore();
+  const { selectedAppIds, toggleAppId } = useBuilderStore();
+  const { mode } = useModeStore();
 
   const isExpert = mode === 'expert';
 
@@ -29,7 +30,7 @@ export default function BuilderCatalog({
     Record<string, boolean>
   >({});
   const categories = Array.from(
-    new Set(allApps.map((s) => s.category)),
+    new Set(apps.map((s) => s.category)),
   ).sort();
 
   const toggleCategory = (cat: string) => {
@@ -89,7 +90,7 @@ export default function BuilderCatalog({
 
             {!isCollapsed && (
               <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
-                {allApps
+                {apps
                   .filter((s) => s.category === cat)
                   .map((svc) => {
                     const isSelected = selectedAppIds.has(svc.id);

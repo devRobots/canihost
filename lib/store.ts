@@ -4,106 +4,98 @@ import { createJSONStorage, persist } from 'zustand/middleware';
 
 import { type AppBundle, type Host } from '@/types';
 
-// ─── Types ─────────────────────────────────────────────────────────────────
-
 type Mode = 'normal' | 'expert';
 
-interface AppState {
-  /** Global Data */
+// ─── DB Store ─────────────────────────────────────────────────────────────────
+
+interface DbState {
   hosts: Host[];
-  allBundles: AppBundle[];
-  allApps: App[];
-  setInitialData: (data: {
-    hosts: Host[];
-    allBundles: AppBundle[];
-    allApps: App[];
-  }) => void;
-
-  /** Custom resources overrides exclusively for the CUSTOM host */
-  customVariantCores: number;
-  customVariantRam: number;
-  setCustomResources: (cores: number, ram: number) => void;
-
-  /** UI mode: normal hides technical specs, expert shows full details */
-  mode: Mode;
-  setMode: (m: Mode) => void;
-  toggleMode: () => void;
-
-  /** Currently selected host and its specific variant */
-  selectedHostId: string | null;
-  selectedVariantId: string | null;
-  setSelectedHostId: (id: string | null) => void;
-  setSelectedVariantId: (id: string | null) => void;
-
-  /** Apps selected in the manual builder */
-  selectedAppIds: Set<string>;
-  toggleAppId: (id: string) => void;
-  clearApps: () => void;
+  bundles: AppBundle[];
+  apps: App[];
+  setInitialData: (data: { hosts: Host[]; bundles: AppBundle[]; apps: App[] }) => void;
 }
 
-// ─── Store ──────────────────────────────────────────────────────────────────
+export const useDbStore = create<DbState>((set) => ({
+  hosts: [],
+  bundles: [],
+  apps: [],
+  setInitialData: (data) => set(data),
+}));
 
-export const useAppStore = create<AppState>()(
+// ─── Host Store ───────────────────────────────────────────────────────────────
+
+interface HostState {
+  core: number;
+  ram: number;
+  selectedHostId: string | null;
+  selectedVariantId: string | null;
+  setCustomResources: (core: number, ram: number) => void;
+  setSelectedHostId: (id: string | null, hosts: Host[]) => void;
+  setSelectedVariantId: (id: string | null) => void;
+}
+
+export const useHostStore = create<HostState>()(
   persist(
-    (set, get) => ({
-      // Global Data
-      hosts: [],
-      allBundles: [],
-      allApps: [],
-      setInitialData: (data) =>
-        set((state) => {
-          let hostId = state.selectedHostId;
-          let variantId = state.selectedVariantId;
-
-          // Ensure host exists
-          const hostExists = data.hosts.find((m) => m.id === hostId);
-          if (!hostExists) {
-            hostId = data.hosts[0]?.id || null;
-            variantId = data.hosts[0]?.variants[0]?.id || null;
-          } else {
-            // Check if variant exists in that host
-            const variantExists = hostExists.variants.find(
-              (v) => v.id === variantId,
-            );
-            if (!variantExists) {
-              variantId = hostExists.variants[0]?.id || null;
-            }
-          }
-
-          return {
-            ...data,
-            hosts: data.hosts,
-            selectedHostId: hostId,
-            selectedVariantId: variantId,
-          };
-        }),
-
-      // Custom Overrides
-      customVariantCores: 4,
-      customVariantRam: 8,
-      setCustomResources: (cores, ram) =>
-        set({ customVariantCores: cores, customVariantRam: ram }),
-
-      // Mode
-      mode: 'normal',
-      setMode: (m) => set({ mode: m }),
-      toggleMode: () =>
-        set({ mode: get().mode === 'expert' ? 'normal' : 'expert' }),
-
-      // Host selection
+    (set) => ({
+      core: 4,
+      ram: 8,
       selectedHostId: null,
       selectedVariantId: null,
-      setSelectedHostId: (id) =>
-        set((state) => {
-          const host = state.hosts.find((m) => m.id === id);
+      setCustomResources: (core, ram) => set({ core, ram }),
+      setSelectedHostId: (id, hosts) =>
+        set(() => {
+          const host = hosts.find((h) => h.id === id);
           return {
             selectedHostId: id,
             selectedVariantId: host?.variants[0]?.id || null,
           };
         }),
       setSelectedVariantId: (id) => set({ selectedVariantId: id }),
+    }),
+    {
+      name: 'host-store',
+      storage: createJSONStorage(() =>
+        typeof window !== 'undefined' ? window.localStorage : { getItem: () => null, setItem: () => {}, removeItem: () => {} }
+      ),
+    }
+  )
+);
 
-      // App builder
+// ─── Mode Store ───────────────────────────────────────────────────────────────
+
+interface ModeState {
+  mode: Mode;
+  setMode: (m: Mode) => void;
+  toggleMode: () => void;
+}
+
+export const useModeStore = create<ModeState>()(
+  persist(
+    (set, get) => ({
+      mode: 'normal',
+      setMode: (m) => set({ mode: m }),
+      toggleMode: () => set({ mode: get().mode === 'expert' ? 'normal' : 'expert' }),
+    }),
+    {
+      name: 'mode-store',
+      storage: createJSONStorage(() =>
+        typeof window !== 'undefined' ? window.localStorage : { getItem: () => null, setItem: () => {}, removeItem: () => {} }
+      ),
+    }
+  )
+);
+
+// ─── Builder Store ────────────────────────────────────────────────────────────
+
+interface BuilderState {
+  selectedAppIds: Set<string>;
+  toggleAppId: (id: string) => void;
+  clearApps: () => void;
+}
+
+export const useBuilderStore = create<BuilderState>()(
+  persist(
+    (set) => ({
       selectedAppIds: new Set<string>(),
       toggleAppId: (id) =>
         set((s) => {
@@ -115,31 +107,18 @@ export const useAppStore = create<AppState>()(
       clearApps: () => set({ selectedAppIds: new Set<string>() }),
     }),
     {
-      name: 'canihost-store',
+      name: 'builder-store',
       storage: createJSONStorage(() =>
-        typeof window !== 'undefined'
-          ? window.localStorage
-          : {
-              getItem: () => null,
-              setItem: () => {},
-              removeItem: () => {},
-            },
+        typeof window !== 'undefined' ? window.localStorage : { getItem: () => null, setItem: () => {}, removeItem: () => {} }
       ),
       partialize: (state) => ({
-        mode: state.mode,
-        selectedHostId: state.selectedHostId,
-        selectedVariantId: state.selectedVariantId,
-        customVariantCores: state.customVariantCores,
-        customVariantRam: state.customVariantRam,
         selectedAppIds: Array.from(state.selectedAppIds),
       }),
       merge: (persisted, current) => ({
         ...current,
-        ...(persisted as Partial<AppState>),
-        selectedAppIds: new Set(
-          (persisted as { selectedAppIds?: string[] }).selectedAppIds ?? [],
-        ),
+        ...(persisted as Partial<BuilderState>),
+        selectedAppIds: new Set((persisted as { selectedAppIds?: string[] })?.selectedAppIds ?? []),
       }),
-    },
-  ),
+    }
+  )
 );
