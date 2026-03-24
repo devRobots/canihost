@@ -46,7 +46,7 @@ export default function AppBundleCard({ bundle, machine, isExpert, onBundleClick
         <div className="flex flex-col gap-1 mt-auto">
           <div className="flex justify-between text-xs text-fg-dim">
             <span className={`text-${cpuClass}`}>CPU</span>
-            <span>{totalCpu}c / {machine.cpuCores}c</span>
+            <span>{totalCpu.toFixed(2)}c / {machine.cpuCores}c</span>
           </div>
           <div className="h-1 bg-input rounded overflow-hidden flex">
             <div className={`bar-fill ${cpuClass}`} style={{ width: `${cpuPct}%` }} />
@@ -59,7 +59,7 @@ export default function AppBundleCard({ bundle, machine, isExpert, onBundleClick
         <div className="flex flex-col gap-1">
           <div className="flex justify-between text-xs text-fg-dim">
             <span className={`text-${ramClass}`}>RAM</span>
-            <span>{totalRam}GB / {machine.memoryRamGb}GB</span>
+            <span>{totalRam.toFixed(2)}GB / {machine.memoryRamGb}GB</span>
           </div>
           <div className="h-1 bg-input rounded overflow-hidden flex">
             <div className={`bar-fill ${ramClass}`} style={{ width: `${ramPct}%` }} />
