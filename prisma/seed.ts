@@ -1,5 +1,5 @@
 import { PrismaBetterSqlite3 } from '@prisma/adapter-better-sqlite3';
-import { MachineType, PrismaClient } from '@prisma/client';
+import { HostType, PrismaClient } from '@prisma/client';
 
 const adapter = new PrismaBetterSqlite3({
   url: process.env.DATABASE_URL,
@@ -10,16 +10,16 @@ const prisma = new PrismaClient({ adapter });
 async function main() {
   console.log('Limpiando DB...');
   await prisma.appBundle.deleteMany({});
-  await prisma.service.deleteMany({});
-  await prisma.machineVariant.deleteMany({});
-  await prisma.machine.deleteMany({});
+  await prisma.app.deleteMany({});
+  await prisma.hostVariant.deleteMany({});
+  await prisma.host.deleteMany({});
 
-  console.log('Insertando Máquinas y Variantes...');
+  console.log('Insertando Hosts y Variantes...');
 
   const machinesData = [
     {
       name: 'Zimaboard 2',
-      type: MachineType.MINI_PC,
+      type: HostType.MINI_PC,
       variants: [
         { name: '832', cpuCores: 4, memoryRamGb: 8 },
         { name: '1664', cpuCores: 4, memoryRamGb: 16 },
@@ -27,12 +27,12 @@ async function main() {
     },
     {
       name: 'Chuwi Larkbox X',
-      type: MachineType.MINI_PC,
+      type: HostType.MINI_PC,
       variants: [{ name: 'N100 12GB', cpuCores: 4, memoryRamGb: 12 }],
     },
     {
       name: 'Mac Mini M2',
-      type: MachineType.MINI_PC,
+      type: HostType.MINI_PC,
       variants: [
         { name: 'Base', cpuCores: 8, memoryRamGb: 8 },
         { name: 'Pro', cpuCores: 10, memoryRamGb: 16 },
@@ -40,7 +40,7 @@ async function main() {
     },
     {
       name: 'Raspberry Pi 5',
-      type: MachineType.MINI_PC,
+      type: HostType.MINI_PC,
       variants: [
         { name: '8GB', cpuCores: 4, memoryRamGb: 8 },
         { name: '4GB', cpuCores: 4, memoryRamGb: 4 },
@@ -48,12 +48,12 @@ async function main() {
     },
     {
       name: 'Intel NUC 13 Pro',
-      type: MachineType.MINI_PC,
+      type: HostType.MINI_PC,
       variants: [{ name: 'i7 16GB', cpuCores: 12, memoryRamGb: 16 }],
     },
     {
       name: 'CubePath VPS',
-      type: MachineType.VPS,
+      type: HostType.VPS,
       variants: [
         { name: 'Starter (1vCPU/1GB)', cpuCores: 1, memoryRamGb: 1 },
         { name: 'Developer (2vCPU/4GB)', cpuCores: 2, memoryRamGb: 4 },
@@ -62,13 +62,13 @@ async function main() {
     },
     {
       name: 'Custom Server',
-      type: MachineType.CUSTOM,
+      type: HostType.CUSTOM,
       variants: [{ name: 'Customized', cpuCores: 4, memoryRamGb: 8 }],
     },
   ];
 
   for (const mData of machinesData) {
-    await prisma.machine.create({
+    await prisma.host.create({
       data: {
         name: mData.name,
         type: mData.type,
@@ -79,7 +79,7 @@ async function main() {
     });
   }
 
-  console.log('Insertando Servicios (>40 aplicaciones)...');
+  console.log('Insertando Apps (>40 aplicaciones)...');
 
   const servicesData = [
     // Databases
@@ -376,11 +376,11 @@ async function main() {
     },
   ];
 
-  await prisma.service.createMany({ data: servicesData });
+  await prisma.app.createMany({ data: servicesData });
 
   console.log('Insertando AppBundles...');
 
-  const allServices = await prisma.service.findMany();
+  const allServices = await prisma.app.findMany();
   const findSvc = (name: string) => allServices.find((s) => s.name === name);
 
   const sets = [
@@ -408,7 +408,7 @@ async function main() {
         data: {
           name: s.name,
           description: s.description,
-          services: {
+          apps: {
             connect: svcs.map((svc) => ({ id: svc!.id })),
           },
         },

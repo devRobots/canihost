@@ -1,11 +1,11 @@
 import { Prisma } from '@prisma/client';
 
-export type ActiveMachine = Machine & {
+export type ActiveHost = Host & {
   cpuCores: number;
   memoryRamGb: number;
 };
 
-export type Machine = Prisma.MachineGetPayload<{
+export type Host = Prisma.HostGetPayload<{
   include: {
     variants: true;
   };
@@ -13,6 +13,6 @@ export type Machine = Prisma.MachineGetPayload<{
 
 export type AppBundle = Prisma.AppBundleGetPayload<{
   include: {
-    services: true;
+    apps: true;
   };
 }>;

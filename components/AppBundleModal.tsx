@@ -1,7 +1,7 @@
 'use client';
 
 import Modal from '@/components/Modal';
-import { getServiceIcon } from '@/lib/icons';
+import { getAppIcon } from '@/lib/icons';
 import { type AppBundle } from '@/types';
 
 export default function AppBundleModal({
@@ -33,7 +33,7 @@ export default function AppBundleModal({
                 Total Min CPU
               </div>
               <div className="font-bold" style={{ color: 'var(--fg)' }}>
-                {bundle.services
+                {bundle.apps
                   .reduce((acc, s) => acc + s.minCPU, 0)
                   .toFixed(1)}{' '}
                 cores
@@ -47,7 +47,7 @@ export default function AppBundleModal({
                 Total Min RAM
               </div>
               <div className="font-bold" style={{ color: 'var(--fg)' }}>
-                {bundle.services
+                {bundle.apps
                   .reduce((acc, s) => acc + s.minRAM, 0)
                   .toFixed(1)}{' '}
                 GB
@@ -63,9 +63,9 @@ export default function AppBundleModal({
               {'// '} Individual Application Roles & Costs
             </div>
             <div className="flex max-h-64 flex-col gap-2 overflow-y-auto pr-2">
-              {bundle.services.map((svc) => (
+              {bundle.apps.map((app) => (
                 <div
-                  key={svc.id}
+                  key={app.id}
                   className="flex flex-col gap-1 rounded p-3"
                   style={{
                     background: 'var(--bg-card)',
@@ -73,25 +73,25 @@ export default function AppBundleModal({
                   }}
                 >
                   <div className="flex items-center gap-2">
-                    <span className="text-xl">{getServiceIcon(svc.name)}</span>
+                    <span className="text-xl">{getAppIcon(app.name)}</span>
                     <span
                       className="text-xs font-bold"
                       style={{ color: 'var(--fg)' }}
                     >
-                      {svc.name}
+                      {app.name}
                     </span>
                     <span
                       className="font-mono text-[10px] whitespace-nowrap"
                       style={{ color: 'var(--fg-dim)' }}
                     >
-                      {svc.minCPU}c | {svc.minRAM}G
+                      {app.minCPU}c | {app.minRAM}G
                     </span>
                   </div>
                   <div
                     className="mt-1 text-[10px] font-bold tracking-widest uppercase opacity-70"
                     style={{ color: 'var(--fg-dim)' }}
                   >
-                    CPU: {svc.minCPU}C | RAM: {svc.minRAM}GB
+                    CPU: {app.minCPU}C | RAM: {app.minRAM}GB
                   </div>
                 </div>
               ))}

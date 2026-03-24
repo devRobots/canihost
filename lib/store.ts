@@ -1,8 +1,8 @@
-import { Service } from '@prisma/client';
+import { App } from '@prisma/client';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 
-import { type AppBundle, type Machine } from '@/types';
+import { type AppBundle, type Host } from '@/types';
 
 // ─── Types ─────────────────────────────────────────────────────────────────
 
@@ -10,13 +10,13 @@ type Mode = 'normal' | 'expert';
 
 interface AppState {
   /** Global Data */
-  machines: Machine[];
+  hosts: Host[];
   allBundles: AppBundle[];
-  allServices: Service[];
+  allApps: App[];
   setInitialData: (data: {
-    machines: Machine[];
+    hosts: Host[];
     allBundles: AppBundle[];
-    allServices: Service[];
+    allApps: App[];
   }) => void;
 
   /** Custom resources overrides exclusively for the CUSTOM machine */
@@ -30,15 +30,15 @@ interface AppState {
   toggleMode: () => void;
 
   /** Currently selected machine and its specific variant */
-  selectedMachineId: string | null;
+  selectedHostId: string | null;
   selectedVariantId: string | null;
-  setSelectedMachineId: (id: string | null) => void;
+  setSelectedHostId: (id: string | null) => void;
   setSelectedVariantId: (id: string | null) => void;
 
   /** Services selected in the manual builder */
-  selectedServiceIds: Set<string>;
-  toggleServiceId: (id: string) => void;
-  clearServices: () => void;
+  selectedAppIds: Set<string>;
+  toggleAppId: (id: string) => void;
+  clearApps: () => void;
 }
 
 // ─── Store ──────────────────────────────────────────────────────────────────
@@ -47,19 +47,19 @@ export const useAppStore = create<AppState>()(
   persist(
     (set, get) => ({
       // Global Data
-      machines: [],
+      hosts: [],
       allBundles: [],
-      allServices: [],
+      allApps: [],
       setInitialData: (data) =>
         set((state) => {
-          let machineId = state.selectedMachineId;
+          let hostId = state.selectedHostId;
           let variantId = state.selectedVariantId;
 
           // Ensure machine exists
-          const machineExists = data.machines.find((m) => m.id === machineId);
+          const machineExists = data.hosts.find((m) => m.id === hostId);
           if (!machineExists) {
-            machineId = data.machines[0]?.id || null;
-            variantId = data.machines[0]?.variants[0]?.id || null;
+            hostId = data.hosts[0]?.id || null;
+            variantId = data.hosts[0]?.variants[0]?.id || null;
           } else {
             // Check if variant exists in that machine
             const variantExists = machineExists.variants.find(
@@ -72,8 +72,8 @@ export const useAppStore = create<AppState>()(
 
           return {
             ...data,
-            machines: data.machines,
-            selectedMachineId: machineId,
+            hosts: data.hosts,
+            selectedHostId: hostId,
             selectedVariantId: variantId,
           };
         }),
@@ -91,11 +91,11 @@ export const useAppStore = create<AppState>()(
         set({ mode: get().mode === 'expert' ? 'normal' : 'expert' }),
 
       // Machine selection
-      selectedMachineId: null,
+      selectedHostId: null,
       selectedVariantId: null,
-      setSelectedMachineId: (id) =>
+      setSelectedHostId: (id) =>
         set((state) => {
-          const machine = state.machines.find((m) => m.id === id);
+          const machine = state.hosts.find((m) => m.id === id);
           return {
             selectedMachineId: id,
             selectedVariantId: machine?.variants[0]?.id || null,
@@ -104,15 +104,15 @@ export const useAppStore = create<AppState>()(
       setSelectedVariantId: (id) => set({ selectedVariantId: id }),
 
       // Service builder
-      selectedServiceIds: new Set<string>(),
-      toggleServiceId: (id) =>
+      selectedAppIds: new Set<string>(),
+      toggleAppId: (id) =>
         set((s) => {
-          const next = new Set(s.selectedServiceIds);
+          const next = new Set(s.selectedAppIds);
           if (next.has(id)) next.delete(id);
           else next.add(id);
-          return { selectedServiceIds: next };
+          return { selectedAppIds: next };
         }),
-      clearServices: () => set({ selectedServiceIds: new Set<string>() }),
+      clearApps: () => set({ selectedAppIds: new Set<string>() }),
     }),
     {
       name: 'canihost-store',
@@ -127,18 +127,17 @@ export const useAppStore = create<AppState>()(
       ),
       partialize: (state) => ({
         mode: state.mode,
-        selectedMachineId: state.selectedMachineId,
+        selectedHostId: state.selectedHostId,
         selectedVariantId: state.selectedVariantId,
         customVariantCores: state.customVariantCores,
         customVariantRam: state.customVariantRam,
-        selectedServiceIds: Array.from(state.selectedServiceIds),
+        selectedAppIds: Array.from(state.selectedAppIds),
       }),
       merge: (persisted, current) => ({
         ...current,
         ...(persisted as Partial<AppState>),
-        selectedServiceIds: new Set(
-          (persisted as { selectedServiceIds?: string[] }).selectedServiceIds ??
-            [],
+        selectedAppIds: new Set(
+          (persisted as { selectedAppIds?: string[] }).selectedAppIds ?? [],
         ),
       }),
     },

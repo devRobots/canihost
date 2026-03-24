@@ -1,25 +1,25 @@
 import Hero from '@/components/Hero';
-import MachinePicker from '@/components/MachinePicker';
+import MachinePicker from '@/components/HostPicker';
 import RecommendationsPanel from '@/components/RecommendationsPanel';
 import StoreInitializer from '@/components/StoreInitializer';
 import prisma from '@/lib/prisma';
 
 export default async function Home() {
-  const [machines, allBundles, allServices] = await Promise.all([
-    prisma.machine.findMany({
+  const [hosts, allBundles, allApps] = await Promise.all([
+    prisma.host.findMany({
       orderBy: { name: 'asc' },
       include: { variants: true },
     }),
-    prisma.appBundle.findMany({ include: { services: true } }),
-    prisma.service.findMany({ orderBy: { name: 'asc' } }),
+    prisma.appBundle.findMany({ include: { apps: true } }),
+    prisma.app.findMany({ orderBy: { name: 'asc' } }),
   ]);
 
   return (
     <>
       <StoreInitializer
-        machines={machines}
+        hosts={hosts}
         allBundles={allBundles}
-        allServices={allServices}
+        allApps={allApps}
       />
       <div className="bg-page flex min-h-screen flex-col font-mono">
         <Hero />

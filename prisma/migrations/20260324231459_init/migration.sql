@@ -1,5 +1,5 @@
 -- CreateTable
-CREATE TABLE "Machine" (
+CREATE TABLE "Host" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "name" TEXT NOT NULL,
     "type" TEXT NOT NULL,
@@ -8,17 +8,17 @@ CREATE TABLE "Machine" (
 );
 
 -- CreateTable
-CREATE TABLE "MachineVariant" (
+CREATE TABLE "HostVariant" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "name" TEXT NOT NULL,
     "cpuCores" INTEGER NOT NULL,
     "memoryRamGb" REAL NOT NULL,
-    "machineId" TEXT NOT NULL,
-    CONSTRAINT "MachineVariant_machineId_fkey" FOREIGN KEY ("machineId") REFERENCES "Machine" ("id") ON DELETE CASCADE ON UPDATE CASCADE
+    "hostId" TEXT NOT NULL,
+    CONSTRAINT "HostVariant_hostId_fkey" FOREIGN KEY ("hostId") REFERENCES "Host" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- CreateTable
-CREATE TABLE "Service" (
+CREATE TABLE "App" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "name" TEXT NOT NULL,
     "category" TEXT NOT NULL,
@@ -46,15 +46,15 @@ CREATE TABLE "AppBundle" (
 );
 
 -- CreateTable
-CREATE TABLE "_AppBundleToService" (
+CREATE TABLE "_AppToAppBundle" (
     "A" TEXT NOT NULL,
     "B" TEXT NOT NULL,
-    CONSTRAINT "_AppBundleToService_A_fkey" FOREIGN KEY ("A") REFERENCES "AppBundle" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT "_AppBundleToService_B_fkey" FOREIGN KEY ("B") REFERENCES "Service" ("id") ON DELETE CASCADE ON UPDATE CASCADE
+    CONSTRAINT "_AppToAppBundle_A_fkey" FOREIGN KEY ("A") REFERENCES "App" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT "_AppToAppBundle_B_fkey" FOREIGN KEY ("B") REFERENCES "AppBundle" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "_AppBundleToService_AB_unique" ON "_AppBundleToService"("A", "B");
+CREATE UNIQUE INDEX "_AppToAppBundle_AB_unique" ON "_AppToAppBundle"("A", "B");
 
 -- CreateIndex
-CREATE INDEX "_AppBundleToService_B_index" ON "_AppBundleToService"("B");
+CREATE INDEX "_AppToAppBundle_B_index" ON "_AppToAppBundle"("B");

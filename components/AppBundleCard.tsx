@@ -1,28 +1,28 @@
-import { Service } from '@prisma/client';
+import { App } from '@prisma/client';
 
-import { getServiceIcon } from '@/lib/icons';
-import { type ActiveMachine, type AppBundle } from '@/types';
+import { getAppIcon } from '@/lib/icons';
+import { type ActiveHost, type AppBundle } from '@/types';
 
 interface Props {
   bundle: AppBundle;
-  machine: ActiveMachine;
+  host: ActiveHost;
   isExpert: boolean;
   onBundleClick: (bundle: AppBundle) => void;
-  onServiceClick: (service: Service) => void;
+  onAppClick: (app: App) => void;
 }
 
 export default function AppBundleCard({
   bundle,
-  machine,
+  host,
   isExpert,
   onBundleClick,
-  onServiceClick,
+  onAppClick,
 }: Props) {
-  const totalCpu = bundle.services.reduce((acc, s) => acc + s.minCPU, 0);
-  const totalRam = bundle.services.reduce((acc, s) => acc + s.minRAM, 0);
-  const cpuPct = Math.min(Math.round((totalCpu / machine.cpuCores) * 100), 999);
+  const totalCpu = bundle.apps.reduce((acc, s) => acc + s.minCPU, 0);
+  const totalRam = bundle.apps.reduce((acc, s) => acc + s.minRAM, 0);
+  const cpuPct = Math.min(Math.round((totalCpu / host.cpuCores) * 100), 999);
   const ramPct = Math.min(
-    Math.round((totalRam / machine.memoryRamGb) * 100),
+    Math.round((totalRam / host.memoryRamGb) * 100),
     999,
   );
   const cpuClass = cpuPct > 70 ? 'warn' : 'accent';
@@ -56,7 +56,7 @@ export default function AppBundleCard({
           <div className="text-fg-dim flex justify-between text-xs">
             <span className={`text-${cpuClass}`}>CPU</span>
             <span>
-              {totalCpu.toFixed(2)}c / {machine.cpuCores}c
+              {totalCpu.toFixed(2)}c / {host.cpuCores}c
             </span>
           </div>
           <div className="bg-input flex h-1 overflow-hidden rounded">
@@ -74,7 +74,7 @@ export default function AppBundleCard({
           <div className="text-fg-dim flex justify-between text-xs">
             <span className={`text-${ramClass}`}>RAM</span>
             <span>
-              {totalRam.toFixed(2)}GB / {machine.memoryRamGb}GB
+              {totalRam.toFixed(2)}GB / {host.memoryRamGb}GB
             </span>
           </div>
           <div className="bg-input flex h-1 overflow-hidden rounded">
@@ -88,13 +88,13 @@ export default function AppBundleCard({
 
       {/* Services list */}
       <div className="mt-2 flex flex-wrap gap-2">
-        {bundle.services.map((svc) => (
+        {bundle.apps.map((app) => (
           <button
-            key={svc.id}
-            onClick={() => onServiceClick(svc)}
+            key={app.id}
+            onClick={() => onAppClick(app)}
             className="tag flex cursor-pointer items-center gap-1 transition-all hover:bg-white/10 active:scale-[0.98]"
           >
-            {getServiceIcon(svc.name)} {svc.name}
+            {getAppIcon(app.name)} {app.name}
           </button>
         ))}
       </div>

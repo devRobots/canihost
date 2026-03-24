@@ -1,32 +1,30 @@
 'use client';
 
-import { Service } from '@prisma/client';
-import { MachineType } from '@prisma/enums';
+import { App } from '@prisma/client';
+import { HostType } from '@prisma/enums';
 import { useMemo, useState } from 'react';
 
 import AppBundleModal from '@/components/AppBundleModal';
 import AppBundlesPanel from '@/components/AppBundlesPanel';
+import AppModal from '@/components/AppModal';
 import BarelyUsableAppsPanel from '@/components/BarelyUsableAppsPanel';
 import RecommendedAppsPanel from '@/components/RecommendedAppsPanel';
-import ServiceModal from '@/components/ServiceModal';
 import UnsupportedAppsPanel from '@/components/UnsupportedAppsPanel';
 import { useAppStore } from '@/lib/store';
-import { type ActiveMachine, type AppBundle } from '@/types';
+import { type ActiveHost, type AppBundle } from '@/types';
 
 export default function RecommendationsPanel() {
   const {
-    machines,
+    hosts,
     allBundles,
-    allServices,
-    selectedMachineId,
+    allApps,
+    selectedHostId,
     selectedVariantId,
     customVariantCores,
     customVariantRam,
     mode,
   } = useAppStore();
-  const [serviceModalData, setServiceModalData] = useState<Service | null>(
-    null,
-  );
+  const [appModalData, setAppModalData] = useState<App | null>(null);
   const [appBundleModalData, setAppBundleModalData] =
     useState<AppBundle | null>(null);
 
@@ -37,27 +35,27 @@ export default function RecommendationsPanel() {
     recommendedApps,
     barelyUsableApps,
     unsupportedApps,
-    activeMachine,
+    activeHost,
   } = useMemo(() => {
-    const machine = selectedMachineId
-      ? (machines.find((m) => m.id === selectedMachineId) ?? null)
+    const host = selectedHostId
+      ? (hosts.find((h) => h.id === selectedHostId) ?? null)
       : null;
-    if (!machine)
+    if (!host)
       return {
         recommendedBundles: [],
         recommendedApps: [],
         barelyUsableApps: [],
         unsupportedApps: [],
-        activeMachine: null,
+        activeHost: null,
       };
 
     const selectedVariant =
-      machine.variants.find((v) => v.id === selectedVariantId) ||
-      machine.variants[0];
-    const isCustom = machine.type === MachineType.CUSTOM;
+      host.variants.find((v) => v.id === selectedVariantId) ||
+      host.variants[0];
+    const isCustom = host.type === HostType.CUSTOM;
 
-    const activeMachine: ActiveMachine = {
-      ...machine,
+    const activeHost: ActiveHost = {
+      ...host,
       cpuCores: isCustom ? customVariantCores : selectedVariant?.cpuCores || 0,
       memoryRamGb: isCustom
         ? customVariantRam
@@ -71,39 +69,39 @@ export default function RecommendationsPanel() {
         let totalMinCpu = 0;
         let totalMinRam = 0;
         let cloudSafe = true;
-        for (const svc of bundle.services) {
+        for (const svc of bundle.apps) {
           totalMinCpu += svc.minCPU;
           totalMinRam += svc.minRAM;
-          if (!svc.isCloudRecommended && activeMachine.type === MachineType.VPS)
+          if (!svc.isCloudRecommended && activeHost.type === HostType.VPS)
             cloudSafe = false;
         }
         return (
-          totalMinCpu <= activeMachine.cpuCores &&
-          totalMinRam <= activeMachine.memoryRamGb &&
+          totalMinCpu <= activeHost.cpuCores &&
+          totalMinRam <= activeHost.memoryRamGb &&
           cloudSafe
         );
       })
       .slice(0, maxBundles);
 
     // 2. Evaluate Individual Apps
-    const recApps: Service[] = [];
-    const barelyApps: Service[] = [];
-    const unsuppApps: Service[] = [];
+    const recApps: App[] = [];
+    const barelyApps: App[] = [];
+    const unsuppApps: App[] = [];
 
-    for (const svc of allServices) {
+    for (const svc of allApps) {
       const isVpsIncompatible =
         svc.isCloudRecommended === false &&
-        activeMachine.type === MachineType.VPS;
+        activeHost.type === HostType.VPS;
       const meetsMinimums =
-        svc.minCPU <= activeMachine.cpuCores &&
-        svc.minRAM <= activeMachine.memoryRamGb;
+        svc.minCPU <= activeHost.cpuCores &&
+        svc.minRAM <= activeHost.memoryRamGb;
 
       if (isVpsIncompatible || !meetsMinimums) {
         unsuppApps.push(svc);
       } else {
         const meetsRecommended =
-          svc.recommendedCPU <= activeMachine.cpuCores &&
-          svc.recommendedRAM <= activeMachine.memoryRamGb;
+          svc.recommendedCPU <= activeHost.cpuCores &&
+          svc.recommendedRAM <= activeHost.memoryRamGb;
 
         if (meetsRecommended) {
           recApps.push(svc);
@@ -123,19 +121,19 @@ export default function RecommendationsPanel() {
       recommendedApps: recApps.slice(0, 12),
       barelyUsableApps: barelyApps.slice(0, 12),
       unsupportedApps: unsuppApps.slice(0, 12),
-      activeMachine,
+      activeHost,
     };
   }, [
     allBundles,
-    allServices,
-    selectedMachineId,
+    allApps,
+    selectedHostId,
     selectedVariantId,
     customVariantCores,
     customVariantRam,
-    machines,
+    hosts,
   ]);
 
-  if (!activeMachine) {
+  if (!activeHost) {
     return (
       <div className="text-fg-dim py-16 text-center text-sm">
         <div className="mb-4 text-4xl">_</div>
@@ -157,10 +155,10 @@ export default function RecommendationsPanel() {
         <div id="section-bundles" className="scroll-mt-24">
           <AppBundlesPanel
             bundles={recommendedBundles}
-            machine={activeMachine}
+            host={activeHost}
             isExpert={isExpert}
             onBundleClick={setAppBundleModalData}
-            onServiceClick={setServiceModalData}
+            onAppClick={setAppModalData}
           />
         </div>
 
@@ -169,7 +167,7 @@ export default function RecommendationsPanel() {
           <RecommendedAppsPanel
             apps={recommendedApps}
             isExpert={isExpert}
-            onServiceClick={setServiceModalData}
+            onAppClick={setAppModalData}
           />
         </div>
 
@@ -178,7 +176,7 @@ export default function RecommendationsPanel() {
           <BarelyUsableAppsPanel
             apps={barelyUsableApps}
             isExpert={isExpert}
-            onServiceClick={setServiceModalData}
+            onAppClick={setAppModalData}
           />
         </div>
 
@@ -187,7 +185,7 @@ export default function RecommendationsPanel() {
           <UnsupportedAppsPanel
             apps={unsupportedApps}
             isExpert={isExpert}
-            onServiceClick={setServiceModalData}
+            onAppClick={setAppModalData}
           />
         </div>
       </section>
@@ -235,9 +233,9 @@ export default function RecommendationsPanel() {
       </aside>
 
       {/* Modals */}
-      <ServiceModal
-        service={serviceModalData}
-        onClose={() => setServiceModalData(null)}
+      <AppModal
+        app={appModalData}
+        onClose={() => setAppModalData(null)}
       />
       <AppBundleModal
         bundle={appBundleModalData}

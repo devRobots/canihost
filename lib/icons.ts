@@ -67,27 +67,6 @@ export const SERVICE_ICONS: Record<string, string> = {
   Sonarr: '📺',
 };
 
-export function getServiceIcon(name: string): string {
+export function getAppIcon(name: string): string {
   return SERVICE_ICONS[name] ?? '📦';
-}
-
-/**
- * Brand icons per machine brand / type
- */
-export const MACHINE_ICONS: Record<string, string> = {
-  ZimaBoard: '🧊',
-  Chuwi: '🔲',
-  Apple: '🍎',
-  'Raspberry Pi': '🍓',
-  Intel: '🔵',
-  Beelink: '🐝',
-  Minisforum: '⚙️',
-  Dell: '🔷',
-  Lenovo: '🔴',
-  CubePath: '☁️',
-};
-
-export function getMachineIcon(brand: string | null | undefined): string {
-  if (!brand) return '🖥️';
-  return MACHINE_ICONS[brand] ?? '🖥️';
 }

@@ -7,31 +7,31 @@ datasource db {
   provider = "sqlite"
 }
 
-enum MachineType {
+enum HostType {
   MINI_PC
   VPS
   CUSTOM
 }
 
-model Machine {
+model Host {
   id        String           @id @default(cuid())
   name      String
-  type      MachineType
-  variants  MachineVariant[]
+  type      HostType
+  variants  HostVariant[]
   createdAt DateTime         @default(now())
   updatedAt DateTime         @updatedAt
 }
 
-model MachineVariant {
+model HostVariant {
   id          String  @id @default(cuid())
   name        String
   cpuCores    Int
   memoryRamGb Float
-  machineId   String
-  machine     Machine @relation(fields: [machineId], references: [id], onDelete: Cascade)
+  hostId   String
+  host     Host @relation(fields: [hostId], references: [id], onDelete: Cascade)
 }
 
-model Service {
+model App {
   id                 String      @id @default(cuid())
   name               String
   category           String
@@ -54,7 +54,7 @@ model AppBundle {
   id          String    @id @default(cuid())
   name        String
   description String?
-  services    Service[]
+  apps    App[]
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 }

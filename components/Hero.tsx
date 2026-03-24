@@ -15,7 +15,7 @@ export default function Hero() {
             <span className="text-fg-muted">.tech</span>
           </h1>
           <p className="text-fg-muted max-w-xl text-sm">
-            Find the perfect services to run on your Machine or VPS.
+            Find the perfect services to run on your host.
           </p>
         </div>
         <div>

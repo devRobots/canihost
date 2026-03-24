@@ -1,41 +1,39 @@
 'use client';
 
-import { Service } from '@prisma/client';
-import { MachineType } from '@prisma/enums';
+import { App } from '@prisma/client';
+import { HostType } from '@prisma/enums';
 
 import PieChart from '@/components/PieChart';
-import { getServiceIcon } from '@/lib/icons';
+import { getAppIcon } from '@/lib/icons';
 import { useAppStore } from '@/lib/store';
-import { type ActiveMachine } from '@/types';
+import { type ActiveHost } from '@/types';
 
 type Props = {
-  machine: ActiveMachine;
-  setServiceModalData: (s: Service | null) => void;
+  host: ActiveHost;
+  setAppModalData: (s: App | null) => void;
 };
 
 export default function BuilderMonitor({
-  machine,
-  setServiceModalData,
+  host,
+  setAppModalData,
 }: Props) {
-  const { allServices, selectedServiceIds, mode } = useAppStore();
+  const { allApps, selectedAppIds, mode } = useAppStore();
   const isExpert = mode === 'expert';
 
-  const selectedServices = allServices.filter((s) =>
-    selectedServiceIds.has(s.id),
-  );
-  const totalCpu = selectedServices.reduce((acc, s) => acc + s.minCPU, 0);
-  const totalRam = selectedServices.reduce((acc, s) => acc + s.minRAM, 0);
+  const selectedApps = allApps.filter((s) => selectedAppIds.has(s.id));
+  const totalCpu = selectedApps.reduce((acc, s) => acc + s.minCPU, 0);
+  const totalRam = selectedApps.reduce((acc, s) => acc + s.minRAM, 0);
 
-  const cpuPct = Math.min(Math.round((totalCpu / machine.cpuCores) * 100), 999);
+  const cpuPct = Math.min(Math.round((totalCpu / host.cpuCores) * 100), 999);
   const ramPct = Math.min(
-    Math.round((totalRam / machine.memoryRamGb) * 100),
+    Math.round((totalRam / host.memoryRamGb) * 100),
     999,
   );
 
-  const isCpuOver = totalCpu > machine.cpuCores;
-  const isRamOver = totalRam > machine.memoryRamGb;
-  const cloudWarnings = selectedServices.filter(
-    (s) => !s.isCloudRecommended && machine.type === MachineType.VPS,
+  const isCpuOver = totalCpu > host.cpuCores;
+  const isRamOver = totalRam > host.memoryRamGb;
+  const cloudWarnings = selectedApps.filter(
+    (s) => !s.isCloudRecommended && host.type === HostType.VPS,
   );
 
   let cpuClass: 'accent' | 'warn' | 'danger' = 'accent';
@@ -59,7 +57,7 @@ export default function BuilderMonitor({
             <div className="text-fg-dim flex justify-between text-xs">
               <span>CPU</span>
               <span className={isCpuOver ? 'text-red-500' : 'text-fg'}>
-                {totalCpu.toFixed(1)} / {machine.cpuCores.toFixed(1)} ({cpuPct}
+                {totalCpu.toFixed(1)} / {host.cpuCores.toFixed(1)} ({cpuPct}
                 %)
               </span>
             </div>
@@ -75,7 +73,7 @@ export default function BuilderMonitor({
             <div className="text-fg-dim flex justify-between text-xs">
               <span>RAM</span>
               <span className={isRamOver ? 'text-red-500' : 'text-fg'}>
-                {totalRam.toFixed(1)}GB / {machine.memoryRamGb}GB ({ramPct}%)
+                {totalRam.toFixed(1)}GB / {host.memoryRamGb}GB ({ramPct}%)
               </span>
             </div>
             <div className="bg-input border-line flex h-2 overflow-hidden rounded">
@@ -123,26 +121,26 @@ export default function BuilderMonitor({
       )}
 
       {/* Selected Items */}
-      {selectedServices.length > 0 && (
+      {selectedApps.length > 0 && (
         <div className="mt-2 flex flex-col gap-3">
           <div className="text-fg-dim border-default border-b pb-2 text-[10px] font-bold tracking-widest uppercase">
-            Selected Stack ({selectedServices.length})
+            Selected Stack ({selectedApps.length})
           </div>
           <div className="flex flex-col gap-2">
-            {selectedServices.map((s) => (
+            {selectedApps.map((s) => (
               <button
                 key={s.id}
-                onClick={() => setServiceModalData(s)}
+                onClick={() => setAppModalData(s)}
                 className="bg-input border-line text-fg flex cursor-pointer items-center gap-2 rounded p-2 text-xs transition-all hover:brightness-125"
               >
-                <span className="text-lg">{getServiceIcon(s.name)}</span>
+                <span className="text-lg">{getAppIcon(s.name)}</span>
                 <span className="truncate font-bold" title={s.name}>
                   {s.name}
                 </span>
                 <span className="text-fg-dim ml-auto font-mono text-xs whitespace-nowrap">
                   {isExpert
                     ? `${s.minCPU}c · ${s.minRAM}G`
-                    : `${Math.round((s.minCPU / machine.cpuCores) * 100)}%C`}
+                    : `${Math.round((s.minCPU / host.cpuCores) * 100)}%C`}
                 </span>
               </button>
             ))}

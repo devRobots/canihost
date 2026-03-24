@@ -1,17 +1,17 @@
-import { Service } from '@prisma/client';
+import { App } from '@prisma/client';
 
 import IndividualAppCard from '@/components/IndividualAppCard';
 
 interface Props {
-  apps: Service[];
+  apps: App[];
   isExpert: boolean;
-  onServiceClick: (service: Service) => void;
+  onAppClick: (app: App) => void;
 }
 
 export default function BarelyUsableAppsPanel({
   apps,
   isExpert,
-  onServiceClick,
+  onAppClick,
 }: Props) {
   if (apps.length === 0) return null;
 
@@ -27,15 +27,15 @@ export default function BarelyUsableAppsPanel({
       </p>
 
       <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-5">
-        {apps.map((svc) => (
+        {apps.map((app) => (
           <div
-            key={svc.id}
+            key={app.id}
             className="h-full w-full opacity-80 grayscale-[30%] transition-all hover:opacity-100 hover:grayscale-0"
           >
             <IndividualAppCard
-              service={svc}
+              app={app}
               isExpert={isExpert}
-              onServiceClick={onServiceClick}
+              onAppClick={onAppClick}
             />
           </div>
         ))}

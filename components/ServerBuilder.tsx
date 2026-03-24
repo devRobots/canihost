@@ -1,33 +1,33 @@
 'use client';
 
-import { Service } from '@prisma/client';
-import { MachineType } from '@prisma/enums';
+import { App } from '@prisma/client';
+import { HostType } from '@prisma/enums';
 import { useState } from 'react';
 
+import AppModal from '@/components/AppModal';
 import BuilderCatalog from '@/components/BuilderCatalog';
 import BuilderMonitor from '@/components/BuilderMonitor';
 import Modal from '@/components/Modal';
-import ServiceModal from '@/components/ServiceModal';
 import { useAppStore } from '@/lib/store';
-import { type ActiveMachine, type Machine } from '@/types';
+import { type ActiveHost, type Host } from '@/types';
 
 export default function ServerBuilder() {
   const {
-    machines,
-    selectedMachineId,
+    hosts,
+    selectedHostId,
     selectedVariantId,
     customVariantCores,
     customVariantRam,
   } = useAppStore();
-  const machine =
-    machines.find((m: Machine) => m.id === selectedMachineId) || machines[0];
+  const host =
+    hosts.find((h: Host) => h.id === selectedHostId) || hosts[0];
 
-  const [machineModalOpen, setMachineModalOpen] = useState(false);
-  const [serviceModalData, setServiceModalData] = useState<Service | null>(
+  const [hostModalOpen, setHostModalOpen] = useState(false);
+  const [appModalData, setAppModalData] = useState<App | null>(
     null,
   );
 
-  if (!machine) {
+  if (!host) {
     return (
       <div className="bg-page text-fg-dim flex min-h-[calc(100vh-56px)] w-full items-center justify-center font-mono">
         <span className="prompt">Loading...</span>
@@ -36,13 +36,13 @@ export default function ServerBuilder() {
   }
 
   const selectedVariant =
-    machine.variants?.find((v) => v.id === selectedVariantId) ||
-    machine.variants?.[0] ||
+    host.variants?.find((v) => v.id === selectedVariantId) ||
+    host.variants?.[0] ||
     null;
-  const isCustom = machine.type === MachineType.CUSTOM;
+  const isCustom = host.type === HostType.CUSTOM;
 
-  const activeMachine: ActiveMachine = {
-    ...machine,
+  const activeHost: ActiveHost = {
+    ...host,
     cpuCores: isCustom ? customVariantCores : selectedVariant?.cpuCores || 0,
     memoryRamGb: isCustom
       ? customVariantRam
@@ -53,43 +53,43 @@ export default function ServerBuilder() {
     <div className="bg-page mx-auto flex min-h-[calc(100vh-56px)] w-full max-w-screen-2xl flex-col font-mono lg:flex-row">
       {/* ─── LEFT: Catalog ─── */}
       <BuilderCatalog
-        machine={activeMachine}
-        setServiceModalData={setServiceModalData}
-        setMachineModalOpen={setMachineModalOpen}
+        host={activeHost}
+        setAppModalData={setAppModalData}
+        setHostModalOpen={setHostModalOpen}
       />
 
       {/* ─── RIGHT: Resource Monitor ─── */}
       <BuilderMonitor
-        machine={activeMachine}
-        setServiceModalData={setServiceModalData}
+        host={activeHost}
+        setAppModalData={setAppModalData}
       />
 
       {/* ─── MODALS ─── */}
-      <ServiceModal
-        service={serviceModalData}
-        onClose={() => setServiceModalData(null)}
+      <AppModal
+        app={appModalData}
+        onClose={() => setAppModalData(null)}
       />
 
       <Modal
-        isOpen={machineModalOpen}
-        onClose={() => setMachineModalOpen(false)}
-        title={machine.name}
+        isOpen={hostModalOpen}
+        onClose={() => setHostModalOpen(false)}
+        title={host.name}
       >
         <div className="text-fg-muted flex flex-col gap-6 p-2 font-sans text-sm">
           <div className="border-default mt-2 grid grid-cols-2 gap-y-2 border-t pt-4 text-xs">
             <div className="text-fg-dim">Architecture:</div>
             <div className="text-fg text-right font-mono">
-              {activeMachine.type}
+              {activeHost.type}
             </div>
 
             <div className="text-fg-dim">CPU Cores:</div>
             <div className="text-fg text-right font-mono">
-              {activeMachine.cpuCores}
+              {activeHost.cpuCores}
             </div>
 
             <div className="text-fg-dim">Memory RAM:</div>
             <div className="text-fg text-right font-mono">
-              {activeMachine.memoryRamGb} GB
+              {activeHost.memoryRamGb} GB
             </div>
           </div>
         </div>

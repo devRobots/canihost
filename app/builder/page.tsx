@@ -3,28 +3,28 @@ import { notFound } from 'next/navigation';
 import ServerBuilder from '@/components/ServerBuilder';
 import StoreInitializer from '@/components/StoreInitializer';
 import prisma from '@/lib/prisma';
-import { type Machine } from '@/types';
+import { type Host } from '@/types';
 
 export default async function BuilderPage() {
-  const [machines, allBundles, allServices] = await Promise.all([
-    prisma.machine.findMany({
+  const [hosts, allBundles, allApps] = await Promise.all([
+    prisma.host.findMany({
       orderBy: { name: 'asc' },
       include: { variants: true },
     }),
-    prisma.appBundle.findMany({ include: { services: true } }),
-    prisma.service.findMany({ orderBy: { name: 'asc' } }),
+    prisma.appBundle.findMany({ include: { apps: true } }),
+    prisma.app.findMany({ orderBy: { name: 'asc' } }),
   ]);
 
-  const targetId = machines[0]?.id;
-  const machine = machines.find((m: Machine) => m.id === targetId);
-  if (!machine) return notFound();
+  const targetId = hosts[0]?.id;
+  const host = hosts.find((m: Host) => m.id === targetId);
+  if (!host) return notFound();
 
   return (
     <>
       <StoreInitializer
-        machines={machines}
+        hosts={hosts}
         allBundles={allBundles}
-        allServices={allServices}
+        allApps={allApps}
       />
       <ServerBuilder />
     </>

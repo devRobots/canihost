@@ -1,22 +1,22 @@
-import { Service } from '@prisma/client';
+import { App } from '@prisma/client';
 import { Cpu, MemoryStick } from 'lucide-react';
 
-import { getServiceIcon } from '@/lib/icons';
+import { getAppIcon } from '@/lib/icons';
 
 interface Props {
-  service: Service;
+  app: App;
   isExpert: boolean;
-  onServiceClick: (service: Service) => void;
+  onAppClick: (app: App) => void;
 }
 
 export default function IndividualAppCard({
-  service,
+  app,
   isExpert,
-  onServiceClick,
+  onAppClick,
 }: Props) {
   return (
     <button
-      onClick={() => onServiceClick(service)}
+      onClick={() => onAppClick(app)}
       className="card hover:border-accent relative flex h-full w-full cursor-pointer flex-col px-3 pt-3 pb-2 transition-all active:scale-[0.98]"
     >
       {/* Info Button Top Left */}
@@ -26,10 +26,10 @@ export default function IndividualAppCard({
 
       <div className="flex flex-1 flex-col items-center gap-2 pt-4 pb-4 text-center">
         <span className="text-3xl leading-none">
-          {getServiceIcon(service.name)}
+          {getAppIcon(app.name)}
         </span>
         <span className="text-fg mt-1 px-1 text-xs leading-tight font-bold">
-          {service.name}
+          {app.name}
         </span>
       </div>
       {isExpert && (
@@ -37,17 +37,17 @@ export default function IndividualAppCard({
           <div className="flex w-full items-center justify-center gap-3">
             <span className="flex items-center gap-1 whitespace-nowrap">
               <Cpu size={12} />
-              {service.minCPU === service.recommendedCPU
-                ? service.recommendedCPU
-                : `${service.minCPU}`}{' '}
+              {app.minCPU === app.recommendedCPU
+                ? app.recommendedCPU
+                : `${app.minCPU}`}{' '}
               cores
             </span>
             <span className="opacity-50">|</span>
             <span className="flex items-center gap-1 whitespace-nowrap">
               <MemoryStick size={12} />
-              {service.minRAM === service.recommendedRAM
-                ? service.recommendedRAM
-                : `${service.minRAM}`}{' '}
+              {app.minRAM === app.recommendedRAM
+                ? app.recommendedRAM
+                : `${app.minRAM}`}{' '}
               GB
             </span>
           </div>

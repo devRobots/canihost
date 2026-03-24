@@ -1,6 +1,6 @@
 'use client';
 
-import { MachineType } from '@prisma/enums';
+import { HostType } from '@prisma/enums';
 import {
   Box,
   ChevronDown,
@@ -15,25 +15,25 @@ import { useEffect, useRef, useState } from 'react';
 
 import { useAppStore } from '@/lib/store';
 
-const getMachineTypeIcon = (type?: string) => {
+const getHostTypeIcon = (type?: string) => {
   if (type === 'VPS') return <Cloud size={20} />;
   if (type === 'CUSTOM') return <Settings size={20} />;
   return <Server size={20} />;
 };
 
-const getMachineTypeLabel = (type?: string) => {
+const getHostTypeLabel = (type?: string) => {
   if (type === 'VPS') return 'Cloud';
   if (type === 'CUSTOM') return 'Custom';
   return 'Device';
 };
 
-export default function MachinePicker() {
+export default function HostPicker() {
   const {
-    selectedMachineId,
+    selectedHostId,
     selectedVariantId,
-    setSelectedMachineId,
+    setSelectedHostId,
     setSelectedVariantId,
-    machines,
+    hosts,
     customVariantCores,
     customVariantRam,
     setCustomResources,
@@ -42,7 +42,7 @@ export default function MachinePicker() {
   } = useAppStore();
 
   const [openDropdown, setOpenDropdown] = useState<
-    'machine' | 'variant' | 'cpu' | 'ram' | null
+    'host' | 'variant' | 'cpu' | 'ram' | null
   >(null);
   const containerRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -64,8 +64,8 @@ export default function MachinePicker() {
     };
   }, []);
 
-  const handleSelectMachine = (id: string) => {
-    setSelectedMachineId(id);
+  const handleSelectHost = (id: string) => {
+    setSelectedHostId(id);
     setOpenDropdown(null);
     setTimeout(
       () =>
@@ -76,20 +76,20 @@ export default function MachinePicker() {
     );
   };
 
-  const miniPcs = machines
-    .filter((m) => m.type === MachineType.MINI_PC)
+  const miniPcs = hosts
+    .filter((m) => m.type === HostType.MINI_PC)
     .sort((a, b) => a.name.localeCompare(b.name));
-  const vpss = machines
-    .filter((m) => m.type === MachineType.VPS)
+  const vpss = hosts
+    .filter((m) => m.type === HostType.VPS)
     .sort((a, b) => a.name.localeCompare(b.name));
-  const customs = machines.filter((m) => m.type === MachineType.CUSTOM);
+  const customs = hosts.filter((m) => m.type === HostType.CUSTOM);
 
-  const selectedMachine = machines.find((m) => m.id === selectedMachineId);
+  const selectedMachine = hosts.find((m) => m.id === selectedHostId);
   const selectedVariant =
     selectedMachine?.variants.find((v) => v.id === selectedVariantId) ||
     selectedMachine?.variants[0];
 
-  const isCustom = selectedMachine?.type === MachineType.CUSTOM;
+  const isCustom = selectedMachine?.type === HostType.CUSTOM;
   const currentCores = isCustom
     ? customVariantCores
     : selectedVariant?.cpuCores || 0;
@@ -107,19 +107,19 @@ export default function MachinePicker() {
         ref={containerRef}
         className="border-line-accent bg-card flex w-full flex-col items-stretch justify-center gap-2 rounded-md border px-4 py-3 sm:flex-row sm:items-center sm:gap-4 sm:py-2 md:w-auto"
       >
-        {/* ─── MACHINE SELECTOR ─── */}
+        {/* ─── HOST SELECTOR ─── */}
         <div className="relative flex-1 sm:flex-none">
           <button
             onClick={() =>
-              setOpenDropdown(openDropdown === 'machine' ? null : 'machine')
+              setOpenDropdown(openDropdown === 'host' ? null : 'host')
             }
             className="group flex w-full items-center justify-between gap-3 py-1 text-left transition-colors sm:justify-start"
           >
             <div className="flex items-center gap-3">
               <div className="flex flex-col items-center justify-center opacity-70 transition-opacity group-hover:opacity-100">
-                {getMachineTypeIcon(selectedMachine?.type)}
+                {getHostTypeIcon(selectedMachine?.type)}
                 <span className="text-fg-dim mt-1 text-[8px] font-bold tracking-widest uppercase">
-                  {getMachineTypeLabel(selectedMachine?.type)}
+                  {getHostTypeLabel(selectedMachine?.type)}
                 </span>
               </div>
 
@@ -129,49 +129,49 @@ export default function MachinePicker() {
             </div>
             <ChevronDown
               size={14}
-              className={`text-fg-dim transition-transform ${openDropdown === 'machine' ? 'rotate-180' : ''}`}
+              className={`text-fg-dim transition-transform ${openDropdown === 'host' ? 'rotate-180' : ''}`}
             />
           </button>
 
-          {openDropdown === 'machine' && (
+          {openDropdown === 'host' && (
             <div className="bg-card border-default absolute top-full left-0 z-50 mt-3 max-h-80 w-full overflow-y-auto rounded-md border shadow-2xl ring-1 ring-black/5 sm:w-72">
               <div className="p-1.5">
                 <div className="text-fg-dim flex items-center gap-2 px-3 py-1.5 text-[10px] font-bold tracking-widest uppercase">
                   <Cloud size={10} /> Cloud VPS
                 </div>
-                {vpss.map((m) => (
+                {vpss.map((h) => (
                   <button
-                    key={m.id}
-                    onClick={() => handleSelectMachine(m.id)}
-                    className={`w-full rounded-sm px-3 py-2 text-left text-xs transition-all ${selectedMachineId === m.id ? 'bg-accent/10 text-accent font-bold' : 'hover:bg-input text-fg'}`}
+                    key={h.id}
+                    onClick={() => handleSelectHost(h.id)}
+                    className={`w-full rounded-sm px-3 py-2 text-left text-xs transition-all ${selectedHostId === h.id ? 'bg-accent/10 text-accent font-bold' : 'hover:bg-input text-fg'}`}
                   >
-                    {m.name}
+                    {h.name}
                   </button>
                 ))}
 
                 <div className="text-fg-dim border-default mt-2 flex items-center gap-2 border-t px-3 py-1.5 pt-3 text-[10px] font-bold tracking-widest uppercase">
                   <Server size={10} /> Mini PCs & Servers
                 </div>
-                {miniPcs.map((m) => (
+                {miniPcs.map((h) => (
                   <button
-                    key={m.id}
-                    onClick={() => handleSelectMachine(m.id)}
-                    className={`w-full rounded-sm px-3 py-2 text-left text-xs transition-all ${selectedMachineId === m.id ? 'bg-accent/10 text-accent font-bold' : 'hover:bg-input text-fg'}`}
+                    key={h.id}
+                    onClick={() => handleSelectHost(h.id)}
+                    className={`w-full rounded-sm px-3 py-2 text-left text-xs transition-all ${selectedHostId === h.id ? 'bg-accent/10 text-accent font-bold' : 'hover:bg-input text-fg'}`}
                   >
-                    {m.name}
+                    {h.name}
                   </button>
                 ))}
 
                 <div className="text-fg-dim border-default mt-2 flex items-center gap-2 border-t px-3 py-1.5 pt-3 text-[10px] font-bold tracking-widest uppercase">
                   <Settings size={10} /> Custom Spec
                 </div>
-                {customs.map((m) => (
+                {customs.map((h) => (
                   <button
-                    key={m.id}
-                    onClick={() => handleSelectMachine(m.id)}
-                    className={`w-full rounded-sm px-3 py-2 text-left text-xs transition-all ${selectedMachineId === m.id ? 'bg-accent/10 text-accent font-bold' : 'hover:bg-input text-fg'}`}
+                    key={h.id}
+                    onClick={() => handleSelectHost(h.id)}
+                    className={`w-full rounded-sm px-3 py-2 text-left text-xs transition-all ${selectedHostId === h.id ? 'bg-accent/10 text-accent font-bold' : 'hover:bg-input text-fg'}`}
                   >
-                    {m.name}
+                    {h.name}
                   </button>
                 ))}
               </div>

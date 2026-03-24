@@ -1,22 +1,22 @@
-import { Service } from '@prisma/client';
+import { App } from '@prisma/client';
 
 import AppBundleCard from '@/components/AppBundleCard';
-import { type ActiveMachine, type AppBundle } from '@/types';
+import { type ActiveHost, type AppBundle } from '@/types';
 
 interface Props {
   bundles: AppBundle[];
-  machine: ActiveMachine;
+  host: ActiveHost;
   isExpert: boolean;
   onBundleClick: (bundle: AppBundle) => void;
-  onServiceClick: (service: Service) => void;
+  onAppClick: (app: App) => void;
 }
 
 export default function AppBundlesPanel({
   bundles,
-  machine,
+  host,
   isExpert,
   onBundleClick,
-  onServiceClick,
+  onAppClick,
 }: Props) {
   return (
     <div className="flex flex-col gap-6">
@@ -39,10 +39,10 @@ export default function AppBundlesPanel({
             <AppBundleCard
               key={bundle.id}
               bundle={bundle}
-              machine={machine}
+              host={host}
               isExpert={isExpert}
               onBundleClick={onBundleClick}
-              onServiceClick={onServiceClick}
+              onAppClick={onAppClick}
             />
           ))}
         </div>

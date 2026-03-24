@@ -1,20 +1,20 @@
 'use client';
 
-import { Service } from '@prisma/client';
+import { App } from '@prisma/client';
 
 import Modal from '@/components/Modal';
-import { getServiceIcon } from '@/lib/icons';
+import { getAppIcon } from '@/lib/icons';
 
-export default function ServiceModal({
-  service,
+export default function AppModal({
+  app,
   onClose,
 }: {
-  service: Service | null;
+  app: App | null;
   onClose: () => void;
 }) {
   return (
-    <Modal isOpen={!!service} onClose={onClose} title="Service Details">
-      {service && (
+    <Modal isOpen={!!app} onClose={onClose} title="Service Details">
+      {app && (
         <div
           className="flex flex-col gap-4 text-sm"
           style={{ color: 'var(--fg-muted)' }}
@@ -23,30 +23,30 @@ export default function ServiceModal({
             className="flex items-center gap-3 border-b pb-4"
             style={{ borderColor: 'var(--border)' }}
           >
-            <span className="text-4xl">{getServiceIcon(service.name)}</span>
+            <span className="text-4xl">{getAppIcon(app.name)}</span>
             <div>
               <h3 className="text-lg font-bold" style={{ color: 'var(--fg)' }}>
-                {service.name}
+                {app.name}
               </h3>
               <p
                 className="text-xs tracking-widest uppercase"
                 style={{ color: 'var(--accent)' }}
               >
-                {service.category}
+                {app.category}
               </p>
             </div>
           </div>
 
           <p className="leading-relaxed" style={{ color: 'var(--fg)' }}>
-            {service.description || 'No description available.'}
+            {app.description || 'No description available.'}
           </p>
 
-          {service.longDescription && (
+          {app.longDescription && (
             <p
               className="text-xs leading-relaxed opacity-80"
               style={{ color: 'var(--fg)' }}
             >
-              {service.longDescription}
+              {app.longDescription}
             </p>
           )}
 
@@ -64,8 +64,8 @@ export default function ServiceModal({
               >
                 Minimum Requirements
               </div>
-              <div className="text-xs">{service.minCPU} Cores</div>
-              <div className="text-xs">{service.minRAM} GB RAM</div>
+              <div className="text-xs">{app.minCPU} Cores</div>
+              <div className="text-xs">{app.minRAM} GB RAM</div>
             </div>
             <div
               className="rounded p-3"
@@ -80,16 +80,16 @@ export default function ServiceModal({
               >
                 Recommended
               </div>
-              <div className="text-xs">{service.recommendedCPU} Cores</div>
-              <div className="text-xs">{service.recommendedRAM} GB RAM</div>
+              <div className="text-xs">{app.recommendedCPU} Cores</div>
+              <div className="text-xs">{app.recommendedRAM} GB RAM</div>
             </div>
           </div>
 
           {/* Action Links */}
           <div className="mt-2 flex flex-col gap-2">
-            {service.officialUrl && (
+            {app.officialUrl && (
               <a
-                href={service.officialUrl}
+                href={app.officialUrl}
                 target="_blank"
                 rel="noreferrer"
                 className="text-accent flex items-center gap-2 text-xs hover:underline"
@@ -97,9 +97,9 @@ export default function ServiceModal({
                 🌐 Sitio Oficial
               </a>
             )}
-            {service.dockerRegistryUrl && (
+            {app.dockerRegistryUrl && (
               <a
-                href={service.dockerRegistryUrl}
+                href={app.dockerRegistryUrl}
                 target="_blank"
                 rel="noreferrer"
                 className="text-info flex items-center gap-2 text-xs hover:underline"
@@ -107,9 +107,9 @@ export default function ServiceModal({
                 🐳 Docker Registry
               </a>
             )}
-            {service.cubepathUrl && (
+            {app.cubepathUrl && (
               <a
-                href={service.cubepathUrl}
+                href={app.cubepathUrl}
                 target="_blank"
                 rel="noreferrer"
                 className="text-warning flex items-center gap-2 text-xs hover:underline"

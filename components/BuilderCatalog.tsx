@@ -1,26 +1,26 @@
 'use client';
 
-import { Service } from '@prisma/client';
-import { MachineType } from '@prisma/enums';
+import { App } from '@prisma/client';
+import { HostType } from '@prisma/enums';
 import Link from 'next/link';
 import { useState } from 'react';
 
-import { getServiceIcon } from '@/lib/icons';
+import { getAppIcon } from '@/lib/icons';
 import { useAppStore } from '@/lib/store';
-import { type ActiveMachine } from '@/types';
+import { type ActiveHost } from '@/types';
 
 type Props = {
-  machine: ActiveMachine;
-  setServiceModalData: (s: Service | null) => void;
-  setMachineModalOpen: (b: boolean) => void;
+  host: ActiveHost;
+  setAppModalData: (s: App | null) => void;
+  setHostModalOpen: (b: boolean) => void;
 };
 
 export default function BuilderCatalog({
-  machine,
-  setServiceModalData,
-  setMachineModalOpen,
+  host,
+  setAppModalData,
+  setHostModalOpen,
 }: Props) {
-  const { allServices, selectedServiceIds, toggleServiceId, mode } =
+  const { allApps, selectedAppIds, toggleAppId, mode } =
     useAppStore();
 
   const isExpert = mode === 'expert';
@@ -29,7 +29,7 @@ export default function BuilderCatalog({
     Record<string, boolean>
   >({});
   const categories = Array.from(
-    new Set(allServices.map((s) => s.category)),
+    new Set(allApps.map((s) => s.category)),
   ).sort();
 
   const toggleCategory = (cat: string) => {
@@ -44,13 +44,13 @@ export default function BuilderCatalog({
           <div className="flex items-center gap-2">
             <span className="text-accent">▶</span>
             <span className="text-accent text-lg font-bold">
-              {machine.name}
+              {host.name}
             </span>
             <span className="tag px-2">
-              {machine.type === MachineType.VPS ? 'Cloud VPS' : 'Mini PC'}
+              {host.type === HostType.VPS ? 'Cloud VPS' : 'Mini PC'}
             </span>
             <button
-              onClick={() => setMachineModalOpen(true)}
+              onClick={() => setHostModalOpen(true)}
               className="border-accent text-accent ml-2 flex h-6 w-6 items-center justify-center rounded-full border text-xs transition-all hover:bg-white/10"
               title="Info"
             >
@@ -59,8 +59,8 @@ export default function BuilderCatalog({
           </div>
           {isExpert && (
             <p className="text-fg-muted text-xs">
-              CPU: <strong>{machine.cpuCores}c</strong> · RAM:{' '}
-              <strong>{machine.memoryRamGb}GB</strong>
+              CPU: <strong>{host.cpuCores}c</strong> · RAM:{' '}
+              <strong>{host.memoryRamGb}GB</strong>
             </p>
           )}
         </div>
@@ -89,14 +89,14 @@ export default function BuilderCatalog({
 
             {!isCollapsed && (
               <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
-                {allServices
+                {allApps
                   .filter((s) => s.category === cat)
                   .map((svc) => {
-                    const isSelected = selectedServiceIds.has(svc.id);
+                    const isSelected = selectedAppIds.has(svc.id);
                     const isLocalOnly =
                       !svc.isCloudRecommended &&
-                      machine.type === MachineType.VPS;
-                    const icon = getServiceIcon(svc.name);
+                      host.type === HostType.VPS;
+                    const icon = getAppIcon(svc.name);
 
                     let borderColorClass = 'border-default';
                     if (isSelected) borderColorClass = 'border-accent';
@@ -108,9 +108,9 @@ export default function BuilderCatalog({
                         key={svc.id}
                         role="button"
                         tabIndex={0}
-                        onClick={() => toggleServiceId(svc.id)}
+                        onClick={() => toggleAppId(svc.id)}
                         onKeyDown={(e) =>
-                          e.key === 'Enter' && toggleServiceId(svc.id)
+                          e.key === 'Enter' && toggleAppId(svc.id)
                         }
                         className={`relative flex min-h-[120px] cursor-pointer flex-col rounded-md pt-2 transition-all active:scale-[0.98] ${
                           isSelected
@@ -122,7 +122,7 @@ export default function BuilderCatalog({
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
-                            setServiceModalData(svc);
+                            setAppModalData(svc);
                           }}
                           className="btn-terminal bg-input absolute top-2 left-2 z-10 flex h-6 w-6 items-center justify-center text-[10px] font-bold transition-all hover:bg-white/10"
                           title="Info"
@@ -174,7 +174,7 @@ export default function BuilderCatalog({
                             <div className="flex w-full justify-center gap-2">
                               <span>
                                 {(
-                                  (svc.minCPU / machine.cpuCores) *
+                                  (svc.minCPU / host.cpuCores) *
                                   100
                                 ).toFixed(0)}
                                 %C
@@ -182,7 +182,7 @@ export default function BuilderCatalog({
                               <span>|</span>
                               <span>
                                 {(
-                                  (svc.minRAM / machine.memoryRamGb) *
+                                  (svc.minRAM / host.memoryRamGb) *
                                   100
                                 ).toFixed(0)}
                                 %R

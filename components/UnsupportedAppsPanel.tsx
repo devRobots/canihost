@@ -1,17 +1,17 @@
-import { Service } from '@prisma/client';
+import { App } from '@prisma/client';
 
 import IndividualAppCard from '@/components/IndividualAppCard';
 
 interface Props {
-  apps: Service[];
+  apps: App[];
   isExpert: boolean;
-  onServiceClick: (service: Service) => void;
+  onAppClick: (app: App) => void;
 }
 
 export default function UnsupportedAppsPanel({
   apps,
   isExpert,
-  onServiceClick,
+  onAppClick,
 }: Props) {
   if (apps.length === 0) return null;
 
@@ -33,9 +33,9 @@ export default function UnsupportedAppsPanel({
             className="h-full w-full cursor-not-allowed opacity-50 grayscale transition-all hover:opacity-80 hover:grayscale-[50%]"
           >
             <IndividualAppCard
-              service={svc}
+              app={svc}
               isExpert={isExpert}
-              onServiceClick={onServiceClick}
+              onAppClick={onAppClick}
             />
           </div>
         ))}

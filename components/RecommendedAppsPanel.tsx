@@ -1,17 +1,17 @@
-import { Service } from '@prisma/client';
+import { App } from '@prisma/client';
 
 import IndividualAppCard from '@/components/IndividualAppCard';
 
 interface Props {
-  apps: Service[];
+  apps: App[];
   isExpert: boolean;
-  onServiceClick: (service: Service) => void;
+  onAppClick: (app: App) => void;
 }
 
 export default function RecommendedAppsPanel({
   apps,
   isExpert,
-  onServiceClick,
+  onAppClick,
 }: Props) {
   if (apps.length === 0) return null;
 
@@ -23,12 +23,12 @@ export default function RecommendedAppsPanel({
       </div>
 
       <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-5">
-        {apps.map((svc) => (
+        {apps.map((app) => (
           <IndividualAppCard
-            key={svc.id}
-            service={svc}
+            key={app.id}
+            app={app}
             isExpert={isExpert}
-            onServiceClick={onServiceClick}
+            onAppClick={onAppClick}
           />
         ))}
       </div>

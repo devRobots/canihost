@@ -1,26 +1,26 @@
 'use client';
 
-import { Service } from '@prisma/client';
+import { App } from '@prisma/client';
 import { useRef } from 'react';
 
 import { useAppStore } from '@/lib/store';
-import { type AppBundle, type Machine } from '@/types';
+import { type AppBundle, type Host } from '@/types';
 
 export default function StoreInitializer({
-  machines,
+  hosts,
   allBundles,
-  allServices,
+  allApps,
 }: {
-  machines: Machine[];
+  hosts: Host[];
   allBundles: AppBundle[];
-  allServices: Service[];
+  allApps: App[];
 }) {
   const initialized = useRef(false);
   if (!initialized.current) {
     // We silently hydrate the store on mount to avoid the "Cannot update a component while rendering" warning in React 18+
     const state = useAppStore.getState();
-    if (state.machines.length === 0) {
-      state.setInitialData({ machines, allBundles, allServices });
+    if (state.hosts.length === 0) {
+      state.setInitialData({ hosts, allBundles, allApps });
     }
     initialized.current = true;
   }
