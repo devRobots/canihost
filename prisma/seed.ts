@@ -1,4 +1,4 @@
-import { PrismaClient, Prisma } from '@/prisma/generated/prisma/client';
+import { MachineType, PrismaClient } from '@/prisma/generated/prisma/client';
 import { PrismaBetterSqlite3 } from "@prisma/adapter-better-sqlite3";
 
 const adapter = new PrismaBetterSqlite3({
@@ -18,27 +18,27 @@ async function main() {
   
   const machinesData = [
     { 
-      name: 'Zimaboard 2', type: 'MINI_PC',
+      name: 'Zimaboard 2', type: MachineType.MINI_PC,
       variants: [ { name: '832', cpuCores: 4, memoryRamGb: 8 }, { name: '1664', cpuCores: 4, memoryRamGb: 16 } ]
     },
     { 
-      name: 'Chuwi Larkbox X', type: 'MINI_PC', 
+      name: 'Chuwi Larkbox X', type: MachineType.MINI_PC, 
       variants: [ { name: 'N100 12GB', cpuCores: 4, memoryRamGb: 12 } ]
     },
     { 
-      name: 'Mac Mini M2', type: 'MINI_PC', 
+      name: 'Mac Mini M2', type: MachineType.MINI_PC, 
       variants: [ { name: 'Base', cpuCores: 8, memoryRamGb: 8 }, { name: 'Pro', cpuCores: 10, memoryRamGb: 16 } ]
     },
     { 
-      name: 'Raspberry Pi 5', type: 'MINI_PC', 
+      name: 'Raspberry Pi 5', type: MachineType.MINI_PC, 
       variants: [ { name: '8GB', cpuCores: 4, memoryRamGb: 8 }, { name: '4GB', cpuCores: 4, memoryRamGb: 4 } ]
     },
     { 
-      name: 'Intel NUC 13 Pro', type: 'MINI_PC', 
+      name: 'Intel NUC 13 Pro', type: MachineType.MINI_PC, 
       variants: [ { name: 'i7 16GB', cpuCores: 12, memoryRamGb: 16 } ]
     },
     {
-      name: 'CubePath VPS', type: 'VPS',
+      name: 'CubePath VPS', type: MachineType.VPS,
       variants: [ 
         { name: 'Starter (1vCPU/1GB)', cpuCores: 1, memoryRamGb: 1 },
         { name: 'Developer (2vCPU/4GB)', cpuCores: 2, memoryRamGb: 4 },
@@ -46,7 +46,7 @@ async function main() {
       ]
     },
     {
-      name: 'Custom Server', type: 'CUSTOM',
+      name: 'Custom Server', type: MachineType.CUSTOM,
       variants: [ { name: 'Customized', cpuCores: 4, memoryRamGb: 8 } ]
     }
   ];

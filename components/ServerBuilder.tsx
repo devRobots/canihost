@@ -8,6 +8,7 @@ import ServiceModal from '@/components/ServiceModal';
 import BuilderCatalog from '@/components/BuilderCatalog';
 import BuilderMonitor from '@/components/BuilderMonitor';
 import { type Service, type Machine, type ActiveMachine } from '@/types';
+import { MachineType } from '@/prisma/generated/prisma/enums';
 
 export default function ServerBuilder() {
   const { machines, selectedMachineId, selectedVariantId, customVariantCores, customVariantRam } = useAppStore();
@@ -25,7 +26,7 @@ export default function ServerBuilder() {
   }
 
   const selectedVariant = machine.variants?.find(v => v.id === selectedVariantId) || machine.variants?.[0] || null;
-  const isCustom = machine.type === 'CUSTOM';
+  const isCustom = machine.type === MachineType.CUSTOM;
   
   const activeMachine: ActiveMachine = {
     ...machine,

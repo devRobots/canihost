@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { useAppStore } from '@/lib/store';
 import { Cpu, MemoryStick, Cloud, Server, ChevronDown, LayoutDashboard, Settings, Box } from 'lucide-react';
+import { MachineType } from '@/prisma/generated/prisma/enums';
 
 const getMachineTypeIcon = (type?: string) => {
   if (type === 'VPS') return <Cloud size={20} />;
@@ -46,14 +47,14 @@ export default function MachinePicker() {
     setTimeout(() => document.getElementById('recommendations-section')?.scrollIntoView({ behavior: 'smooth' }), 100);
   };
 
-  const miniPcs = machines.filter(m => m.type === 'MINI_PC').sort((a, b) => a.name.localeCompare(b.name));
-  const vpss = machines.filter(m => m.type === 'VPS').sort((a, b) => a.name.localeCompare(b.name));
-  const customs = machines.filter(m => m.type === 'CUSTOM');
+  const miniPcs = machines.filter(m => m.type === MachineType.MINI_PC).sort((a, b) => a.name.localeCompare(b.name));
+  const vpss = machines.filter(m => m.type === MachineType.VPS).sort((a, b) => a.name.localeCompare(b.name));
+  const customs = machines.filter(m => m.type === MachineType.CUSTOM);
 
   const selectedMachine = machines.find(m => m.id === selectedMachineId);
   const selectedVariant = selectedMachine?.variants.find(v => v.id === selectedVariantId) || selectedMachine?.variants[0];
 
-  const isCustom = selectedMachine?.type === 'CUSTOM';
+  const isCustom = selectedMachine?.type === MachineType.CUSTOM;
   const currentCores = isCustom ? customVariantCores : (selectedVariant?.cpuCores || 0);
   const currentRam = isCustom ? customVariantRam : (selectedVariant?.memoryRamGb || 0);
 

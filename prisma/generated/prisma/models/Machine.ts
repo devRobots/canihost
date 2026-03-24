@@ -27,7 +27,7 @@ export type AggregateMachine = {
 export type MachineMinAggregateOutputType = {
   id: string | null
   name: string | null
-  type: string | null
+  type: $Enums.MachineType | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -35,7 +35,7 @@ export type MachineMinAggregateOutputType = {
 export type MachineMaxAggregateOutputType = {
   id: string | null
   name: string | null
-  type: string | null
+  type: $Enums.MachineType | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -150,7 +150,7 @@ export type MachineGroupByArgs<ExtArgs extends runtime.Types.Extensions.Internal
 export type MachineGroupByOutputType = {
   id: string
   name: string
-  type: string
+  type: $Enums.MachineType
   createdAt: Date
   updatedAt: Date
   _count: MachineCountAggregateOutputType | null
@@ -179,7 +179,7 @@ export type MachineWhereInput = {
   NOT?: Prisma.MachineWhereInput | Prisma.MachineWhereInput[]
   id?: Prisma.StringFilter<"Machine"> | string
   name?: Prisma.StringFilter<"Machine"> | string
-  type?: Prisma.StringFilter<"Machine"> | string
+  type?: Prisma.EnumMachineTypeFilter<"Machine"> | $Enums.MachineType
   createdAt?: Prisma.DateTimeFilter<"Machine"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Machine"> | Date | string
   variants?: Prisma.MachineVariantListRelationFilter
@@ -200,7 +200,7 @@ export type MachineWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.MachineWhereInput[]
   NOT?: Prisma.MachineWhereInput | Prisma.MachineWhereInput[]
   name?: Prisma.StringFilter<"Machine"> | string
-  type?: Prisma.StringFilter<"Machine"> | string
+  type?: Prisma.EnumMachineTypeFilter<"Machine"> | $Enums.MachineType
   createdAt?: Prisma.DateTimeFilter<"Machine"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Machine"> | Date | string
   variants?: Prisma.MachineVariantListRelationFilter
@@ -223,7 +223,7 @@ export type MachineScalarWhereWithAggregatesInput = {
   NOT?: Prisma.MachineScalarWhereWithAggregatesInput | Prisma.MachineScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Machine"> | string
   name?: Prisma.StringWithAggregatesFilter<"Machine"> | string
-  type?: Prisma.StringWithAggregatesFilter<"Machine"> | string
+  type?: Prisma.EnumMachineTypeWithAggregatesFilter<"Machine"> | $Enums.MachineType
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Machine"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Machine"> | Date | string
 }
@@ -231,7 +231,7 @@ export type MachineScalarWhereWithAggregatesInput = {
 export type MachineCreateInput = {
   id?: string
   name: string
-  type: string
+  type: $Enums.MachineType
   createdAt?: Date | string
   updatedAt?: Date | string
   variants?: Prisma.MachineVariantCreateNestedManyWithoutMachineInput
@@ -240,7 +240,7 @@ export type MachineCreateInput = {
 export type MachineUncheckedCreateInput = {
   id?: string
   name: string
-  type: string
+  type: $Enums.MachineType
   createdAt?: Date | string
   updatedAt?: Date | string
   variants?: Prisma.MachineVariantUncheckedCreateNestedManyWithoutMachineInput
@@ -249,7 +249,7 @@ export type MachineUncheckedCreateInput = {
 export type MachineUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumMachineTypeFieldUpdateOperationsInput | $Enums.MachineType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   variants?: Prisma.MachineVariantUpdateManyWithoutMachineNestedInput
@@ -258,7 +258,7 @@ export type MachineUpdateInput = {
 export type MachineUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumMachineTypeFieldUpdateOperationsInput | $Enums.MachineType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   variants?: Prisma.MachineVariantUncheckedUpdateManyWithoutMachineNestedInput
@@ -267,7 +267,7 @@ export type MachineUncheckedUpdateInput = {
 export type MachineCreateManyInput = {
   id?: string
   name: string
-  type: string
+  type: $Enums.MachineType
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -275,7 +275,7 @@ export type MachineCreateManyInput = {
 export type MachineUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumMachineTypeFieldUpdateOperationsInput | $Enums.MachineType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -283,7 +283,7 @@ export type MachineUpdateManyMutationInput = {
 export type MachineUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumMachineTypeFieldUpdateOperationsInput | $Enums.MachineType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -321,6 +321,10 @@ export type StringFieldUpdateOperationsInput = {
   set?: string
 }
 
+export type EnumMachineTypeFieldUpdateOperationsInput = {
+  set?: $Enums.MachineType
+}
+
 export type DateTimeFieldUpdateOperationsInput = {
   set?: Date | string
 }
@@ -342,7 +346,7 @@ export type MachineUpdateOneRequiredWithoutVariantsNestedInput = {
 export type MachineCreateWithoutVariantsInput = {
   id?: string
   name: string
-  type: string
+  type: $Enums.MachineType
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -350,7 +354,7 @@ export type MachineCreateWithoutVariantsInput = {
 export type MachineUncheckedCreateWithoutVariantsInput = {
   id?: string
   name: string
-  type: string
+  type: $Enums.MachineType
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -374,7 +378,7 @@ export type MachineUpdateToOneWithWhereWithoutVariantsInput = {
 export type MachineUpdateWithoutVariantsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumMachineTypeFieldUpdateOperationsInput | $Enums.MachineType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -382,7 +386,7 @@ export type MachineUpdateWithoutVariantsInput = {
 export type MachineUncheckedUpdateWithoutVariantsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumMachineTypeFieldUpdateOperationsInput | $Enums.MachineType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -468,7 +472,7 @@ export type $MachinePayload<ExtArgs extends runtime.Types.Extensions.InternalArg
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     name: string
-    type: string
+    type: $Enums.MachineType
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["machine"]>
@@ -897,7 +901,7 @@ export interface Prisma__MachineClient<T, Null = never, ExtArgs extends runtime.
 export interface MachineFieldRefs {
   readonly id: Prisma.FieldRef<"Machine", 'String'>
   readonly name: Prisma.FieldRef<"Machine", 'String'>
-  readonly type: Prisma.FieldRef<"Machine", 'String'>
+  readonly type: Prisma.FieldRef<"Machine", 'MachineType'>
   readonly createdAt: Prisma.FieldRef<"Machine", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Machine", 'DateTime'>
 }

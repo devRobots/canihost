@@ -6,6 +6,7 @@ import { getServiceIcon } from '@/lib/icons';
 
 import Link from 'next/link';
 import { type ActiveMachine, type Service } from '@/types';
+import { MachineType } from '@/prisma/generated/prisma/enums';
 
 type Props = {
   machine: ActiveMachine;
@@ -33,7 +34,7 @@ export default function BuilderCatalog({ machine, setServiceModalData, setMachin
           <div className="flex items-center gap-2">
             <span className="text-accent">▶</span>
             <span className="font-bold text-lg text-accent">{machine.name}</span>
-            <span className="tag px-2">{machine.type === 'VPS' ? 'Cloud VPS' : 'Mini PC'}</span>
+            <span className="tag px-2">{machine.type === MachineType.VPS ? 'Cloud VPS' : 'Mini PC'}</span>
             <button
               onClick={() => setMachineModalOpen(true)}
               className="ml-2 text-xs w-6 h-6 flex items-center justify-center rounded-full border border-accent text-accent transition-all hover:bg-white/10"
@@ -75,7 +76,7 @@ export default function BuilderCatalog({ machine, setServiceModalData, setMachin
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
                 {allServices.filter(s => s.category === cat).map(svc => {
                   const isSelected = selectedServiceIds.has(svc.id);
-                  const isLocalOnly = !svc.isCloudRecommended && machine.type === 'VPS';
+                  const isLocalOnly = !svc.isCloudRecommended && machine.type === MachineType.VPS;
                   const icon = getServiceIcon(svc.name);
 
                   let borderColorClass = 'border-default';

@@ -1,18 +1,14 @@
 import { getServiceIcon } from '@/lib/icons';
-import { type Service, type ActiveMachine } from '@/types';
+import { type Service } from '@/types';
 import { Cpu, MemoryStick } from 'lucide-react';
 
 interface Props {
   service: Service;
-  machine: ActiveMachine;
   isExpert: boolean;
   onServiceClick: (service: Service) => void;
 }
 
-export default function IndividualAppCard({ service, machine, isExpert, onServiceClick }: Props) {
-  const cpuPct = (service.recommendedCPU / machine.cpuCores) * 100;
-  const ramPct = (service.recommendedRAM / machine.memoryRamGb) * 100;
-
+export default function IndividualAppCard({ service, isExpert, onServiceClick }: Props) {
   return (
     <button
       onClick={() => onServiceClick(service)}

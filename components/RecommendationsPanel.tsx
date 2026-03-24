@@ -9,6 +9,7 @@ import RecommendedAppsPanel from '@/components/RecommendedAppsPanel';
 import BarelyUsableAppsPanel from '@/components/BarelyUsableAppsPanel';
 import UnsupportedAppsPanel from '@/components/UnsupportedAppsPanel';
 import { type Service, type AppBundle, type ActiveMachine } from '@/types';
+import { MachineType } from '@/prisma/generated/prisma/enums';
 
 export default function RecommendationsPanel() {
   const { machines, allBundles, allServices, selectedMachineId, selectedVariantId, customVariantCores, customVariantRam, mode } = useAppStore();
@@ -22,7 +23,7 @@ export default function RecommendationsPanel() {
     if (!machine) return { recommendedBundles: [], recommendedApps: [], barelyUsableApps: [], unsupportedApps: [], activeMachine: null };
 
     const selectedVariant = machine.variants.find(v => v.id === selectedVariantId) || machine.variants[0];
-    const isCustom = machine.type === 'CUSTOM';
+    const isCustom = machine.type === MachineType.CUSTOM;
     
     const activeMachine: ActiveMachine = {
       ...machine,
@@ -39,7 +40,7 @@ export default function RecommendationsPanel() {
       for (const svc of bundle.services) {
         totalMinCpu += svc.minCPU;
         totalMinRam += svc.minRAM;
-        if (!svc.isCloudRecommended && activeMachine.type === 'VPS') cloudSafe = false;
+        if (!svc.isCloudRecommended && activeMachine.type === MachineType.VPS) cloudSafe = false;
       }
       return totalMinCpu <= activeMachine.cpuCores && totalMinRam <= activeMachine.memoryRamGb && cloudSafe;
     }).slice(0, maxBundles);
@@ -50,7 +51,7 @@ export default function RecommendationsPanel() {
     const unsuppApps: Service[] = [];
 
     for (const svc of allServices) {
-      const isVpsIncompatible = (svc.isCloudRecommended === false && activeMachine.type === 'VPS');
+      const isVpsIncompatible = (svc.isCloudRecommended === false && activeMachine.type === MachineType.VPS);
       const meetsMinimums = svc.minCPU <= activeMachine.cpuCores && svc.minRAM <= activeMachine.memoryRamGb;
 
       if (isVpsIncompatible || !meetsMinimums) {

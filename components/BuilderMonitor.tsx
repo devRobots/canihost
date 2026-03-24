@@ -4,6 +4,7 @@ import { useAppStore } from '@/lib/store';
 import PieChart from '@/components/PieChart';
 import { type ActiveMachine, type Service } from '@/types';
 import { getServiceIcon } from '@/lib/icons';
+import { MachineType } from '@/prisma/generated/prisma/enums';
 
 type Props = {
   machine: ActiveMachine;
@@ -23,7 +24,7 @@ export default function BuilderMonitor({ machine, setServiceModalData }: Props) 
 
   const isCpuOver = totalCpu > machine.cpuCores;
   const isRamOver = totalRam > machine.memoryRamGb;
-  const cloudWarnings = selectedServices.filter(s => !s.isCloudRecommended && machine.type === 'VPS');
+  const cloudWarnings = selectedServices.filter(s => !s.isCloudRecommended && machine.type === MachineType.VPS);
 
   let cpuClass: 'accent' | 'warn' | 'danger' = 'accent';
   if (isCpuOver) cpuClass = 'danger';

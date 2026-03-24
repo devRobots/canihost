@@ -9,7 +9,10 @@
 * 🟢 You can import this file directly.
 */
 
+export const MachineType = {
+  MINI_PC: 'MINI_PC',
+  VPS: 'VPS',
+  CUSTOM: 'CUSTOM'
+} as const
 
-
-// This file is empty because there are no enums in the schema.
-export {}
+export type MachineType = (typeof MachineType)[keyof typeof MachineType]
