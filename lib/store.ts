@@ -12,7 +12,11 @@ interface DbState {
   hosts: Host[];
   bundles: AppBundle[];
   apps: App[];
-  setInitialData: (data: { hosts: Host[]; bundles: AppBundle[]; apps: App[] }) => void;
+  setInitialData: (data: {
+    hosts: Host[];
+    bundles: AppBundle[];
+    apps: App[];
+  }) => void;
 }
 
 export const useDbStore = create<DbState>((set) => ({
@@ -55,10 +59,12 @@ export const useHostStore = create<HostState>()(
     {
       name: 'host-store',
       storage: createJSONStorage(() =>
-        typeof window !== 'undefined' ? window.localStorage : { getItem: () => null, setItem: () => {}, removeItem: () => {} }
+        typeof window !== 'undefined'
+          ? window.localStorage
+          : { getItem: () => null, setItem: () => {}, removeItem: () => {} },
       ),
-    }
-  )
+    },
+  ),
 );
 
 // ─── Mode Store ───────────────────────────────────────────────────────────────
@@ -74,15 +80,18 @@ export const useModeStore = create<ModeState>()(
     (set, get) => ({
       mode: 'normal',
       setMode: (m) => set({ mode: m }),
-      toggleMode: () => set({ mode: get().mode === 'expert' ? 'normal' : 'expert' }),
+      toggleMode: () =>
+        set({ mode: get().mode === 'expert' ? 'normal' : 'expert' }),
     }),
     {
       name: 'mode-store',
       storage: createJSONStorage(() =>
-        typeof window !== 'undefined' ? window.localStorage : { getItem: () => null, setItem: () => {}, removeItem: () => {} }
+        typeof window !== 'undefined'
+          ? window.localStorage
+          : { getItem: () => null, setItem: () => {}, removeItem: () => {} },
       ),
-    }
-  )
+    },
+  ),
 );
 
 // ─── Builder Store ────────────────────────────────────────────────────────────
@@ -109,7 +118,9 @@ export const useBuilderStore = create<BuilderState>()(
     {
       name: 'builder-store',
       storage: createJSONStorage(() =>
-        typeof window !== 'undefined' ? window.localStorage : { getItem: () => null, setItem: () => {}, removeItem: () => {} }
+        typeof window !== 'undefined'
+          ? window.localStorage
+          : { getItem: () => null, setItem: () => {}, removeItem: () => {} },
       ),
       partialize: (state) => ({
         selectedAppIds: Array.from(state.selectedAppIds),
@@ -117,8 +128,10 @@ export const useBuilderStore = create<BuilderState>()(
       merge: (persisted, current) => ({
         ...current,
         ...(persisted as Partial<BuilderState>),
-        selectedAppIds: new Set((persisted as { selectedAppIds?: string[] })?.selectedAppIds ?? []),
+        selectedAppIds: new Set(
+          (persisted as { selectedAppIds?: string[] })?.selectedAppIds ?? [],
+        ),
       }),
-    }
-  )
+    },
+  ),
 );

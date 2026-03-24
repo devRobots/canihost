@@ -5,7 +5,7 @@ import StoreInitializer from '@/components/StoreInitializer';
 import prisma from '@/lib/prisma';
 
 export default async function Home() {
-  const [hosts, allBundles, allApps] = await Promise.all([
+  const [hosts, bundles, apps] = await Promise.all([
     prisma.host.findMany({
       orderBy: { name: 'asc' },
       include: { variants: true },
@@ -16,11 +16,7 @@ export default async function Home() {
 
   return (
     <>
-      <StoreInitializer
-        hosts={hosts}
-        allBundles={allBundles}
-        allApps={allApps}
-      />
+      <StoreInitializer hosts={hosts} bundles={bundles} apps={apps} />
       <div className="bg-page flex min-h-screen flex-col font-mono">
         <Hero />
         <div className="container mx-auto flex flex-col gap-10 px-4 py-8 sm:px-8">

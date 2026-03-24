@@ -29,9 +29,7 @@ export default function BuilderCatalog({
   const [collapsedCategories, setCollapsedCategories] = useState<
     Record<string, boolean>
   >({});
-  const categories = Array.from(
-    new Set(apps.map((s) => s.category)),
-  ).sort();
+  const categories = Array.from(new Set(apps.map((s) => s.category))).sort();
 
   const toggleCategory = (cat: string) => {
     setCollapsedCategories((prev) => ({ ...prev, [cat]: !prev[cat] }));
@@ -44,9 +42,7 @@ export default function BuilderCatalog({
         <div className="flex flex-col gap-1.5">
           <div className="flex items-center gap-2">
             <span className="text-accent">▶</span>
-            <span className="text-accent text-lg font-bold">
-              {host.name}
-            </span>
+            <span className="text-accent text-lg font-bold">{host.name}</span>
             <span className="tag px-2">
               {host.type === HostType.VPS ? 'Cloud VPS' : 'Mini PC'}
             </span>
@@ -95,8 +91,7 @@ export default function BuilderCatalog({
                   .map((svc) => {
                     const isSelected = selectedAppIds.has(svc.id);
                     const isLocalOnly =
-                      !svc.isCloudRecommended &&
-                      host.type === HostType.VPS;
+                      !svc.isCloudRecommended && host.type === HostType.VPS;
                     const icon = getAppIcon(svc.name);
 
                     let borderColorClass = 'border-default';
@@ -174,10 +169,9 @@ export default function BuilderCatalog({
                           ) : (
                             <div className="flex w-full justify-center gap-2">
                               <span>
-                                {(
-                                  (svc.minCPU / host.cpuCores) *
-                                  100
-                                ).toFixed(0)}
+                                {((svc.minCPU / host.cpuCores) * 100).toFixed(
+                                  0,
+                                )}
                                 %C
                               </span>
                               <span>|</span>

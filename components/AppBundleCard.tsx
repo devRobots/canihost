@@ -21,10 +21,7 @@ export default function AppBundleCard({
   const totalCpu = bundle.apps.reduce((acc, s) => acc + s.minCPU, 0);
   const totalRam = bundle.apps.reduce((acc, s) => acc + s.minRAM, 0);
   const cpuPct = Math.min(Math.round((totalCpu / host.cpuCores) * 100), 999);
-  const ramPct = Math.min(
-    Math.round((totalRam / host.memoryRamGb) * 100),
-    999,
-  );
+  const ramPct = Math.min(Math.round((totalRam / host.memoryRamGb) * 100), 999);
   const cpuClass = cpuPct > 70 ? 'warn' : 'accent';
   const ramClass = ramPct > 70 ? 'warn' : 'accent';
 

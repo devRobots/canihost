@@ -14,13 +14,8 @@ import { useDbStore, useHostStore, useModeStore } from '@/lib/store';
 import { type ActiveHost, type AppBundle } from '@/types';
 
 export default function RecommendationsPanel() {
-  const { hosts, bundles: allBundles, apps: allApps } = useDbStore();
-  const {
-    selectedHostId,
-    selectedVariantId,
-    core,
-    ram,
-  } = useHostStore();
+  const { hosts, bundles: bundles, apps: apps } = useDbStore();
+  const { selectedHostId, selectedVariantId, core, ram } = useHostStore();
   const { mode } = useModeStore();
   const [appModalData, setAppModalData] = useState<App | null>(null);
   const [appBundleModalData, setAppBundleModalData] =
@@ -48,21 +43,18 @@ export default function RecommendationsPanel() {
       };
 
     const selectedVariant =
-      host.variants.find((v) => v.id === selectedVariantId) ||
-      host.variants[0];
+      host.variants.find((v) => v.id === selectedVariantId) || host.variants[0];
     const isCustom = host.type === HostType.CUSTOM;
 
     const activeHost: ActiveHost = {
       ...host,
       cpuCores: isCustom ? core : selectedVariant?.cpuCores || 0,
-      memoryRamGb: isCustom
-        ? ram
-        : selectedVariant?.memoryRamGb || 0,
+      memoryRamGb: isCustom ? ram : selectedVariant?.memoryRamGb || 0,
     };
 
     // 1. Evaluate Bundles
     const maxBundles = 6;
-    const recommendedBundles = allBundles
+    const recommendedBundles = bundles
       .filter((bundle) => {
         let totalMinCpu = 0;
         let totalMinRam = 0;
@@ -86,10 +78,9 @@ export default function RecommendationsPanel() {
     const barelyApps: App[] = [];
     const unsuppApps: App[] = [];
 
-    for (const svc of allApps) {
+    for (const svc of apps) {
       const isVpsIncompatible =
-        svc.isCloudRecommended === false &&
-        activeHost.type === HostType.VPS;
+        svc.isCloudRecommended === false && activeHost.type === HostType.VPS;
       const meetsMinimums =
         svc.minCPU <= activeHost.cpuCores &&
         svc.minRAM <= activeHost.memoryRamGb;
@@ -121,15 +112,7 @@ export default function RecommendationsPanel() {
       unsupportedApps: unsuppApps.slice(0, 12),
       activeHost,
     };
-  }, [
-    allBundles,
-    allApps,
-    selectedHostId,
-    selectedVariantId,
-    core,
-    ram,
-    hosts,
-  ]);
+  }, [bundles, apps, selectedHostId, selectedVariantId, core, ram, hosts]);
 
   if (!activeHost) {
     return (
@@ -231,10 +214,7 @@ export default function RecommendationsPanel() {
       </aside>
 
       {/* Modals */}
-      <AppModal
-        app={appModalData}
-        onClose={() => setAppModalData(null)}
-      />
+      <AppModal app={appModalData} onClose={() => setAppModalData(null)} />
       <AppBundleModal
         bundle={appBundleModalData}
         onClose={() => setAppBundleModalData(null)}

@@ -13,24 +13,18 @@ type Props = {
   setAppModalData: (s: App | null) => void;
 };
 
-export default function BuilderMonitor({
-  host,
-  setAppModalData,
-}: Props) {
-  const { apps: allApps } = useDbStore();
+export default function BuilderMonitor({ host, setAppModalData }: Props) {
+  const { apps: apps } = useDbStore();
   const { selectedAppIds } = useBuilderStore();
   const { mode } = useModeStore();
   const isExpert = mode === 'expert';
 
-  const selectedApps = allApps.filter((s) => selectedAppIds.has(s.id));
+  const selectedApps = apps.filter((s) => selectedAppIds.has(s.id));
   const totalCpu = selectedApps.reduce((acc, s) => acc + s.minCPU, 0);
   const totalRam = selectedApps.reduce((acc, s) => acc + s.minRAM, 0);
 
   const cpuPct = Math.min(Math.round((totalCpu / host.cpuCores) * 100), 999);
-  const ramPct = Math.min(
-    Math.round((totalRam / host.memoryRamGb) * 100),
-    999,
-  );
+  const ramPct = Math.min(Math.round((totalRam / host.memoryRamGb) * 100), 999);
 
   const isCpuOver = totalCpu > host.cpuCores;
   const isRamOver = totalRam > host.memoryRamGb;
@@ -116,8 +110,8 @@ export default function BuilderMonitor({
             <span className="animate-pulse">⚠</span> Overloaded
           </div>
           <p className="font-sans leading-relaxed opacity-90">
-            Your host cannot handle this stack. Consider removing some apps
-            or returning to Home to upgrade your hardware.
+            Your host cannot handle this stack. Consider removing some apps or
+            returning to Home to upgrade your hardware.
           </p>
         </div>
       )}

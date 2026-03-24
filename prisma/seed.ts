@@ -380,8 +380,8 @@ async function main() {
 
   console.log('Insertando AppBundles...');
 
-  const allApps = await prisma.app.findMany();
-  const findApp = (name: string) => allApps.find((s) => s.name === name);
+  const apps = await prisma.app.findMany();
+  const findApp = (name: string) => apps.find((s) => s.name === name);
 
   const sets = [
     {

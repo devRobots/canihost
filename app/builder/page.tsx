@@ -6,7 +6,7 @@ import prisma from '@/lib/prisma';
 import { type Host } from '@/types';
 
 export default async function BuilderPage() {
-  const [hosts, allBundles, allApps] = await Promise.all([
+  const [hosts, bundles, apps] = await Promise.all([
     prisma.host.findMany({
       orderBy: { name: 'asc' },
       include: { variants: true },
@@ -21,11 +21,7 @@ export default async function BuilderPage() {
 
   return (
     <>
-      <StoreInitializer
-        hosts={hosts}
-        allBundles={allBundles}
-        allApps={allApps}
-      />
+      <StoreInitializer hosts={hosts} bundles={bundles} apps={apps} />
       <ServerBuilder />
     </>
   );

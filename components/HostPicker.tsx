@@ -89,12 +89,8 @@ export default function HostPicker() {
     selectedHost?.variants[0];
 
   const isCustom = selectedHost?.type === HostType.CUSTOM;
-  const currentCores = isCustom
-    ? core
-    : selectedVariant?.cpuCores || 0;
-  const currentRam = isCustom
-    ? ram
-    : selectedVariant?.memoryRamGb || 0;
+  const currentCores = isCustom ? core : selectedVariant?.cpuCores || 0;
+  const currentRam = isCustom ? ram : selectedVariant?.memoryRamGb || 0;
 
   const CPU_OPTIONS = [1, 2, 4, 6, 8, 10, 12, 14, 16, 24, 32, 64];
   const RAM_OPTIONS = [1, 2, 4, 6, 8, 12, 16, 24, 32, 64, 128];

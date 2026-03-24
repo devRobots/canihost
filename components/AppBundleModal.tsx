@@ -33,9 +33,7 @@ export default function AppBundleModal({
                 Total Min CPU
               </div>
               <div className="font-bold" style={{ color: 'var(--fg)' }}>
-                {bundle.apps
-                  .reduce((acc, s) => acc + s.minCPU, 0)
-                  .toFixed(1)}{' '}
+                {bundle.apps.reduce((acc, s) => acc + s.minCPU, 0).toFixed(1)}{' '}
                 cores
               </div>
             </div>
@@ -47,9 +45,7 @@ export default function AppBundleModal({
                 Total Min RAM
               </div>
               <div className="font-bold" style={{ color: 'var(--fg)' }}>
-                {bundle.apps
-                  .reduce((acc, s) => acc + s.minRAM, 0)
-                  .toFixed(1)}{' '}
+                {bundle.apps.reduce((acc, s) => acc + s.minRAM, 0).toFixed(1)}{' '}
                 GB
               </div>
             </div>

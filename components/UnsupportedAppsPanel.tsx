@@ -22,8 +22,8 @@ export default function UnsupportedAppsPanel({
         Not Supported Apps
       </div>
       <p className="text-fg-dim -mt-2 text-xs">
-        These apps require more resources than the current host can provide
-        or are incompatible with the environment.
+        These apps require more resources than the current host can provide or
+        are incompatible with the environment.
       </p>
 
       <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-5">

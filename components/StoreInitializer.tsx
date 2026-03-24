@@ -8,12 +8,12 @@ import { type AppBundle, type Host } from '@/types';
 
 export default function StoreInitializer({
   hosts,
-  allBundles,
-  allApps,
+  bundles,
+  apps,
 }: {
   hosts: Host[];
-  allBundles: AppBundle[];
-  allApps: App[];
+  bundles: AppBundle[];
+  apps: App[];
 }) {
   const initialized = useRef(false);
   if (!initialized.current) {
@@ -21,7 +21,7 @@ export default function StoreInitializer({
     const hostState = useHostStore.getState();
 
     if (dbState.hosts.length === 0) {
-      dbState.setInitialData({ hosts, bundles: allBundles, apps: allApps });
+      dbState.setInitialData({ hosts, bundles: bundles, apps: apps });
 
       const hostId = hostState.selectedHostId;
       const variantId = hostState.selectedVariantId;
@@ -30,9 +30,13 @@ export default function StoreInitializer({
       if (!hostExists) {
         hostState.setSelectedHostId(hosts[0]?.id || null, hosts);
       } else {
-        const variantExists = hostExists.variants.find((v) => v.id === variantId);
+        const variantExists = hostExists.variants.find(
+          (v) => v.id === variantId,
+        );
         if (!variantExists) {
-          useHostStore.setState({ selectedVariantId: hostExists.variants[0]?.id || null });
+          useHostStore.setState({
+            selectedVariantId: hostExists.variants[0]?.id || null,
+          });
         }
       }
     }

@@ -13,19 +13,11 @@ import { type ActiveHost, type Host } from '@/types';
 
 export default function ServerBuilder() {
   const { hosts } = useDbStore();
-  const {
-    selectedHostId,
-    selectedVariantId,
-    core,
-    ram,
-  } = useHostStore();
-  const host =
-    hosts.find((h: Host) => h.id === selectedHostId) || hosts[0];
+  const { selectedHostId, selectedVariantId, core, ram } = useHostStore();
+  const host = hosts.find((h: Host) => h.id === selectedHostId) || hosts[0];
 
   const [hostModalOpen, setHostModalOpen] = useState(false);
-  const [appModalData, setAppModalData] = useState<App | null>(
-    null,
-  );
+  const [appModalData, setAppModalData] = useState<App | null>(null);
 
   if (!host) {
     return (
@@ -44,9 +36,7 @@ export default function ServerBuilder() {
   const activeHost: ActiveHost = {
     ...host,
     cpuCores: isCustom ? core : selectedVariant?.cpuCores || 0,
-    memoryRamGb: isCustom
-      ? ram
-      : selectedVariant?.memoryRamGb || 0,
+    memoryRamGb: isCustom ? ram : selectedVariant?.memoryRamGb || 0,
   };
 
   return (
@@ -59,16 +49,10 @@ export default function ServerBuilder() {
       />
 
       {/* ─── RIGHT: Resource Monitor ─── */}
-      <BuilderMonitor
-        host={activeHost}
-        setAppModalData={setAppModalData}
-      />
+      <BuilderMonitor host={activeHost} setAppModalData={setAppModalData} />
 
       {/* ─── MODALS ─── */}
-      <AppModal
-        app={appModalData}
-        onClose={() => setAppModalData(null)}
-      />
+      <AppModal app={appModalData} onClose={() => setAppModalData(null)} />
 
       <Modal
         isOpen={hostModalOpen}
