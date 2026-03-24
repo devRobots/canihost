@@ -12,26 +12,40 @@ datasource db {
 model Machine {
   id             String   @id @default(cuid())
   name           String
-  type           String   // 'MINI_PC' | 'VPS'
+  type           String   // 'MINI_PC' | 'VPS' | 'CUSTOM'
   brand          String?
-  cpuCores       Int
-  memoryRamGb    Float
   targetAudience String?  // para quien esta destinado
   useCases       String?  // para que puede servir
   specialTech    String?  // tecnologias especiales
   technicalSpecs String?  // requisitos tecnicos
+  variants       MachineVariant[]
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
+}
+
+model MachineVariant {
+  id          String   @id @default(cuid())
+  name        String   // e.g. "832", "1664"
+  cpuCores    Float
+  memoryRamGb Float
+  machineId   String
+  machine     Machine  @relation(fields: [machineId], references: [id], onDelete: Cascade)
 }
 
 model Service {
   id                    String   @id @default(cuid())
   name                  String
   category              String
-  cpuCost               Float    // Cores it typically uses actively
-  ramCostGb             Float    // RAM in GB it typically needs
+  minCPU                Float    // Minimum Cores required
+  recommendedCPU        Float    // Recommended Cores for optimal use
+  minRAM                Float    // Minimum RAM required in GB
+  recommendedRAM        Float    // Recommended RAM for optimal use
   isCloudRecommended    Boolean  @default(true)
-  description           String?
+  description           String?  // Short description
+  longDescription       String?  // Extended details for modals
+  officialUrl           String?
+  cubepathUrl           String?
+  dockerRegistryUrl     String?
   minRequirements       String?  // requisitos minimos
   recRequirements       String?  // requisitos recomendados
   appBundles            AppBundle[] // Implicit m2m

@@ -1,17 +1,17 @@
 import { getServiceIcon } from '@/lib/icons';
-import { type Service, type Machine } from '@/types';
+import { type Service, type ActiveMachine } from '@/types';
 import { Cpu, MemoryStick } from 'lucide-react';
 
 interface Props {
   service: Service;
-  machine: Machine;
+  machine: ActiveMachine;
   isExpert: boolean;
   onServiceClick: (service: Service) => void;
 }
 
 export default function IndividualAppCard({ service, machine, isExpert, onServiceClick }: Props) {
-  const cpuPct = (service.cpuCost / machine.cpuCores) * 100;
-  const ramPct = (service.ramCostGb / machine.memoryRamGb) * 100;
+  const cpuPct = (service.recommendedCPU / machine.cpuCores) * 100;
+  const ramPct = (service.recommendedRAM / machine.memoryRamGb) * 100;
 
   return (
     <button
@@ -29,21 +29,28 @@ export default function IndividualAppCard({ service, machine, isExpert, onServic
           {service.name}
         </span>
       </div>
-      {isExpert && (
-        <div className="flex justify-center mt-auto pt-2 text-[10px] font-mono w-full border-t border-default text-fg-dim">
+      
+      <div className="flex justify-center mt-auto pt-2 text-[10px] font-mono w-full border-t border-default text-fg-dim">
+        {isExpert ? (
           <div className="flex gap-3 w-full justify-center items-center">
             <span className="flex items-center gap-1">
               <Cpu size={12} />
-              {service.cpuCost.toFixed(1)}c
+              {service.minCPU === service.recommendedCPU ? service.recommendedCPU : `${service.minCPU}-${service.recommendedCPU}`}c
             </span>
             <span className="opacity-50">|</span>
             <span className="flex items-center gap-1">
               <MemoryStick size={12} />
-              {service.ramCostGb.toFixed(1)}G
+              {service.minRAM === service.recommendedRAM ? service.recommendedRAM : `${service.minRAM}-${service.recommendedRAM}`}G
             </span>
           </div>
-        </div>
-      )}
+        ) : (
+          <div className="flex gap-2 w-full justify-center">
+            <span>{Math.min(100, cpuPct).toFixed(0)}%C</span>
+            <span>|</span>
+            <span>{Math.min(100, ramPct).toFixed(0)}%R</span>
+          </div>
+        )}
+      </div>
     </button>
   );
 }

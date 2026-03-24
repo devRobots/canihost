@@ -1,9 +1,9 @@
-import { type AppBundle, type Service, type Machine } from '@/types';
+import { type AppBundle, type Service, type ActiveMachine } from '@/types';
 import AppBundleCard from '@/components/AppBundleCard';
 
 interface Props {
   bundles: AppBundle[];
-  machine: Machine;
+  machine: ActiveMachine;
   isExpert: boolean;
   onBundleClick: (bundle: AppBundle) => void;
   onServiceClick: (service: Service) => void;

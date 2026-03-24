@@ -8,31 +8,40 @@ import AppBundlesPanel from '@/components/AppBundlesPanel';
 import RecommendedAppsPanel from '@/components/RecommendedAppsPanel';
 import BarelyUsableAppsPanel from '@/components/BarelyUsableAppsPanel';
 import UnsupportedAppsPanel from '@/components/UnsupportedAppsPanel';
-import { type Service, type AppBundle } from '@/types';
+import { type Service, type AppBundle, type ActiveMachine } from '@/types';
 
 export default function RecommendationsPanel() {
-  const { machines, allBundles, allServices, selectedMachineId, mode } = useAppStore();
+  const { machines, allBundles, allServices, selectedMachineId, selectedVariantId, customVariantCores, customVariantRam, mode } = useAppStore();
   const [serviceModalData, setServiceModalData] = useState<Service | null>(null);
   const [appBundleModalData, setAppBundleModalData] = useState<AppBundle | null>(null);
 
   const isExpert = mode === 'expert';
-  const machine = selectedMachineId ? machines.find(m => m.id === selectedMachineId) ?? null : null;
 
-  const { recommendedBundles, recommendedApps, barelyUsableApps, unsupportedApps } = useMemo(() => {
-    if (!machine) return { recommendedBundles: [], recommendedApps: [], barelyUsableApps: [], unsupportedApps: [] };
+  const { recommendedBundles, recommendedApps, barelyUsableApps, unsupportedApps, activeMachine } = useMemo(() => {
+    const machine = selectedMachineId ? machines.find(m => m.id === selectedMachineId) ?? null : null;
+    if (!machine) return { recommendedBundles: [], recommendedApps: [], barelyUsableApps: [], unsupportedApps: [], activeMachine: null };
+
+    const selectedVariant = machine.variants.find(v => v.id === selectedVariantId) || machine.variants[0];
+    const isCustom = machine.type === 'CUSTOM';
+    
+    const activeMachine: ActiveMachine = {
+      ...machine,
+      cpuCores: isCustom ? customVariantCores : (selectedVariant?.cpuCores || 0),
+      memoryRamGb: isCustom ? customVariantRam : (selectedVariant?.memoryRamGb || 0),
+    };
 
     // 1. Evaluate Bundles
     const maxBundles = 6;
     const recommendedBundles = allBundles.filter((bundle) => {
-      let totalCpu = 0;
-      let totalRam = 0;
+      let totalMinCpu = 0;
+      let totalMinRam = 0;
       let cloudSafe = true;
       for (const svc of bundle.services) {
-        totalCpu += svc.cpuCost;
-        totalRam += svc.ramCostGb;
-        if (!svc.isCloudRecommended && machine.type === 'VPS') cloudSafe = false;
+        totalMinCpu += svc.minCPU;
+        totalMinRam += svc.minRAM;
+        if (!svc.isCloudRecommended && activeMachine.type === 'VPS') cloudSafe = false;
       }
-      return totalCpu <= machine.cpuCores && totalRam <= machine.memoryRamGb * 0.9 && cloudSafe;
+      return totalMinCpu <= activeMachine.cpuCores && totalMinRam <= activeMachine.memoryRamGb && cloudSafe;
     }).slice(0, maxBundles);
 
     // 2. Evaluate Individual Apps
@@ -41,17 +50,15 @@ export default function RecommendationsPanel() {
     const unsuppApps: Service[] = [];
 
     for (const svc of allServices) {
-      const isVpsIncompatible = (svc.isCloudRecommended === false && machine.type === 'VPS');
-      const cpuFitsAtAll = svc.cpuCost <= machine.cpuCores;
-      const ramFitsAtAll = svc.ramCostGb <= machine.memoryRamGb;
+      const isVpsIncompatible = (svc.isCloudRecommended === false && activeMachine.type === 'VPS');
+      const meetsMinimums = svc.minCPU <= activeMachine.cpuCores && svc.minRAM <= activeMachine.memoryRamGb;
 
-      if (isVpsIncompatible || !cpuFitsAtAll || !ramFitsAtAll) {
+      if (isVpsIncompatible || !meetsMinimums) {
         unsuppApps.push(svc);
       } else {
-        const cpuComfortable = svc.cpuCost <= (machine.cpuCores * 0.8);
-        const ramComfortable = svc.ramCostGb <= (machine.memoryRamGb * 0.8);
+        const meetsRecommended = svc.recommendedCPU <= activeMachine.cpuCores && svc.recommendedRAM <= activeMachine.memoryRamGb;
 
-        if (cpuComfortable && ramComfortable) {
+        if (meetsRecommended) {
           recApps.push(svc);
         } else {
           barelyApps.push(svc);
@@ -60,19 +67,20 @@ export default function RecommendationsPanel() {
     }
 
     // Sort apps by RAM Cost descending
-    recApps.sort((a, b) => b.ramCostGb - a.ramCostGb);
-    barelyApps.sort((a, b) => b.ramCostGb - a.ramCostGb);
-    unsuppApps.sort((a, b) => b.ramCostGb - a.ramCostGb);
+    recApps.sort((a, b) => b.recommendedRAM - a.recommendedRAM);
+    barelyApps.sort((a, b) => b.minRAM - a.minRAM);
+    unsuppApps.sort((a, b) => b.minRAM - a.minRAM);
 
     return { 
       recommendedBundles, 
       recommendedApps: recApps.slice(0, 12),
       barelyUsableApps: barelyApps.slice(0, 12),
-      unsupportedApps: unsuppApps.slice(0, 12)
+      unsupportedApps: unsuppApps.slice(0, 12),
+      activeMachine
     };
-  }, [allBundles, allServices, machine]);
+  }, [allBundles, allServices, selectedMachineId, selectedVariantId, customVariantCores, customVariantRam, machines]);
 
-  if (!machine) {
+  if (!activeMachine) {
     return (
       <div className="text-center py-16 text-sm text-fg-dim">
         <div className="text-4xl mb-4">_</div>
@@ -91,7 +99,7 @@ export default function RecommendationsPanel() {
         <div id="section-bundles" className="scroll-mt-24">
           <AppBundlesPanel
             bundles={recommendedBundles}
-            machine={machine}
+            machine={activeMachine}
             isExpert={isExpert}
             onBundleClick={setAppBundleModalData}
             onServiceClick={setServiceModalData}
@@ -102,7 +110,7 @@ export default function RecommendationsPanel() {
         <div id="section-recommended" className="scroll-mt-24">
           <RecommendedAppsPanel
             apps={recommendedApps}
-            machine={machine}
+            machine={activeMachine}
             isExpert={isExpert}
             onServiceClick={setServiceModalData}
           />
@@ -112,7 +120,7 @@ export default function RecommendationsPanel() {
         <div id="section-barely-usable" className="scroll-mt-24">
           <BarelyUsableAppsPanel
             apps={barelyUsableApps}
-            machine={machine}
+            machine={activeMachine}
             isExpert={isExpert}
             onServiceClick={setServiceModalData}
           />
@@ -122,7 +130,7 @@ export default function RecommendationsPanel() {
         <div id="section-unsupported" className="scroll-mt-24">
           <UnsupportedAppsPanel
             apps={unsupportedApps}
-            machine={machine}
+            machine={activeMachine}
             isExpert={isExpert}
             onServiceClick={setServiceModalData}
           />

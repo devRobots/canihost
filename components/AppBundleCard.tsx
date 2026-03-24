@@ -1,17 +1,17 @@
 import { getServiceIcon } from '@/lib/icons';
-import { type AppBundle, type Service, type Machine } from '@/types';
+import { type AppBundle, type Service, type ActiveMachine } from '@/types';
 
 interface Props {
   bundle: AppBundle;
-  machine: Machine;
+  machine: ActiveMachine;
   isExpert: boolean;
   onBundleClick: (bundle: AppBundle) => void;
   onServiceClick: (service: Service) => void;
 }
 
 export default function AppBundleCard({ bundle, machine, isExpert, onBundleClick, onServiceClick }: Props) {
-  const totalCpu = bundle.services.reduce((acc, s) => acc + s.cpuCost, 0);
-  const totalRam = bundle.services.reduce((acc, s) => acc + s.ramCostGb, 0);
+  const totalCpu = bundle.services.reduce((acc, s) => acc + s.minCPU, 0);
+  const totalRam = bundle.services.reduce((acc, s) => acc + s.minRAM, 0);
   const cpuPct = Math.min(Math.round((totalCpu / machine.cpuCores) * 100), 999);
   const ramPct = Math.min(Math.round((totalRam / machine.memoryRamGb) * 100), 999);
   const cpuClass = cpuPct > 70 ? 'warn' : 'accent';

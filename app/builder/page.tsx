@@ -12,7 +12,7 @@ export default async function BuilderPage({
   const { machineId } = await searchParams;
 
   const [machines, allBundles, allServices] = await Promise.all([
-    prisma.machine.findMany({ orderBy: { name: 'asc' } }),
+    prisma.machine.findMany({ orderBy: { name: 'asc' }, include: { variants: true } }),
     prisma.appBundle.findMany({ include: { services: true } }),
     prisma.service.findMany({ orderBy: { name: 'asc' } }),
   ]);

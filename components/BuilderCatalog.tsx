@@ -5,10 +5,10 @@ import { useAppStore } from '@/lib/store';
 import { getServiceIcon } from '@/lib/icons';
 
 import Link from 'next/link';
-import { type Machine, type Service } from '@/types';
+import { type ActiveMachine, type Service } from '@/types';
 
 type Props = {
-  machine: Machine;
+  machine: ActiveMachine;
   setServiceModalData: (s: Service | null) => void;
   setMachineModalOpen: (b: boolean) => void;
 };
@@ -121,16 +121,22 @@ export default function BuilderCatalog({ machine, setServiceModalData, setMachin
                       {/* Hardware Metrics Footer */}
                       <div className="flex justify-center mt-auto pt-2 pb-1 text-[10px] font-mono w-full border-t border-default text-fg-dim">
                         {isExpert ? (
-                          <div className="flex gap-2 w-full justify-center">
-                            <span>{svc.cpuCost.toFixed(1)}c</span>
-                            <span>|</span>
-                            <span>{svc.ramCostGb.toFixed(1)}G</span>
+                          <div className="flex gap-3 w-full justify-center items-center">
+                            <span className="flex items-center gap-1">
+                              <span className="text-xs">CPU</span>
+                              {svc.minCPU === svc.recommendedCPU ? svc.recommendedCPU : `${svc.minCPU}-${svc.recommendedCPU}`}c
+                            </span>
+                            <span className="opacity-50">|</span>
+                            <span className="flex items-center gap-1">
+                              <span className="text-xs">RAM</span>
+                              {svc.minRAM === svc.recommendedRAM ? svc.recommendedRAM : `${svc.minRAM}-${svc.recommendedRAM}`}G
+                            </span>
                           </div>
                         ) : (
                           <div className="flex gap-2 w-full justify-center">
-                            <span>{(svc.cpuCost / machine.cpuCores * 100).toFixed(0)}%C</span>
+                            <span>{(svc.minCPU / machine.cpuCores * 100).toFixed(0)}%C</span>
                             <span>|</span>
-                            <span>{(svc.ramCostGb / machine.memoryRamGb * 100).toFixed(0)}%R</span>
+                            <span>{(svc.minRAM / machine.memoryRamGb * 100).toFixed(0)}%R</span>
                           </div>
                         )}
                       </div>

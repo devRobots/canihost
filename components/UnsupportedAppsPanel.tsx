@@ -1,9 +1,9 @@
-import { type Service, type Machine } from '@/types';
+import { type Service, type ActiveMachine } from '@/types';
 import IndividualAppCard from '@/components/IndividualAppCard';
 
 interface Props {
   apps: Service[];
-  machine: Machine;
+  machine: ActiveMachine;
   isExpert: boolean;
   onServiceClick: (service: Service) => void;
 }

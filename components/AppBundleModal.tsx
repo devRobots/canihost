@@ -21,6 +21,21 @@ export default function AppBundleModal({ bundle, onClose }: { bundle: AppBundle 
              {bundle.description || 'No description available for this bundle.'}
           </p>
 
+          <div className="flex gap-6">
+            <div>
+              <div className="text-[10px] uppercase font-bold tracking-widest mb-1" style={{ color: 'var(--fg-dim)' }}>Total Min CPU</div>
+              <div className="font-bold" style={{ color: 'var(--fg)' }}>
+                {bundle.services.reduce((acc, s) => acc + s.minCPU, 0).toFixed(1)} cores
+              </div>
+            </div>
+            <div>
+              <div className="text-[10px] uppercase font-bold tracking-widest mb-1" style={{ color: 'var(--fg-dim)' }}>Total Min RAM</div>
+              <div className="font-bold" style={{ color: 'var(--fg)' }}>
+                {bundle.services.reduce((acc, s) => acc + s.minRAM, 0).toFixed(1)} GB
+              </div>
+            </div>
+          </div>
+
           <div>
              <div className="text-[10px] uppercase font-bold tracking-widest mb-3" style={{ color: 'var(--accent)' }}>
                 {'// '} Individual Application Roles & Costs
@@ -31,12 +46,12 @@ export default function AppBundleModal({ bundle, onClose }: { bundle: AppBundle 
                       <div className="flex items-center gap-2">
                          <span className="text-xl">{getServiceIcon(svc.name)}</span>
                          <span className="font-bold text-xs" style={{ color: 'var(--fg)' }}>{svc.name}</span>
-                         <span className="text-[10px] ml-auto uppercase opacity-70" style={{ color: 'var(--fg-dim)' }}>
-                            {svc.category}
-                         </span>
+                         <span className="text-[10px] font-mono whitespace-nowrap" style={{ color: 'var(--fg-dim)' }}>
+                    {svc.minCPU}c | {svc.minRAM}G
+                  </span>
                       </div>
                       <div className="text-[10px] uppercase font-bold tracking-widest mt-1 opacity-70" style={{ color: 'var(--fg-dim)' }}>
-                        CPU: {svc.cpuCost}C | RAM: {svc.ramCostGb}GB
+                        CPU: {svc.minCPU}C | RAM: {svc.minRAM}GB
                       </div>
                    </div>
                 ))}

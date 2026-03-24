@@ -2,11 +2,11 @@
 
 import { useAppStore } from '@/lib/store';
 import PieChart from '@/components/PieChart';
-import { type Machine, type Service } from '@/types';
+import { type ActiveMachine, type Service } from '@/types';
 import { getServiceIcon } from '@/lib/icons';
 
 type Props = {
-  machine: Machine;
+  machine: ActiveMachine;
   setServiceModalData: (s: Service | null) => void;
 };
 
@@ -15,8 +15,8 @@ export default function BuilderMonitor({ machine, setServiceModalData }: Props) 
   const isExpert = mode === 'expert';
 
   const selectedServices = allServices.filter(s => selectedServiceIds.has(s.id));
-  const totalCpu = selectedServices.reduce((acc, s) => acc + s.cpuCost, 0);
-  const totalRam = selectedServices.reduce((acc, s) => acc + s.ramCostGb, 0);
+  const totalCpu = selectedServices.reduce((acc, s) => acc + s.minCPU, 0);
+  const totalRam = selectedServices.reduce((acc, s) => acc + s.minRAM, 0);
 
   const cpuPct = Math.min(Math.round((totalCpu / machine.cpuCores) * 100), 999);
   const ramPct = Math.min(Math.round((totalRam / machine.memoryRamGb) * 100), 999);
@@ -115,13 +115,13 @@ export default function BuilderMonitor({ machine, setServiceModalData }: Props) 
               >
                 <span className="text-lg">{getServiceIcon(s.name)}</span>
                 <span className="font-bold truncate" title={s.name}>{s.name}</span>
-                <div className="ml-auto text-[10px] text-fg-muted font-mono whitespace-nowrap">
-                  {isExpert ? (
-                    `${s.cpuCost}c · ${s.ramCostGb}G`
-                  ) : (
-                    `${Math.round((s.cpuCost/machine.cpuCores)*100)}%C`
-                  )}
-                </div>
+                  <span className="ml-auto text-xs text-fg-dim font-mono whitespace-nowrap">
+                    {isExpert ? (
+                      `${s.minCPU}c · ${s.minRAM}G`
+                    ) : (
+                      `${Math.round((s.minCPU/machine.cpuCores)*100)}%C`
+                    )}
+                  </span>
               </button>
             ))}
           </div>
