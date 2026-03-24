@@ -86,7 +86,7 @@ export default function AppBundleCard({
         </div>
       )}
 
-      {/* Services list */}
+      {/* Apps list */}
       <div className="mt-2 flex flex-wrap gap-2">
         {bundle.apps.map((app) => (
           <button

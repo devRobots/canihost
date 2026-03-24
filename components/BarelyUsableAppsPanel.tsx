@@ -23,7 +23,7 @@ export default function BarelyUsableAppsPanel({
       </div>
       <p className="text-fg-dim -mt-2 text-xs">
         These apps can run on the host, but might encounter performance
-        constraints or leave little room for other services.
+        constraints or leave little room for other apps.
       </p>
 
       <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-5">

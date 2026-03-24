@@ -13,7 +13,7 @@ export default function AppModal({
   onClose: () => void;
 }) {
   return (
-    <Modal isOpen={!!app} onClose={onClose} title="Service Details">
+    <Modal isOpen={!!app} onClose={onClose} title="App Details">
       {app && (
         <div
           className="flex flex-col gap-4 text-sm"

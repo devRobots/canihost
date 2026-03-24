@@ -35,7 +35,7 @@ interface AppState {
   setSelectedHostId: (id: string | null) => void;
   setSelectedVariantId: (id: string | null) => void;
 
-  /** Services selected in the manual builder */
+  /** Apps selected in the manual builder */
   selectedAppIds: Set<string>;
   toggleAppId: (id: string) => void;
   clearApps: () => void;
@@ -103,7 +103,7 @@ export const useAppStore = create<AppState>()(
         }),
       setSelectedVariantId: (id) => set({ selectedVariantId: id }),
 
-      // Service builder
+      // App builder
       selectedAppIds: new Set<string>(),
       toggleAppId: (id) =>
         set((s) => {

@@ -81,7 +81,7 @@ async function main() {
 
   console.log('Insertando Apps (>40 aplicaciones)...');
 
-  const servicesData = [
+  const appsData = [
     // Databases
     {
       name: 'PostgreSQL',
@@ -376,40 +376,40 @@ async function main() {
     },
   ];
 
-  await prisma.app.createMany({ data: servicesData });
+  await prisma.app.createMany({ data: appsData });
 
   console.log('Insertando AppBundles...');
 
-  const allServices = await prisma.app.findMany();
-  const findSvc = (name: string) => allServices.find((s) => s.name === name);
+  const allApps = await prisma.app.findMany();
+  const findApp = (name: string) => allApps.find((s) => s.name === name);
 
   const sets = [
     {
       name: 'Starter Homelab',
       description: 'The standard entry point to self hosting.',
-      services: ['Portainer', 'Nginx Proxy Manager', 'Pi-Hole'],
+      apps: ['Portainer', 'Nginx Proxy Manager', 'Pi-Hole'],
     },
     {
       name: 'Media Server Elite',
       description: 'Your own Netflix and Google Photos replacement.',
-      services: ['Plex', 'Jellyfin', 'Immich'],
+      apps: ['Plex', 'Jellyfin', 'Immich'],
     },
     {
       name: 'DevOps Cloud',
       description: 'Full code hosting and CI/CD pipeline.',
-      services: ['Gitlab', 'Jenkins', 'PostgreSQL', 'Redis'],
+      apps: ['Gitlab', 'Jenkins', 'PostgreSQL', 'Redis'],
     },
   ];
 
   for (const s of sets) {
-    const svcs = s.services.map((name) => findSvc(name)).filter(Boolean);
-    if (svcs.length > 0) {
+    const apps = s.apps.map((name) => findApp(name)).filter(Boolean);
+    if (apps.length > 0) {
       await prisma.appBundle.create({
         data: {
           name: s.name,
           description: s.description,
           apps: {
-            connect: svcs.map((svc) => ({ id: svc!.id })),
+            connect: apps.map((app) => ({ id: app!.id })),
           },
         },
       });

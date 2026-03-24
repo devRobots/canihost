@@ -1,8 +1,8 @@
 /**
- * Maps service names to icon strings (emoji or text-based for terminal aesthetic).
+ * Maps app names to icon strings (emoji or text-based for terminal aesthetic).
  * We keep it simple: emoji icons blend well with the terminal monospace aesthetic.
  */
-export const SERVICE_ICONS: Record<string, string> = {
+export const APP_ICONS: Record<string, string> = {
   // Databases
   PostgreSQL: '🐘',
   MySQL: '🐬',
@@ -68,5 +68,5 @@ export const SERVICE_ICONS: Record<string, string> = {
 };
 
 export function getAppIcon(name: string): string {
-  return SERVICE_ICONS[name] ?? '📦';
+  return APP_ICONS[name] ?? '📦';
 }
