@@ -1,4 +1,21 @@
 id,name,description,appIds
-1,Starter Homelab,The standard entry point to self hosting.,8|10|12
-2,Media Server Elite,Your own Netflix and Google Photos replacement.,22|23|24
-3,DevOps Cloud,Full code hosting and CI/CD pipeline.,5|6|1|4
+1,Essential Privacy Pack,Perfect for routers or micro-servers (Raspberry Pi). Focused on network security and password management with minimal resource usage.,1|18|26|27
+2,Ultimate Home Automation,The definitive combo for a smart home. Integrates local device control and camera security.,3|6|29|25
+3,Media & Memories Pro,Heavy-duty suite for movie and photography lovers. Requires good CPU for media management and facial recognition.,7|8|19
+4,DevOps Enterprise,Professional development environment. High demand for RAM and CPU as it includes GitLab and Jenkins.,4|9|20|21
+5,The AI Automation Hub,Cutting-edge tech bundle. Combines local AI with workflow automation. High resource requirements.,13|15|21|22
+6,SME Productivity Suite,Ideal for small businesses moving away from Google/Microsoft. Manage files documents and web presence.,12|14|17|28
+7,Full-Stack Database Lab,A playground for backend developers to test different database paradigms and caching.,11|12|21|22
+8,Infrastructure & Monitoring,Perfect for sysadmins needing to manage traffic and monitor server health.,5|20|24|25
+9,Lightweight Gaming & Fun,Quick and lightweight fun for servers with limited resources.,10|16
+10,Modern PaaS Cloud,Turn a blank server into a private cloud with a management panel and automatic proxy.,2|24|20
+11,Personal Cloud Hub,Full replacement for Google Drive with basic security services. Very balanced for family use.,14|26|1
+12,Streaming & Transcoding,Exclusively focused on serving high-quality multimedia content with optimized traffic management.,8|19|24
+13,API & Web Backend,The ideal stack for developers who need to deploy a robust and scalable API quickly.,23|21|22
+14,Secure Remote Office,Designed for secure remote work. Private VPN file storage and task automation.,14|27|26|13
+15,Paperless Home Office,Focuses on eliminating physical paper. Smart scanning cloud storage and relational database.,17|14|12
+16,Webmaster Tools & SEO,Everything needed to launch and maintain professional websites with uptime monitoring and metrics.,28|12|24|25|5
+17,Junior Backend Starter,A lightweight environment to learn database management and containers without overloading the machine.,21|11|20
+18,AI-Assisted Content Lab,Ideal for creators using AI to process documents and automate blog publishing.,15|13|17|28
+19,Advanced Network Security,Total network protection with double DNS filtering VPN tunneling and container management.,24|27|18|1|20
+20,The Ultimate All-Rounder,A mix of the most popular apps for those with a powerful server who want to try a bit of everything.,6|14|19|26|1|25
