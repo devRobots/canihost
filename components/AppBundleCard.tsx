@@ -1,6 +1,5 @@
 import { App } from '@prisma/client';
 
-import { getAppIcon } from '@/lib/icons';
 import { type ActiveHost, type AppBundle } from '@/types';
 
 interface Props {
@@ -89,9 +88,13 @@ export default function AppBundleCard({
           <button
             key={app.id}
             onClick={() => onAppClick(app)}
-            className="tag flex cursor-pointer items-center gap-1 transition-all hover:bg-white/10 active:scale-[0.98]"
+            className="tag cursor-pointer items-center gap-2 transition-all"
           >
-            {getAppIcon(app.name)} {app.name}
+            <img
+              src={app.logoUrl}
+              alt={`${app.name} logo`}
+              className="h-2 w-2 object-contain"
+            /> <span className="text-xs">{app.name}</span>
           </button>
         ))}
       </div>

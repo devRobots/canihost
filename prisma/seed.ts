@@ -56,14 +56,17 @@ async function main() {
     id: row.id,
     name: row.name,
     category: row.category,
-    minCPU: parseFloat(row.minCPU),
-    recommendedCPU: parseFloat(row.recommendedCPU),
+    minCPU: parseInt(row.minCPU, 10),
+    recommendedCPU: parseInt(row.recommendedCPU, 10),
     minRAM: parseFloat(row.minRAM),
     recommendedRAM: parseFloat(row.recommendedRAM),
     isCloudRecommended: row.isCloudRecommended === 'true',
     description: row.description,
+    longDescription: row.longDescription,
     officialUrl: row.officialUrl || undefined,
-    longDescription: row.longDescription || undefined,
+    dockerRegistryUrl: row.dockerRegistryUrl || undefined,
+    cubepathUrl: row.cubepathUrl || undefined,
+    logoUrl: row.logoUrl,
   }));
 
   await prisma.app.createMany({ data: appsData });

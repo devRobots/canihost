@@ -1,8 +1,6 @@
 import { App } from '@prisma/client';
 import { Cpu, MemoryStick } from 'lucide-react';
 
-import { getAppIcon } from '@/lib/icons';
-
 interface Props {
   app: App;
   isExpert: boolean;
@@ -25,7 +23,11 @@ export default function IndividualAppCard({
       </div>
 
       <div className="flex flex-1 flex-col items-center gap-2 pt-4 pb-4 text-center">
-        <span className="text-3xl leading-none">{getAppIcon(app.name)}</span>
+        <img
+          src={app.logoUrl}
+          alt={`${app.name} logo`}
+          className="h-12 w-12 object-contain"
+        />
         <span className="text-fg mt-1 px-1 text-xs leading-tight font-bold">
           {app.name}
         </span>

@@ -1,8 +1,12 @@
 id,name,type
-1,Zimaboard 2,MINI_PC
-2,Chuwi Larkbox X,MINI_PC
-3,Mac Mini M2,MINI_PC
+1,ZimaBoard 2,MINI_PC
+2,CHUWI Larkbox X,MINI_PC
+3,Mac Mini M4,MINI_PC
 4,Raspberry Pi 5,MINI_PC
-5,Intel NUC 13 Pro,MINI_PC
-6,CubePath VPS,VPS
-7,Custom Server,CUSTOM
+5,Geekom A9 Max,MINI_PC
+6,GMKtec NucBox G10,MINI_PC
+7,Minisforum MS-02,MINI_PC
+8,Beelink SER9 Max,MINI_PC
+9,CubePath,VPS
+10,Linode,VPS
+11,Custom Server,CUSTOM

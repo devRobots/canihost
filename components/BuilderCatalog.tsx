@@ -92,7 +92,6 @@ export default function BuilderCatalog({
                     const isSelected = selectedAppIds.has(svc.id);
                     const isLocalOnly =
                       !svc.isCloudRecommended && host.type === HostType.VPS;
-                    const icon = getAppIcon(svc.name);
 
                     let borderColorClass = 'border-default';
                     if (isSelected) borderColorClass = 'border-accent';
@@ -138,7 +137,13 @@ export default function BuilderCatalog({
                         </div>
 
                         <div className="flex flex-1 flex-col items-center gap-2 pt-6 pb-2 text-center">
-                          <span className="text-3xl leading-none">{icon}</span>
+                          <span className="text-3xl leading-none">
+                            <img
+                              src={svc.logoUrl}
+                              alt={`${svc.name} logo`}
+                              className="h-6 w-6 object-contain"
+                            />
+                          </span>
                           <span
                             className={`mt-1 px-1 text-xs leading-tight font-bold ${isSelected ? 'text-accent' : 'text-fg'}`}
                           >

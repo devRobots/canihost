@@ -35,13 +35,14 @@ model App {
   id                 String      @id @default(cuid())
   name               String
   category           String
-  minCPU             Float
-  recommendedCPU     Float
+  minCPU             Int
+  recommendedCPU     Int
   minRAM             Float
   recommendedRAM     Float
   isCloudRecommended Boolean     @default(true)
-  description        String?
-  longDescription    String?
+  description        String
+  longDescription    String
+  logoUrl            String
   officialUrl        String?
   cubepathUrl        String?
   dockerRegistryUrl  String?

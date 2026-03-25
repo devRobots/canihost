@@ -1,7 +1,6 @@
 'use client';
 
 import Modal from '@/components/Modal';
-import { getAppIcon } from '@/lib/icons';
 import { type AppBundle } from '@/types';
 
 export default function AppBundleModal({
@@ -69,7 +68,11 @@ export default function AppBundleModal({
                   }}
                 >
                   <div className="flex items-center gap-2">
-                    <span className="text-xl">{getAppIcon(app.name)}</span>
+                    <img
+                      src={app.logoUrl}
+                      alt={`${app.name} logo`}
+                      className="h-6 w-6 object-contain"
+                    />
                     <span
                       className="text-xs font-bold"
                       style={{ color: 'var(--fg)' }}

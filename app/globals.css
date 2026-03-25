@@ -166,7 +166,8 @@ body {
 
 /* ─── TAG BADGE ─── */
 .tag {
-  display: inline-block;
+  display: flex;
+  flex-direction: row;
   padding: 2px 8px;
   border: 1px solid var(--border);
   background: var(--bg-input);

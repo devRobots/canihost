@@ -3,7 +3,6 @@
 import { App } from '@prisma/client';
 
 import Modal from '@/components/Modal';
-import { getAppIcon } from '@/lib/icons';
 
 export default function AppModal({
   app,
@@ -23,7 +22,11 @@ export default function AppModal({
             className="flex items-center gap-3 border-b pb-4"
             style={{ borderColor: 'var(--border)' }}
           >
-            <span className="text-4xl">{getAppIcon(app.name)}</span>
+            <img
+              src={app.logoUrl}
+              alt={`${app.name} logo`}
+              className="h-12 w-12 object-contain"
+            />
             <div>
               <h3 className="text-lg font-bold" style={{ color: 'var(--fg)' }}>
                 {app.name}

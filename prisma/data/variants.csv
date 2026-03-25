@@ -1,13 +1,23 @@
 id,hostId,name,cpuCores,memoryRamGb
 1,1,832,4,8
 2,1,1664,4,16
-3,2,N100 12GB,4,12
-4,3,Base,8,8
-5,3,Pro,10,16
-6,4,8GB,4,8
+3,2,2025 Edition,4,12
+4,3,Base,10,16
+5,3,Pro,12,24
+6,4,2GB,4,2
 7,4,4GB,4,4
-8,5,i7 16GB,12,16
-9,6,Starter (1vCPU/1GB),1,1
-10,6,Developer (2vCPU/4GB),2,4
-11,6,Enterprise (8vCPU/16GB),8,16
-12,7,Customized,4,8
+8,4,8GB,4,8
+9,4,16GB,4,16
+10,5,Ryzen AI 9 HX 370,12,32
+11,6,Ryzen 5 3500U,4,16
+12,7,Core Ultra 9 285HX,24,32
+13,8,Ryzen 7H 255,8,64
+14,9,gp.nano,1,2
+15,9,gp.micro,2,4
+16,9,gp.starter,4,8
+17,9,gp.small,8,16
+18,9,gp.medium,16,32
+19,10,1GB,1,1
+20,10,2GB,1,2
+21,10,4GB,2,4
+22,10,8GB,4,8

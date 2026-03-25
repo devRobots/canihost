@@ -4,7 +4,6 @@ import { App } from '@prisma/client';
 import { HostType } from '@prisma/enums';
 
 import PieChart from '@/components/PieChart';
-import { getAppIcon } from '@/lib/icons';
 import { useBuilderStore, useDbStore, useModeStore } from '@/lib/store';
 import { type ActiveHost } from '@/types';
 
@@ -129,7 +128,13 @@ export default function BuilderMonitor({ host, setAppModalData }: Props) {
                 onClick={() => setAppModalData(s)}
                 className="bg-input border-line text-fg flex cursor-pointer items-center gap-2 rounded p-2 text-xs transition-all hover:brightness-125"
               >
-                <span className="text-lg">{getAppIcon(s.name)}</span>
+                <span className="text-lg">
+                  <img
+                    src={s.logoUrl}
+                    alt={`${s.name} logo`}
+                    className="h-5 w-5 object-contain"
+                  />
+                </span>
                 <span className="truncate font-bold" title={s.name}>
                   {s.name}
                 </span>
