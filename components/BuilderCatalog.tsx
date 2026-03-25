@@ -5,7 +5,6 @@ import { HostType } from '@prisma/enums';
 import Link from 'next/link';
 import { useState } from 'react';
 
-import { getAppIcon } from '@/lib/icons';
 import { useBuilderStore, useDbStore, useModeStore } from '@/lib/store';
 import { type ActiveHost } from '@/types';
 
@@ -129,7 +128,7 @@ export default function BuilderCatalog({
                         <div
                           className={`absolute top-2 right-2 z-10 flex h-6 w-6 items-center justify-center rounded transition-all ${
                             isSelected
-                              ? 'bg-accent border text-[var(--bg)]'
+                              ? 'bg-accent border text-(--bg)'
                               : 'bg-input border-line text-transparent'
                           }`}
                         >
