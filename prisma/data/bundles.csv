@@ -1,0 +1,4 @@
+id,name,description,appIds
+1,Starter Homelab,The standard entry point to self hosting.,8|10|12
+2,Media Server Elite,Your own Netflix and Google Photos replacement.,22|23|24
+3,DevOps Cloud,Full code hosting and CI/CD pipeline.,5|6|1|4

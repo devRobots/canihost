@@ -1,0 +1,13 @@
+id,hostId,name,cpuCores,memoryRamGb
+1,1,832,4,8
+2,1,1664,4,16
+3,2,N100 12GB,4,12
+4,3,Base,8,8
+5,3,Pro,10,16
+6,4,8GB,4,8
+7,4,4GB,4,4
+8,5,i7 16GB,12,16
+9,6,Starter (1vCPU/1GB),1,1
+10,6,Developer (2vCPU/4GB),2,4
+11,6,Enterprise (8vCPU/16GB),8,16
+12,7,Customized,4,8
