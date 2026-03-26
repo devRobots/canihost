@@ -4,10 +4,10 @@ import { App } from '@prisma/client';
 import { HostType } from '@prisma/enums';
 import { useState } from 'react';
 
-import AppModal from '@/components/AppModal';
 import BuilderCatalog from '@/components/BuilderCatalog';
 import BuilderMonitor from '@/components/BuilderMonitor';
-import Modal from '@/components/Modal';
+import AppModal from '@/components/modals/AppModal';
+import Modal from '@/components/modals/Modal';
 import { useDbStore, useHostStore } from '@/lib/store';
 import { type ActiveHost, type Host } from '@/types';
 
