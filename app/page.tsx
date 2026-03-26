@@ -1,5 +1,5 @@
 import Hero from '@/components/Hero';
-import HostPicker from '@/components/HostPicker';
+import HostPicker from '@/components/hostpicker/HostPicker';
 import RecommendationsPanel from '@/components/RecommendationsPanel';
 import StoreInitializer from '@/components/StoreInitializer';
 import prisma from '@/lib/prisma';
