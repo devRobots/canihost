@@ -34,13 +34,6 @@ export default function HostDropdown({
   const handleSelectHost = (id: string) => {
     setSelectedHostId(id, hosts);
     onClose();
-    setTimeout(
-      () =>
-        document
-          .getElementById('recommendations-section')
-          ?.scrollIntoView({ behavior: 'smooth' }),
-      100,
-    );
   };
 
   const miniPcs = hosts
