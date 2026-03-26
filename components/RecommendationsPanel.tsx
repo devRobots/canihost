@@ -4,10 +4,10 @@ import { App } from '@prisma/client';
 import { HostType } from '@prisma/enums';
 import { useMemo, useState } from 'react';
 
-import AppBundleModal from '@/components/AppBundleModal';
 import AppBundlesPanel from '@/components/AppBundlesPanel';
-import AppModal from '@/components/AppModal';
 import BarelyUsableAppsPanel from '@/components/BarelyUsableAppsPanel';
+import AppBundleModal from '@/components/modals/AppBundleModal';
+import AppModal from '@/components/modals/AppModal';
 import RecommendedAppsPanel from '@/components/RecommendedAppsPanel';
 import UnsupportedAppsPanel from '@/components/UnsupportedAppsPanel';
 import { useDbStore, useHostStore, useModeStore } from '@/lib/store';

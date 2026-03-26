@@ -37,7 +37,7 @@ export default function Modal({
 
   return createPortal(
     <div
-      className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6"
+      className="fixed inset-0 z-100 flex items-center justify-center p-4 sm:p-6"
       style={{
         background: 'rgba(0, 0, 0, 0.65)',
         backdropFilter: 'blur(4px)',
@@ -57,7 +57,6 @@ export default function Modal({
         }}
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Header */}
         <div
           className="flex items-center justify-between border-b p-4"
           style={{
@@ -81,7 +80,6 @@ export default function Modal({
           </button>
         </div>
 
-        {/* Body */}
         <div className="custom-scrollbar flex-1 overflow-y-auto p-5">
           {children}
         </div>
