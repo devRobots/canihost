@@ -21,7 +21,7 @@ export default function BarelyUsableAppsPanel({
         <span className="text-orange-400">{'//'}</span>
         Barely Usable Apps
       </div>
-      <p className="text-fg-dim -mt-2 text-xs">
+      <p className="text-fg-dim -mt-2 text-xs text-pretty">
         These apps can run on the host, but might encounter performance
         constraints or leave little room for other apps.
       </p>
@@ -30,7 +30,7 @@ export default function BarelyUsableAppsPanel({
         {apps.map((app) => (
           <div
             key={app.id}
-            className="h-full w-full opacity-80 grayscale-[30%] transition-all hover:opacity-100 hover:grayscale-0"
+            className="h-full w-full opacity-85 grayscale-30 transition-all hover:opacity-100 hover:grayscale-0"
           >
             <IndividualAppCard
               app={app}

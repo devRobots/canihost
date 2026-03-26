@@ -21,7 +21,7 @@ export default function UnsupportedAppsPanel({
         <span className="text-red-500">{'//'}</span>
         Not Supported Apps
       </div>
-      <p className="text-fg-dim -mt-2 text-xs">
+      <p className="text-fg-dim -mt-2 text-xs text-pretty">
         These apps require more resources than the current host can provide or
         are incompatible with the environment.
       </p>
@@ -30,7 +30,7 @@ export default function UnsupportedAppsPanel({
         {apps.map((svc) => (
           <div
             key={svc.id}
-            className="h-full w-full cursor-not-allowed opacity-50 grayscale transition-all hover:opacity-80 hover:grayscale-[50%]"
+            className="h-full w-full cursor-not-allowed opacity-85 grayscale transition-all hover:opacity-100 hover:grayscale-30"
           >
             <IndividualAppCard
               app={svc}
