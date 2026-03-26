@@ -2,22 +2,21 @@
 
 import { App } from '@prisma/client';
 import { HostType } from '@prisma/enums';
-import Link from 'next/link';
 import { useState } from 'react';
 
 import { useBuilderStore, useDbStore, useModeStore } from '@/lib/store';
 import { type ActiveHost } from '@/types';
 
+import HostPicker from './hostpicker/HostPicker';
+
 type Props = {
   host: ActiveHost;
   setAppModalData: (s: App | null) => void;
-  setHostModalOpen: (b: boolean) => void;
 };
 
 export default function BuilderCatalog({
   host,
   setAppModalData,
-  setHostModalOpen,
 }: Props) {
   const { apps } = useDbStore();
   const { selectedAppIds, toggleAppId } = useBuilderStore();
@@ -36,37 +35,8 @@ export default function BuilderCatalog({
 
   return (
     <div className="border-default flex flex-1 flex-col gap-6 overflow-y-auto border-r p-6">
-      {/* Host Header */}
-      <div className="bg-card border-line-accent pulse-glow flex flex-col justify-between gap-4 rounded p-4 sm:flex-row sm:items-center">
-        <div className="flex flex-col gap-1.5">
-          <div className="flex items-center gap-2">
-            <span className="text-accent">▶</span>
-            <span className="text-accent text-lg font-bold">{host.name}</span>
-            <span className="tag px-2">
-              {host.type === HostType.VPS ? 'Cloud VPS' : 'Mini PC'}
-            </span>
-            <button
-              onClick={() => setHostModalOpen(true)}
-              className="border-accent text-accent ml-2 flex h-6 w-6 items-center justify-center rounded-full border text-xs transition-all hover:bg-white/10"
-              title="Info"
-            >
-              i
-            </button>
-          </div>
-          {isExpert && (
-            <p className="text-fg-muted text-xs">
-              CPU: <strong>{host.cpuCores}c</strong> · RAM:{' '}
-              <strong>{host.memoryRamGb}GB</strong>
-            </p>
-          )}
-        </div>
-        <Link
-          href="/"
-          className="btn-terminal px-4 py-2 text-center text-xs font-bold transition-all"
-        >
-          ↶ Change Host
-        </Link>
-      </div>
+      <HostPicker />
+
       {categories.map((cat) => {
         const isCollapsed = collapsedCategories[cat];
         const catNameTranslated = cat;

@@ -21,7 +21,7 @@ export default function RootLayout({
         <div className="flex flex-1 flex-col">{children}</div>
 
         {/* FOOTER */}
-        <footer className="border-line-accent/30 bg-card/30 text-fg-dim relative z-10 mt-10 flex w-full items-center justify-center border-t py-6 font-mono text-[10px] tracking-widest uppercase backdrop-blur-sm sm:text-xs">
+        <footer className="border-line-accent/30 bg-card/30 text-fg-dim relative z-10 flex w-full items-center justify-center border-t py-6 font-mono text-[10px] tracking-widest uppercase backdrop-blur-sm sm:text-xs">
           <div className="flex items-center">
             Made with <span className="text-accent mx-2 font-bold">code</span>{' '}
             by

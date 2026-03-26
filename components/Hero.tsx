@@ -4,7 +4,7 @@ import { Zap } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
-const WORDS = ['PaaS', 'Database', 'Headless CMS', 'Media Server'];
+const WORDS = ['PaaS', 'Database', 'Headless CMS', 'Media Server', 'Web Backend', 'AI Agent', 'Game Server', 'Personal Cloud'];
 
 export default function Hero() {
   const [index, setIndex] = useState(0);
@@ -33,7 +33,7 @@ export default function Hero() {
           </div>
           <h1 className="glow-text text-fg mb-3 text-3xl font-black tracking-tight sm:text-5xl text-center sm:text-start">
             Can <span className="text-accent"> I </span> host
-            <span className="text-fg-muted"> a </span>
+            <span className="text-fg-muted"> a{WORDS[index].startsWith('A') ? 'n' : ''} </span>
             <br className="sm:hidden" />{' '}
             <span className="whitespace-nowrap">
               <span

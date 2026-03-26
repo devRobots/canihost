@@ -7,7 +7,6 @@ import { useState } from 'react';
 import BuilderCatalog from '@/components/BuilderCatalog';
 import BuilderMonitor from '@/components/BuilderMonitor';
 import AppModal from '@/components/modals/AppModal';
-import Modal from '@/components/modals/Modal';
 import { useDbStore, useHostStore } from '@/lib/store';
 import { type ActiveHost, type Host } from '@/types';
 
@@ -16,7 +15,6 @@ export default function ServerBuilder() {
   const { selectedHostId, selectedVariantId, core, ram } = useHostStore();
   const host = hosts.find((h: Host) => h.id === selectedHostId) || hosts[0];
 
-  const [hostModalOpen, setHostModalOpen] = useState(false);
   const [appModalData, setAppModalData] = useState<App | null>(null);
 
   if (!host) {
@@ -45,7 +43,6 @@ export default function ServerBuilder() {
       <BuilderCatalog
         host={activeHost}
         setAppModalData={setAppModalData}
-        setHostModalOpen={setHostModalOpen}
       />
 
       {/* ─── RIGHT: Resource Monitor ─── */}
@@ -53,31 +50,6 @@ export default function ServerBuilder() {
 
       {/* ─── MODALS ─── */}
       <AppModal app={appModalData} onClose={() => setAppModalData(null)} />
-
-      <Modal
-        isOpen={hostModalOpen}
-        onClose={() => setHostModalOpen(false)}
-        title={host.name}
-      >
-        <div className="text-fg-muted flex flex-col gap-6 p-2 font-sans text-sm">
-          <div className="border-default mt-2 grid grid-cols-2 gap-y-2 border-t pt-4 text-xs">
-            <div className="text-fg-dim">Architecture:</div>
-            <div className="text-fg text-right font-mono">
-              {activeHost.type}
-            </div>
-
-            <div className="text-fg-dim">CPU Cores:</div>
-            <div className="text-fg text-right font-mono">
-              {activeHost.cpuCores}
-            </div>
-
-            <div className="text-fg-dim">Memory RAM:</div>
-            <div className="text-fg text-right font-mono">
-              {activeHost.memoryRamGb} GB
-            </div>
-          </div>
-        </div>
-      </Modal>
     </div>
   );
 }
