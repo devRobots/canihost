@@ -2,6 +2,8 @@ import '@/app/globals.css';
 
 import type { Metadata } from 'next';
 
+import Navbar from '@/components/Navbar';
+
 export const metadata: Metadata = {
   title: 'CanIHost.tech',
   description: 'Check what services can run on your host',
@@ -15,6 +17,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning className="dark">
       <body className="scanlines flex min-h-screen flex-col">
+        <Navbar />
         <div className="flex flex-1 flex-col">{children}</div>
 
         {/* FOOTER */}
@@ -29,7 +32,7 @@ export default function RootLayout({
               className="text-fg hover:text-accent group relative ml-2 font-bold transition-all duration-300"
             >
               devRobots
-              <span className="bg-accent absolute -bottom-1 left-0 h-[1px] w-0 transition-all duration-300 group-hover:w-full"></span>
+              <span className="bg-accent absolute -bottom-1 left-0 h-px w-0 transition-all duration-300 group-hover:w-full"></span>
             </a>
           </div>
         </footer>
