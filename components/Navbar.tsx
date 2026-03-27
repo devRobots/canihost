@@ -1,6 +1,6 @@
 'use client';
 
-import { Home, Zap } from 'lucide-react';
+import { Home, Layers, Package, Zap } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -9,6 +9,8 @@ export default function Navbar() {
 
   const links = [
     { name: 'Home', href: '/', icon: Home },
+    { name: 'Apps', href: '/apps', icon: Package },
+    { name: 'Bundles', href: '/bundles', icon: Layers },
     { name: 'Builder', href: '/builder', icon: Zap },
   ];
 
@@ -46,9 +48,11 @@ export default function Navbar() {
                     isActive ? 'text-accent' : 'text-fg-dim group-hover:text-accent'
                   }`}
                 />
-                <span className={isActive ? 'opacity-100' : 'opacity-80 group-hover:opacity-100'}>
-                  {link.name}
-                </span>
+                <div className="hidden md:block">
+                  <span className={isActive ? 'opacity-100' : 'opacity-80 group-hover:opacity-100'}>
+                    {link.name}
+                  </span>
+                </div>
               </Link>
             );
           })}
