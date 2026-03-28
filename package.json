@@ -13,7 +13,8 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "check": "pnpm lint && pnpm format",
-    "prisma:format": "prisma format"
+    "prisma:format": "prisma format",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.6.0",
