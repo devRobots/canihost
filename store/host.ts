@@ -3,7 +3,7 @@ import { createJSONStorage, persist } from 'zustand/middleware';
 
 import { type ActiveHost, type Host } from '@/types';
 
-interface HostState {
+export interface HostState {
   activeHost: ActiveHost | null;
   setActiveHost: (host: Host) => void;
   setVariant: (variantId: string | null) => void;
