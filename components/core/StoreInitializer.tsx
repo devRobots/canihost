@@ -16,7 +16,7 @@ function initializeHostState(hosts: Host[], hostState: HostState) {
 
       if (defaultHost.name === 'CubePath') {
         const variant = defaultHost.variants.find(
-          (v) => v.name === 'gp.starter',
+          (v) => v.name === 'gp.micro',
         );
         if (variant) hostState.setVariant(variant.id);
       }
