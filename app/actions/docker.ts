@@ -7,41 +7,69 @@ interface DockerMetadata {
   imageName: string;
 }
 
-export async function getDockerMetadata(url: string): Promise<DockerMetadata> {
-  let repo = '';
-  let imageName = '';
-  
-  // Parse hub.docker.com URLs
+function parseDockerUrl(url: string): { repo: string; imageName: string } {
   if (url.includes('hub.docker.com/_/')) {
-    imageName = url.split('hub.docker.com/_/')[1];
-    repo = `library/${imageName}`;
-  } else if (url.includes('hub.docker.com/r/')) {
-    imageName = url.split('hub.docker.com/r/')[1];
-    repo = imageName;
-  } else {
-    // Fallback if it's just the name
-    imageName = url.replace('https://', '').replace('http://', '');
-    repo = imageName.includes('/') ? imageName : `library/${imageName}`;
+    const imageName = url.split('hub.docker.com/_/')[1];
+    return { repo: `library/${imageName}`, imageName };
+  } 
+  
+  if (url.includes('hub.docker.com/r/')) {
+    const imageName = url.split('hub.docker.com/r/')[1];
+    return { repo: imageName, imageName };
+  } 
+  
+  // Fallback if it's just the name
+  const imageName = url.replace('https://', '').replace('http://', '');
+  const repo = imageName.includes('/') ? imageName : `library/${imageName}`;
+  return { repo, imageName };
+}
+
+async function fetchDockerToken(repo: string): Promise<string> {
+  const authHeaders: HeadersInit = {};
+  if (process.env.DOCKER_USERNAME && process.env.DOCKER_PAT) {
+    const credentials = Buffer.from(`${process.env.DOCKER_USERNAME}:${process.env.DOCKER_PAT}`).toString('base64');
+    authHeaders.Authorization = `Basic ${credentials}`;
   }
+
+  const authUrl = `https://auth.docker.io/token?service=registry.docker.io&scope=repository:${repo}:pull`;
+  const authRes = await fetch(authUrl, { headers: authHeaders });
+  const authData = await authRes.json();
+  const token = authData.token;
+
+  if (!token) throw new Error('Could not get token');
+
+  return token;
+}
+
+export async function getDockerMetadata(url: string): Promise<DockerMetadata> {
+  const { repo, imageName } = parseDockerUrl(url);
 
   try {
     // 1. Get Token
-    const authUrl = `https://auth.docker.io/token?service=registry.docker.io&scope=repository:${repo}:pull`;
-    const authRes = await fetch(authUrl);
-    const authData = await authRes.json();
-    const token = authData.token;
-
-    if (!token) throw new Error('Could not get token');
+    const token = await fetchDockerToken(repo);
 
     // 2. Get Manifest
     const manifestUrl = `https://registry-1.docker.io/v2/${repo}/manifests/latest`;
-    const manifestRes = await fetch(manifestUrl, {
+    const manifestOptions = {
       headers: {
         Authorization: `Bearer ${token}`,
-        Accept: 'application/vnd.docker.distribution.manifest.v2+json',
+        Accept: 'application/vnd.docker.distribution.manifest.v2+json, application/vnd.docker.distribution.manifest.list.v2+json, application/vnd.oci.image.manifest.v1+json, application/vnd.oci.image.index.v1+json',
       },
-    });
-    const manifestData = await manifestRes.json();
+    };
+    let manifestRes = await fetch(manifestUrl, manifestOptions);
+    let manifestData = await manifestRes.json();
+
+    // If it's a manifest list, fetch the first architecture's manifest (prefer amd64/linux)
+    if (manifestData.manifests && manifestData.manifests.length > 0) {
+      const archManifest = manifestData.manifests.find(
+        (m: { platform?: { architecture?: string; os?: string }; digest: string }) => m.platform?.architecture === 'amd64' && m.platform?.os === 'linux'
+      ) || manifestData.manifests[0];
+      
+      const archManifestUrl = `https://registry-1.docker.io/v2/${repo}/manifests/${archManifest.digest}`;
+      manifestRes = await fetch(archManifestUrl, manifestOptions);
+      manifestData = await manifestRes.json();
+    }
+
     const configDigest = manifestData.config?.digest;
 
     if (!configDigest) throw new Error('Could not find config digest');
