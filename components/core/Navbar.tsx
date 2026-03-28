@@ -1,6 +1,6 @@
 'use client';
 
-import { Home, Package, PencilRuler } from 'lucide-react';
+import { Book,Home, Package, PencilRuler } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -11,6 +11,7 @@ export default function Navbar() {
     { name: 'Home', href: '/', icon: Home },
     { name: 'Builder', href: '/builder', icon: PencilRuler },
     { name: 'Apps', href: '/apps', icon: Package },
+    { name: 'About', href: '/about', icon: Book },
   ];
 
   return (
