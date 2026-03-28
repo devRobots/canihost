@@ -8,7 +8,7 @@ import AppBundlesPanel from '@/components/home/BundlesPanel';
 import RecommendationsSidebar from '@/components/home/QuickNavigation';
 import RecommendedAppsPanel from '@/components/home/RecommendedAppsPanel';
 import UnsupportedAppsPanel from '@/components/home/UnsupportedAppsPanel';
-import AppBundleModal from '@/components/modals/AppBundleModal';
+import AppBundleModal from '@/components/modals/BundleModal';
 import AppModal from '@/components/modals/AppModal';
 import { useDbStore } from '@/store/db';
 import { useHostStore } from '@/store/host';
