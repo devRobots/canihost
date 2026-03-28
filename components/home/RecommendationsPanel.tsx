@@ -26,7 +26,7 @@ export default function RecommendationsPanel() {
   const type = activeHost?.type || HostType.VPS;
 
   const { recommendedApps, barelyUsableApps, unsupportedApps } = useMemo(() => {
-    const isCloudComp = (a: App) => a.isCloudRecommended !== false || type === HostType.VPS;
+    const isCloudComp = (a: App) => a.isCloudRecommended !== false || type !== HostType.VPS;
     const meetsMin = (a: App) => a.minCPU <= core && a.minRAM <= ram;
     const meetsRec = (a: App) =>
       a.recommendedCPU <= core && a.recommendedRAM <= ram;
@@ -34,15 +34,15 @@ export default function RecommendationsPanel() {
     return {
       recommendedApps: apps
         .filter((a) => isCloudComp(a) && meetsMin(a) && meetsRec(a))
-        .sort((a, b) => b.recommendedRAM - a.recommendedRAM),
+        .sort((a, b) => a.name.localeCompare(b.name)),
 
       barelyUsableApps: apps
         .filter((a) => isCloudComp(a) && meetsMin(a) && !meetsRec(a))
-        .sort((a, b) => b.minRAM - a.minRAM),
+        .sort((a, b) => a.name.localeCompare(b.name)),
 
       unsupportedApps: apps
         .filter((a) => !isCloudComp(a) || !meetsMin(a))
-        .sort((a, b) => b.minRAM - a.minRAM),
+        .sort((a, b) => a.name.localeCompare(b.name)),
     };
   }, [apps, core, ram, type]);
 
