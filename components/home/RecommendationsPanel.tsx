@@ -1,6 +1,6 @@
 'use client';
 
-import { App } from '@prisma/client';
+import { App, HostType } from '@prisma/client';
 import { useMemo, useState } from 'react';
 
 import AppBundlesPanel from '@/components/home/AppBundlesPanel';
@@ -23,9 +23,10 @@ export default function RecommendationsPanel() {
 
   const core = activeHost?.cores || 0;
   const ram = activeHost?.ram || 0;
+  const type = activeHost?.type || HostType.VPS;
 
   const { recommendedApps, barelyUsableApps, unsupportedApps } = useMemo(() => {
-    const isCloudComp = (a: App) => a.isCloudRecommended !== false;
+    const isCloudComp = (a: App) => a.isCloudRecommended !== false || type === HostType.VPS;
     const meetsMin = (a: App) => a.minCPU <= core && a.minRAM <= ram;
     const meetsRec = (a: App) =>
       a.recommendedCPU <= core && a.recommendedRAM <= ram;
@@ -43,7 +44,7 @@ export default function RecommendationsPanel() {
         .filter((a) => !isCloudComp(a) || !meetsMin(a))
         .sort((a, b) => b.minRAM - a.minRAM),
     };
-  }, [apps, core, ram]);
+  }, [apps, core, ram, type]);
 
   if (!activeHost) {
     return (
@@ -58,12 +59,10 @@ export default function RecommendationsPanel() {
 
   return (
     <div className="relative flex w-full flex-col items-start gap-8 lg:flex-row">
-      {/* MAIN CONTENT */}
       <section
         id="recommendations-section"
         className="flex w-full min-w-0 flex-1 flex-col gap-10"
       >
-        {/* 1. App Bundles Panel */}
         <div id="section-bundles" className="scroll-mt-24">
           <AppBundlesPanel
             onBundleClick={setAppBundleModalData}
@@ -71,7 +70,6 @@ export default function RecommendationsPanel() {
           />
         </div>
 
-        {/* 2. Recommended Individual Apps */}
         <div id="section-recommended" className="scroll-mt-24">
           <RecommendedAppsPanel
             apps={recommendedApps}
@@ -79,7 +77,6 @@ export default function RecommendationsPanel() {
           />
         </div>
 
-        {/* 3. Barely Usable Individual Apps */}
         <div id="section-barely-usable" className="scroll-mt-24">
           <BarelyUsableAppsPanel
             apps={barelyUsableApps}
@@ -87,7 +84,6 @@ export default function RecommendationsPanel() {
           />
         </div>
 
-        {/* 4. Unsupported Individual Apps */}
         <div id="section-unsupported" className="scroll-mt-24">
           <UnsupportedAppsPanel
             apps={unsupportedApps}
@@ -96,13 +92,11 @@ export default function RecommendationsPanel() {
         </div>
       </section>
 
-      {/* INDEX SIDEBAR */}
       <RecommendationsSidebar
         showBarelyUsable={barelyUsableApps.length > 0}
         showUnsupported={unsupportedApps.length > 0}
       />
 
-      {/* Modals */}
       <AppModal app={appModalData} onClose={() => setAppModalData(null)} />
       <AppBundleModal
         bundle={appBundleModalData}

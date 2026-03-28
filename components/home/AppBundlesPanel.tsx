@@ -41,11 +41,12 @@ export default function AppBundlesPanel({ onBundleClick, onAppClick }: Props) {
       </div>
 
       {recommendedBundles.length === 0 ? (
-        <div className="text-fg-dim border-border flex flex-col items-center justify-center gap-3 rounded-md border border-dashed bg-transparent py-6 text-xs sm:flex-row">
-          <span className="text-lg opacity-70">ℹ</span>
+        <div className="text-fg-dim border-border flex flex-col items-center justify-center gap-3 rounded-md border border-dashed bg-transparent py-6 text-xs sm:flex-row p-4">
+          <span className="text-lg opacity-70">🧮</span>
           <span className="text-center opacity-80">
-            The selected host lacks the resources to run the selected app
-            bundle. Try an individual app below.
+            Zero bundles available. Your host had a panic attack just looking at
+            these combined requirements. Maybe try something simpler, like a
+            pocket calculator?
           </span>
         </div>
       ) : (

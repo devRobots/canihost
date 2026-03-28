@@ -11,8 +11,6 @@ export default function UnsupportedAppsPanel({
   apps,
   onAppClick,
 }: Props) {
-  if (apps.length === 0) return null;
-
   return (
     <div className="mt-6 flex flex-col gap-4">
       <div className="flex items-center gap-3 text-xs font-bold tracking-widest text-red-500 uppercase">
@@ -24,16 +22,26 @@ export default function UnsupportedAppsPanel({
         are incompatible with the environment.
       </p>
 
-      <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-5">
-        {apps.map((svc) => (
-          <div
-            key={svc.id}
-            className="h-full w-full cursor-not-allowed opacity-85 grayscale transition-all hover:opacity-100 hover:grayscale-30"
-          >
-            <IndividualAppCard app={svc} onAppClick={onAppClick} />
-          </div>
-        ))}
-      </div>
+      {apps.length === 0 ? (
+        <div className="text-fg-dim border-border flex flex-col items-center justify-center gap-3 rounded-md border border-dashed bg-transparent py-6 text-xs sm:flex-row p-4">
+          <span className="text-lg opacity-70">🚀</span>
+          <span className="text-center opacity-80">
+            Nothing is unsupported? Either you&apos;re hosting on a NASA rig, or we
+            ran out of heavy apps. Stop flexing, we get it.
+          </span>
+        </div>
+      ) : (
+        <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-5">
+          {apps.map((svc) => (
+            <div
+              key={svc.id}
+              className="h-full w-full cursor-not-allowed opacity-85 grayscale transition-all hover:opacity-100 hover:grayscale-30"
+            >
+              <IndividualAppCard app={svc} onAppClick={onAppClick} />
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
