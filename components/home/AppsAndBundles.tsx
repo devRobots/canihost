@@ -3,9 +3,9 @@
 import { App } from '@prisma/client';
 import { useMemo, useState } from 'react';
 
-import AppBundlesPanel from '@/components/home/AppBundlesPanel';
 import BarelyUsableAppsPanel from '@/components/home/BarelyUsableAppsPanel';
-import RecommendationsSidebar from '@/components/home/RecommendationsSidebar';
+import AppBundlesPanel from '@/components/home/BundlesPanel';
+import RecommendationsSidebar from '@/components/home/QuickNavigation';
 import RecommendedAppsPanel from '@/components/home/RecommendedAppsPanel';
 import UnsupportedAppsPanel from '@/components/home/UnsupportedAppsPanel';
 import AppBundleModal from '@/components/modals/AppBundleModal';

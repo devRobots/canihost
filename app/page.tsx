@@ -1,7 +1,7 @@
 import Hero from '@/components/core/Hero';
-import HostPicker from '@/components/hostpicker/HostPicker';
-import RecommendationsPanel from '@/components/home/RecommendationsPanel';
 import StoreInitializer from '@/components/core/StoreInitializer';
+import RecommendationsPanel from '@/components/home/AppsAndBundles';
+import HostPicker from '@/components/hostpicker/HostPicker';
 import prisma from '@/lib/prisma';
 
 export default async function Home() {

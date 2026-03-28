@@ -1,7 +1,7 @@
 import { App } from '@prisma/client';
 import { useMemo } from 'react';
 
-import AppBundleCard from '@/components/home/AppBundleCard';
+import AppBundleCard from '@/components/home/BundleCard';
 import { useDbStore } from '@/store/db';
 import { useHostStore } from '@/store/host';
 import { type AppBundle } from '@/types';

@@ -1,16 +1,13 @@
 import { App } from '@prisma/client';
 
-import IndividualAppCard from '@/components/home/IndividualAppCard';
+import IndividualAppCard from '@/components/home/AppCard';
 
 interface Props {
   apps: App[];
   onAppClick: (app: App) => void;
 }
 
-export default function UnsupportedAppsPanel({
-  apps,
-  onAppClick,
-}: Props) {
+export default function UnsupportedAppsPanel({ apps, onAppClick }: Props) {
   return (
     <div className="mt-6 flex flex-col gap-4">
       <div className="flex items-center gap-3 text-xs font-bold tracking-widest text-red-500 uppercase">
@@ -23,11 +20,11 @@ export default function UnsupportedAppsPanel({
       </p>
 
       {apps.length === 0 ? (
-        <div className="text-fg-dim border-border flex flex-col items-center justify-center gap-3 rounded-md border border-dashed bg-transparent py-6 text-xs sm:flex-row p-4">
+        <div className="text-fg-dim border-border flex flex-col items-center justify-center gap-3 rounded-md border border-dashed bg-transparent p-4 py-6 text-xs sm:flex-row">
           <span className="text-lg opacity-70">🚀</span>
           <span className="text-center opacity-80">
-            Nothing is unsupported? Either you&apos;re hosting on a NASA rig, or we
-            ran out of heavy apps. Stop flexing, we get it.
+            Nothing is unsupported? Either you&apos;re hosting on a NASA rig, or
+            we ran out of heavy apps. Stop flexing, we get it.
           </span>
         </div>
       ) : (

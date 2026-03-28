@@ -1,6 +1,6 @@
 import { App } from '@prisma/client';
 
-import IndividualAppCard from '@/components/home/IndividualAppCard';
+import IndividualAppCard from '@/components/home/AppCard';
 
 interface Props {
   apps: App[];
@@ -20,11 +20,12 @@ export default function BarelyUsableAppsPanel({ apps, onAppClick }: Props) {
       </p>
 
       {apps.length === 0 ? (
-        <div className="text-fg-dim border-border flex flex-col items-center justify-center gap-3 rounded-md border border-dashed bg-transparent py-6 text-xs sm:flex-row p-4">
+        <div className="text-fg-dim border-border flex flex-col items-center justify-center gap-3 rounded-md border border-dashed bg-transparent p-4 py-6 text-xs sm:flex-row">
           <span className="text-lg opacity-70">😎</span>
           <span className="text-center opacity-80">
-            No poorly performing apps! Your host is so efficient it doesn&apos;t even
-            have &apos;barely usable&apos; in its vocabulary. Total show-off.
+            No poorly performing apps! Your host is so efficient it doesn&apos;t
+            even have &apos;barely usable&apos; in its vocabulary. Total
+            show-off.
           </span>
         </div>
       ) : (
