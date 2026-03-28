@@ -2,7 +2,6 @@
 
 import {
   Cpu,
-  FileCode2,
   Globe,
   MemoryStick,
   Package,
@@ -12,6 +11,7 @@ import {
 import Image from 'next/image';
 import { useState } from 'react';
 
+import DeployScriptButton from '@/components/core/DeployScriptButton';
 import ModeToggle from '@/components/hostpicker/ModeToggle';
 import { App } from '@/generated/prisma/client';
 import { useModeStore } from '@/store/mode';
@@ -112,15 +112,10 @@ export default function AppsGrid({ initialApps }: { initialApps: App[] }) {
             </div>
 
             {/* DESCRIPTION */}
-            <div className="mb-6 flex flex-1 flex-col gap-3">
+            <div className="mb-6 flex flex-col">
               <p className="text-fg line-clamp-2 text-xs leading-relaxed">
                 {app.description || 'No description available.'}
               </p>
-              {app.longDescription && (
-                <p className="text-fg-muted text-[11px]">
-                  {app.longDescription}
-                </p>
-              )}
             </div>
 
             {/* SPECS */}
@@ -132,7 +127,7 @@ export default function AppsGrid({ initialApps }: { initialApps: App[] }) {
                   </div>
                   <div className="flex flex-row gap-2">
                     <div className="flex items-center gap-2">
-                      <Cpu size={12} className="text-accent" />
+                      <Cpu size={14} className="text-accent" />
                       <span className="text-fg text-[11px] font-bold">
                         {app.minCPU}{' '}
                         <span className="text-[9px] font-normal opacity-50">
@@ -141,7 +136,7 @@ export default function AppsGrid({ initialApps }: { initialApps: App[] }) {
                       </span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <MemoryStick size={12} className="text-accent" />
+                      <MemoryStick size={14} className="text-accent" />
                       <span className="text-fg text-[11px] font-bold">
                         {app.minRAM}{' '}
                         <span className="text-[9px] font-normal opacity-50">
@@ -158,7 +153,7 @@ export default function AppsGrid({ initialApps }: { initialApps: App[] }) {
                   </div>
                   <div className="flex flex-row gap-2">
                     <div className="flex items-center gap-2">
-                      <Cpu size={12} className="text-accent" />
+                      <Cpu size={14} className="text-accent" />
                       <span className="text-fg text-[11px] font-bold">
                         {app.recommendedCPU}{' '}
                         <span className="text-[9px] font-normal opacity-50">
@@ -167,7 +162,7 @@ export default function AppsGrid({ initialApps }: { initialApps: App[] }) {
                       </span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <MemoryStick size={12} className="text-accent" />
+                      <MemoryStick size={14} className="text-accent" />
                       <span className="text-fg text-[11px] font-bold">
                         {app.recommendedRAM}{' '}
                         <span className="text-[9px] font-normal opacity-50">
@@ -180,26 +175,40 @@ export default function AppsGrid({ initialApps }: { initialApps: App[] }) {
               </div>
             )}
 
+            <div className="mb-6 flex flex-1 flex-col">
+              {app.longDescription && (
+                <p className="text-fg-muted text-[11px]">
+                  {app.longDescription}
+                </p>
+              )}
+            </div>
+
             {/* FOOTER ACTIONS */}
             <div className="flex gap-2">
               {app.dockerRegistryUrl && (
-                <a
-                  href={app.dockerRegistryUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="border-accent/40 bg-accent/10 text-accent hover:bg-accent hover:text-bg flex flex-1 items-center justify-center gap-2 rounded-sm border px-3 py-2 text-[10px] font-black tracking-widest uppercase transition-all"
+                <DeployScriptButton
+                  apps={[app]}
+                  className="flex flex-1 items-center justify-center gap-2 rounded-md px-4 py-2.5 text-center text-xs font-bold transition-opacity hover:opacity-80"
                 >
-                  <FileCode2 size={12} /> Registry
-                </a>
+                  Deploy Script
+                </DeployScriptButton>
               )}
               {app.cubepathUrl && app.isCloudRecommended && (
                 <a
                   href={app.cubepathUrl}
                   target="_blank"
                   rel="noreferrer"
-                  className="border-green/40 bg-green/10 text-green hover:bg-green hover:text-bg flex flex-1 items-center justify-center gap-2 rounded-sm border px-3 py-2 text-[10px] font-black tracking-widest uppercase transition-all"
+                  className="flex flex-1 items-center justify-center gap-2 rounded-md px-4 py-2.5 text-center text-xs font-bold transition-opacity hover:opacity-80"
+                  style={{
+                    background:
+                      'color-mix(in srgb, var(--green) 15%, transparent)',
+                    border:
+                      '1px solid color-mix(in srgb, var(--green) 40%, transparent)',
+                    color: 'var(--green)',
+                  }}
                 >
-                  <Zap size={12} /> Deploy
+                  <Zap size={14} />
+                  Deploy on CubePath
                 </a>
               )}
             </div>

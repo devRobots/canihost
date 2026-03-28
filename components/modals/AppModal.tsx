@@ -1,8 +1,9 @@
 'use client';
 
 import { App } from '@prisma/client';
-import { Cpu, FileCode2, Globe, MemoryStick, Monitor, Zap } from 'lucide-react';
+import { Cpu, Globe, MemoryStick, Monitor, Zap } from 'lucide-react';
 
+import DeployScriptButton from '@/components/core/DeployScriptButton';
 import Modal from '@/components/modals/Modal';
 import { useModeStore } from '@/store/mode';
 
@@ -171,22 +172,12 @@ export default function AppModal({
           {(app.dockerRegistryUrl || app.cubepathUrl) && (
             <div className="mt-2 flex gap-2">
               {app.dockerRegistryUrl && (
-                <a
-                  href={app.dockerRegistryUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="flex flex-1 items-center justify-center gap-2 rounded-md px-4 py-2.5 text-center text-xs font-bold transition-opacity hover:opacity-80"
-                  style={{
-                    background:
-                      'color-mix(in srgb, var(--accent) 15%, transparent)',
-                    border:
-                      '1px solid color-mix(in srgb, var(--accent) 40%, transparent)',
-                    color: 'var(--accent)',
-                  }}
+                <DeployScriptButton
+                  apps={[app]}
+                  className="flex-1 px-4 py-2.5 text-xs font-bold"
                 >
-                  <FileCode2 size={14} />
                   Deployment Script
-                </a>
+                </DeployScriptButton>
               )}
               {app.cubepathUrl && app.isCloudRecommended && (
                 <a

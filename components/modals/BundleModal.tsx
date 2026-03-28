@@ -139,24 +139,26 @@ export default function AppBundleModal({
                     <div className="text-fg text-xs font-bold">{app.name}</div>
                   </div>
 
-                  <div className="flex items-center gap-4 font-mono text-[10px]">
-                    <div className="bg-border/20 text-fg-muted flex items-center gap-1.5 rounded-full px-2 py-0.5">
-                      <Cpu size={14} className="text-accent" />
-                      {app.minCPU}c
+                  {mode === 'expert' && (
+                    <div className="flex items-center gap-4 font-mono text-[10px]">
+                      <div className="bg-border/20 text-fg-muted flex items-center gap-1.5 rounded-full px-2 py-0.5">
+                        <MemoryStick size={14} className="text-accent" />
+                        {app.minRAM}G
+                      </div>
+                      <div className="bg-border/20 text-fg-muted flex items-center gap-1.5 rounded-full px-2 py-0.5">
+                        <Cpu size={14} className="text-accent" />
+                        {app.minCPU}c
+                      </div>
                     </div>
-                    <div className="bg-border/20 text-fg-muted flex items-center gap-1.5 rounded-full px-2 py-0.5">
-                      <MemoryStick size={14} className="text-accent" />
-                      {app.minRAM}G
-                    </div>
-                  </div>
+                  )}
                 </div>
               ))}
             </div>
           </div>
 
           {/* Deployment Button */}
-          <DeployScriptButton apps={bundle.apps} className="w-full">
-            Generate Deployment Script
+          <DeployScriptButton apps={bundle.apps} className="w-full py-3 text-xs font-bold">
+            Deployment Script
           </DeployScriptButton>
         </div>
       )}

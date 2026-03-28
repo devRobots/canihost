@@ -1,8 +1,10 @@
 'use client';
 
 import { App } from '@prisma/client';
-import { Terminal } from 'lucide-react';
-import React from 'react';
+import { FileCode2, Loader2 } from 'lucide-react';
+import React, { useState } from 'react';
+
+import { getDockerMetadata } from '@/app/actions/docker';
 
 interface Props {
   apps: App[];
@@ -10,48 +12,110 @@ interface Props {
   className?: string;
 }
 
-export default function DeployScriptButton({ apps, children, className = '' }: Props) {
-  const handleGenerate = () => {
-    const appNames = apps.map(a => a.name).join(', ');
-    const script = `#!/bin/bash
-# Auto-generated deployment script for: ${appNames}
-# Created via CanIHost.tech
+export default function DeployScriptButton({
+  apps,
+  children,
+  className = '',
+}: Props) {
+  const [loading, setLoading] = useState(false);
 
-echo "🚀 Starting deployment for ${apps.length} apps..."
+  const handleGenerate = async () => {
+    setLoading(true);
+    try {
+      const deployableApps = apps.filter((app) => app.dockerRegistryUrl);
 
-${apps.map(app => `
-# --- Deploying ${app.name} ---
-# Resources: ${app.minCPU} CPU, ${app.minRAM}GB RAM
-# TODO: Add specific deployment logic for ${app.name} here
-`).join('\n')}
+      if (deployableApps.length === 0) {
+        alert('No apps with docker registry URL found.');
+        return;
+      }
 
-echo "✅ Deployment complete!"
+      const appMetadatas = await Promise.all(
+        deployableApps.map(async (app) => {
+          const metadata = await getDockerMetadata(app.dockerRegistryUrl!);
+          return { app, metadata };
+        })
+      );
+
+      const services = appMetadatas
+        .map(({ app, metadata }) => {
+          const serviceName = app.name.toLowerCase().replace(/[^a-z0-9]/g, '-');
+          let serviceBlock = `  ${serviceName}:
+    image: ${metadata.imageName}
+    container_name: ${serviceName}
+    restart: always`;
+
+          // Add Ports
+          if (metadata.exposedPorts.length > 0) {
+            serviceBlock += '\n    ports:';
+            metadata.exposedPorts.forEach((port) => {
+              const p = port.split('/')[0];
+              serviceBlock += `\n      - "${p}:${p}"`;
+            });
+          }
+
+          // Add Volumes
+          if (metadata.volumes.length > 0) {
+            serviceBlock += '\n    volumes:';
+            metadata.volumes.forEach((vol) => {
+              serviceBlock += `\n      - "./data/${serviceName}${vol}:${vol}"`;
+            });
+          }
+
+          // Add Envs (Filtering out some common internal ones)
+          const usefulEnvs = metadata.envs.filter(
+            (e) => !e.startsWith('PATH=') && !e.startsWith('HOME=')
+          );
+          if (usefulEnvs.length > 0) {
+            serviceBlock += '\n    environment:';
+            usefulEnvs.forEach((env) => {
+              serviceBlock += `\n      - ${env}`;
+            });
+          }
+
+          return serviceBlock;
+        })
+        .join('\n\n');
+
+      const dockerCompose = `version: '3.8'
+
+services:
+${services}
 `;
 
-    const blob = new Blob([script], { type: 'text/x-shellscript' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `deploy-${apps.length}-apps.sh`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+      const blob = new Blob([dockerCompose], { type: 'text/yaml' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `docker-compose.yml`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error('Error generating docker-compose:', err);
+      alert('Failed to generate deployment script.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <button
       onClick={handleGenerate}
-      className={`btn-terminal group relative flex items-center justify-center gap-2 overflow-hidden px-6 py-3 text-xs font-black uppercase tracking-widest ring-1 ring-accent transition-all hover:bg-accent hover:text-bg ${className}`}
+      disabled={loading}
+      className={`flex cursor-pointer items-center justify-center gap-2 rounded-md transition-opacity hover:opacity-80 disabled:cursor-not-allowed disabled:opacity-50 ${className}`}
+      style={{
+        background: 'color-mix(in srgb, var(--accent) 15%, transparent)',
+        border: '1px solid color-mix(in srgb, var(--accent) 40%, transparent)',
+        color: 'var(--accent)',
+      }}
     >
-      <Terminal size={14} className="transition-transform group-hover:rotate-12" />
-      {children}
-      
-      {/* Decorative corners */}
-      <span className="absolute left-0 top-0 h-1 w-1 border-l border-t border-accent opacity-0 group-hover:opacity-100" />
-      <span className="absolute right-0 top-0 h-1 w-1 border-r border-t border-accent opacity-0 group-hover:opacity-100" />
-      <span className="absolute bottom-0 left-0 h-1 w-1 border-l border-b border-accent opacity-0 group-hover:opacity-100" />
-      <span className="absolute bottom-0 right-0 h-1 w-1 border-r border-b border-accent opacity-0 group-hover:opacity-100" />
+      {loading ? (
+        <Loader2 size={14} className="animate-spin" />
+      ) : (
+        <FileCode2 size={14} />
+      )}
+      {loading ? 'Generating...' : children}
     </button>
   );
 }
