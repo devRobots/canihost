@@ -37,7 +37,7 @@ export default function AppBundlesPanel({ onBundleClick, onAppClick }: Props) {
     <div className="flex flex-col gap-6">
       <div className="text-fg-muted flex items-center gap-3 text-xs font-bold tracking-widest uppercase">
         <span className="text-accent">{'//'}</span>
-        Recommended App Bundles
+        Recommended Bundles
       </div>
 
       {recommendedBundles.length === 0 ? (
