@@ -2,13 +2,9 @@ import AppsGrid from '@/components/AppsGrid';
 import prisma from '@/lib/prisma';
 
 export default async function AppsPage() {
-  const apps = (await prisma.app.findMany({
+  const apps = await prisma.app.findMany({
     orderBy: { name: 'asc' },
-  })).map(app => ({
-    ...app,
-    createdAt: app.createdAt.toISOString(),
-    updatedAt: app.updatedAt.toISOString(),
-  }));
+  });
 
   return (
     <div className="bg-page flex min-h-screen flex-col font-mono">
