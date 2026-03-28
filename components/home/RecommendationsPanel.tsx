@@ -1,6 +1,6 @@
 'use client';
 
-import { App, HostType } from '@prisma/client';
+import { App } from '@prisma/client';
 import { useMemo, useState } from 'react';
 
 import AppBundlesPanel from '@/components/home/AppBundlesPanel';
@@ -12,7 +12,7 @@ import AppBundleModal from '@/components/modals/AppBundleModal';
 import AppModal from '@/components/modals/AppModal';
 import { useDbStore } from '@/store/db';
 import { useHostStore } from '@/store/host';
-import { type AppBundle } from '@/types';
+import { type AppBundle, HostType } from '@/types';
 
 export default function RecommendationsPanel() {
   const { apps } = useDbStore();

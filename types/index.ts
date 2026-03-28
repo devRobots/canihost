@@ -17,3 +17,9 @@ export type ActiveHost = Host & {
   ram: number;
   selectedVariantId: string | null;
 };
+
+export enum HostType {
+  VPS = 'VPS',
+  MINI_PC = 'MINI_PC',
+  CUSTOM = 'CUSTOM',
+}
