@@ -4,6 +4,7 @@ import { App } from '@prisma/client';
 import { HostType } from '@prisma/enums';
 import { useState } from 'react';
 
+import { ResourceSpecs } from '@/components/apps/ResourceSpecs';
 import HostPicker from '@/components/hostpicker/HostPicker';
 import { useBuilderStore } from '@/store/builder';
 import { useDbStore } from '@/store/db';
@@ -22,6 +23,11 @@ export default function BuilderCatalog({ host, setAppModalData }: Props) {
 
   const isExpert = mode === 'expert';
 
+  const selectedApps = apps.filter((a) => selectedAppIds.has(a.id));
+  const totalCpu = selectedApps.reduce((acc, a) => acc + a.minCPU, 0);
+  const totalRam = selectedApps.reduce((acc, a) => acc + a.minRAM, 0);
+  const isSystemOverloaded = totalCpu > host.cores || totalRam > host.ram;
+
   const [collapsedCategories, setCollapsedCategories] = useState<
     Record<string, boolean>
   >({});
@@ -32,7 +38,7 @@ export default function BuilderCatalog({ host, setAppModalData }: Props) {
   };
 
   return (
-    <div className="border-default flex flex-1 flex-col gap-6 overflow-y-auto border-r p-6">
+    <div className="flex flex-1 flex-col gap-6 overflow-y-auto p-6">
       <HostPicker />
 
       {categories.map((cat) => {
@@ -55,34 +61,27 @@ export default function BuilderCatalog({ host, setAppModalData }: Props) {
               <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
                 {apps
                   .filter((s) => s.category === cat)
+                  .filter((s) => !(host.type === HostType.VPS && !s.isCloudRecommended))
                   .sort((a, b) => a.name.localeCompare(b.name))
                   .map((svc) => {
                     const isSelected = selectedAppIds.has(svc.id);
-                    const isLocalOnly =
-                      !svc.isCloudRecommended && host.type === HostType.VPS;
-
-                    let borderColorClass = 'border-default';
-                    if (isSelected) borderColorClass = 'border-accent';
-                    else if (isLocalOnly)
-                      borderColorClass = 'border-yellow-500';
-
-                    return (
-                      <div
+                    const isDisabled = !isSelected && isSystemOverloaded;                    return (
+                      <button
                         key={svc.id}
-                        role="button"
-                        tabIndex={0}
+                        disabled={isDisabled}
                         onClick={() => toggleAppId(svc.id)}
-                        onKeyDown={(e) =>
-                          e.key === 'Enter' && toggleAppId(svc.id)
-                        }
-                        className={`relative flex min-h-[120px] cursor-pointer flex-col rounded-md pt-2 transition-all active:scale-[0.98] ${
+                        className={`card relative flex h-full w-full flex-col px-3 pt-3 pb-2 transition-all ${
+                          isDisabled
+                            ? 'opacity-50 cursor-not-allowed grayscale'
+                            : 'cursor-pointer hover:border-accent active:scale-[0.98]'
+                        } ${
                           isSelected
-                            ? 'bg-accent/10 shadow-accent/20 shadow-lg'
-                            : 'bg-card'
-                        } min-h-[120px] cursor-pointer ${!isSelected && isLocalOnly ? 'opacity-70' : 'opacity-100'} border ${borderColorClass}`}
+                            ? 'bg-accent/10 border-accent shadow-accent/20 shadow-lg'
+                            : 'border-default'
+                        }`}
                       >
                         {/* Info Button Top Left */}
-                        <button
+                        <div
                           onClick={(e) => {
                             e.stopPropagation();
                             setAppModalData(svc);
@@ -91,27 +90,23 @@ export default function BuilderCatalog({ host, setAppModalData }: Props) {
                           title="Info"
                         >
                           i
-                        </button>
-
-                        {/* Selection Checkmark Top Right */}
-                        <div
-                          className={`absolute top-2 right-2 z-10 flex h-6 w-6 items-center justify-center rounded transition-all ${
-                            isSelected
-                              ? 'bg-accent border text-(--bg)'
-                              : 'bg-input border-line text-transparent'
-                          }`}
-                        >
-                          <span className="mt-0.5 text-sm font-bold">✓</span>
                         </div>
 
-                        <div className="flex flex-1 flex-col items-center gap-2 pt-6 pb-2 text-center">
-                          <span className="text-3xl leading-none">
-                            <img
-                              src={svc.logoUrl}
-                              alt={`${svc.name} logo`}
-                              className="h-6 w-6 object-contain"
-                            />
-                          </span>
+                        {/* Selection Checkmark */}
+                        {isSelected && (
+                          <div
+                            className={`absolute top-2 right-2 z-10 flex h-6 w-6 items-center justify-center rounded transition-all bg-accent text-(--bg)`}
+                          >
+                            <span className="mt-0.5 text-sm font-bold">✓</span>
+                          </div>
+                        )}
+
+                        <div className="flex flex-1 flex-col items-center gap-2 pt-6 pb-4 text-center">
+                          <img
+                            src={svc.logoUrl}
+                            alt={`${svc.name} logo`}
+                            className="h-12 w-12 object-contain"
+                          />
                           <span
                             className={`mt-1 px-1 text-xs leading-tight font-bold ${isSelected ? 'text-accent' : 'text-fg'}`}
                           >
@@ -120,51 +115,24 @@ export default function BuilderCatalog({ host, setAppModalData }: Props) {
                         </div>
 
                         {/* Hardware Metrics Footer */}
-                        <div className="border-default text-fg-dim mt-auto flex w-full justify-center border-t pt-2 pb-1 font-mono text-[10px]">
-                          {isExpert ? (
-                            <div className="flex w-full items-center justify-center gap-3">
-                              <span className="flex items-center gap-1">
-                                <span className="text-xs">CPU</span>
-                                {svc.minCPU === svc.recommendedCPU
-                                  ? svc.recommendedCPU
-                                  : `${svc.minCPU}-${svc.recommendedCPU}`}
-                                c
-                              </span>
-                              <span className="opacity-50">|</span>
-                              <span className="flex items-center gap-1">
-                                <span className="text-xs">RAM</span>
-                                {svc.minRAM === svc.recommendedRAM
-                                  ? svc.recommendedRAM
-                                  : `${svc.minRAM}-${svc.recommendedRAM}`}
-                                G
-                              </span>
-                            </div>
-                          ) : (
-                            <div className="flex w-full justify-center gap-2">
-                              <span>
-                                {((svc.minCPU / host.cores) * 100).toFixed(
-                                  0,
-                                )}
-                                %C
-                              </span>
-                              <span>|</span>
-                              <span>
-                                {(
-                                  (svc.minRAM / host.ram) *
-                                  100
-                                ).toFixed(0)}
-                                %R
-                              </span>
-                            </div>
-                          )}
-                        </div>
-
-                        {isLocalOnly && (
-                          <div className="absolute right-1 bottom-1 text-[8px] font-bold text-yellow-500 uppercase">
-                            ⚠ Local
+                        {isExpert && (
+                          <div className="mt-auto flex w-full flex-col gap-1.5">
+                            <ResourceSpecs
+                              cpu={svc.recommendedCPU}
+                              ram={svc.recommendedRAM}
+                              title="Recommended"
+                            />
+                            {(svc.minCPU !== svc.recommendedCPU ||
+                              svc.minRAM !== svc.recommendedRAM) && (
+                              <ResourceSpecs
+                                cpu={svc.minCPU}
+                                ram={svc.minRAM}
+                                title="Minimum"
+                              />
+                            )}
                           </div>
                         )}
-                      </div>
+                      </button>
                     );
                   })}
               </div>
