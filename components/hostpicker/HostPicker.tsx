@@ -7,7 +7,8 @@ import HostDropdown from '@/components/hostpicker/HostDropdown';
 import ModeToggle from '@/components/hostpicker/ModeToggle';
 import RamSelector from '@/components/hostpicker/RamSelector';
 import VariantDropdown from '@/components/hostpicker/VariantDropdown';
-import { useDbStore, useHostStore } from '@/lib/store';
+import { useDbStore } from '@/lib/store/db';
+import { useHostStore } from '@/lib/store/host';
 
 export default function HostPicker() {
   const { hosts } = useDbStore();
@@ -43,11 +44,13 @@ export default function HostPicker() {
     <div className="flex w-full flex-col items-end justify-center gap-4 font-mono md:flex-row">
       <div
         ref={containerRef}
-        className="border-line-accent bg-card flex w-full flex-col items-stretch justify-center gap-2 rounded-md border px-4 py-3 md:flex-row md:items-center md:gap-4 md:py-2 md:w-auto"
+        className="border-line-accent bg-card flex w-full flex-col items-stretch justify-center gap-2 rounded-md border px-4 py-3 md:w-auto md:flex-row md:items-center md:gap-4 md:py-2"
       >
         <HostDropdown
           isOpen={openDropdown === 'host'}
-          onToggle={() => setOpenDropdown(openDropdown === 'host' ? null : 'host')}
+          onToggle={() =>
+            setOpenDropdown(openDropdown === 'host' ? null : 'host')
+          }
           onClose={() => setOpenDropdown(null)}
         />
 
@@ -68,7 +71,9 @@ export default function HostPicker() {
             <div className="flex flex-row items-center gap-4">
               <CpuSelector
                 isOpen={openDropdown === 'cpu'}
-                onToggle={() => setOpenDropdown(openDropdown === 'cpu' ? null : 'cpu')}
+                onToggle={() =>
+                  setOpenDropdown(openDropdown === 'cpu' ? null : 'cpu')
+                }
                 onClose={() => setOpenDropdown(null)}
               />
 
@@ -76,7 +81,9 @@ export default function HostPicker() {
 
               <RamSelector
                 isOpen={openDropdown === 'ram'}
-                onToggle={() => setOpenDropdown(openDropdown === 'ram' ? null : 'ram')}
+                onToggle={() =>
+                  setOpenDropdown(openDropdown === 'ram' ? null : 'ram')
+                }
                 onClose={() => setOpenDropdown(null)}
               />
             </div>

@@ -5,7 +5,9 @@ import { HostType } from '@prisma/enums';
 import { useState } from 'react';
 
 import HostPicker from '@/components/hostpicker/HostPicker';
-import { useBuilderStore, useDbStore, useModeStore } from '@/lib/store';
+import { useBuilderStore } from '@/lib/store/builder';
+import { useDbStore } from '@/lib/store/db';
+import { useModeStore } from '@/lib/store/mode';
 import { type ActiveHost } from '@/types';
 
 type Props = {
@@ -13,10 +15,7 @@ type Props = {
   setAppModalData: (s: App | null) => void;
 };
 
-export default function BuilderCatalog({
-  host,
-  setAppModalData,
-}: Props) {
+export default function BuilderCatalog({ host, setAppModalData }: Props) {
   const { apps } = useDbStore();
   const { selectedAppIds, toggleAppId } = useBuilderStore();
   const { mode } = useModeStore();

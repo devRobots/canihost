@@ -3,7 +3,8 @@
 import { App } from '@prisma/client';
 import { useRef } from 'react';
 
-import { useDbStore, useHostStore } from '@/lib/store';
+import { useDbStore } from '@/lib/store/db';
+import { useHostStore } from '@/lib/store/host';
 import { type AppBundle, type Host } from '@/types';
 
 export default function StoreInitializer({

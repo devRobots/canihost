@@ -1,6 +1,7 @@
 import { App } from '@prisma/client';
 
-import { useHostStore, useModeStore } from '@/lib/store';
+import { useHostStore } from '@/lib/store/host';
+import { useModeStore } from '@/lib/store/mode';
 import { type AppBundle } from '@/types';
 
 interface Props {
@@ -9,10 +10,7 @@ interface Props {
   onAppClick: (app: App) => void;
 }
 
-export default function AppBundleCard({
-  bundle,
-  onBundleClick
-}: Props) {
+export default function AppBundleCard({ bundle, onBundleClick }: Props) {
   const { core, ram } = useHostStore();
   const { mode } = useModeStore();
 
@@ -92,7 +90,8 @@ export default function AppBundleCard({
               src={app.logoUrl}
               alt={`${app.name} logo`}
               className="h-2 w-2 object-contain"
-            /> <span className="text-xs">{app.name}</span>
+            />{' '}
+            <span className="text-xs">{app.name}</span>
           </div>
         ))}
       </div>

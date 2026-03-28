@@ -3,7 +3,8 @@
 import { HostType } from '@prisma/enums';
 import { Box, ChevronDown } from 'lucide-react';
 
-import { useDbStore, useHostStore } from '@/lib/store';
+import { useDbStore } from '@/lib/store/db';
+import { useHostStore } from '@/lib/store/host';
 
 const getVariantLabel = (type?: string) => {
   if (type === 'VPS') return 'Tier';

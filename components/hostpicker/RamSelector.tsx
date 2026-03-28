@@ -3,7 +3,8 @@
 import { HostType } from '@prisma/enums';
 import { ChevronDown, MemoryStick } from 'lucide-react';
 
-import { useDbStore, useHostStore } from '@/lib/store';
+import { useDbStore } from '@/lib/store/db';
+import { useHostStore } from '@/lib/store/host';
 
 const RAM_OPTIONS = [1, 2, 4, 6, 8, 12, 16, 24, 32, 64, 128];
 
@@ -19,13 +20,8 @@ export default function RamSelector({
   onClose,
 }: RamSelectorProps) {
   const { hosts } = useDbStore();
-  const {
-    selectedHostId,
-    selectedVariantId,
-    core,
-    ram,
-    setCustomResources,
-  } = useHostStore();
+  const { selectedHostId, selectedVariantId, core, ram, setCustomResources } =
+    useHostStore();
 
   const selectedHost = hosts.find((m) => m.id === selectedHostId);
   const selectedVariant =

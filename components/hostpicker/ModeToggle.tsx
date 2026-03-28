@@ -2,13 +2,13 @@
 
 import { LayoutDashboard } from 'lucide-react';
 
-import { useModeStore } from '@/lib/store';
+import { useModeStore } from '@/lib/store/mode';
 
 export default function ModeToggle() {
   const { mode, toggleMode } = useModeStore();
 
   return (
-    <div className="border-line-accent bg-card flex md:w-auto min-w-max shrink-0 self- md:items-center justify-center gap-4 rounded-md border px-5 py-2">
+    <div className="border-line-accent bg-card self- flex min-w-max shrink-0 justify-center gap-4 rounded-md border px-5 py-2 md:w-auto md:items-center">
       <button
         onClick={toggleMode}
         className="group flex w-full items-center justify-center gap-4 py-1 text-left transition-colors"

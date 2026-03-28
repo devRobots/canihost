@@ -3,7 +3,8 @@
 import { HostType } from '@prisma/enums';
 import { ChevronDown, Cpu } from 'lucide-react';
 
-import { useDbStore, useHostStore } from '@/lib/store';
+import { useDbStore } from '@/lib/store/db';
+import { useHostStore } from '@/lib/store/host';
 
 const CPU_OPTIONS = [1, 2, 4, 6, 8, 10, 12, 14, 16, 24, 32, 64];
 
@@ -19,13 +20,8 @@ export default function CpuSelector({
   onClose,
 }: CpuSelectorProps) {
   const { hosts } = useDbStore();
-  const {
-    selectedHostId,
-    selectedVariantId,
-    core,
-    ram,
-    setCustomResources,
-  } = useHostStore();
+  const { selectedHostId, selectedVariantId, core, ram, setCustomResources } =
+    useHostStore();
 
   const selectedHost = hosts.find((m) => m.id === selectedHostId);
   const selectedVariant =

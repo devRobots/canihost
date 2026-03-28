@@ -10,7 +10,8 @@ import RecommendedAppsPanel from '@/components/home/RecommendedAppsPanel';
 import UnsupportedAppsPanel from '@/components/home/UnsupportedAppsPanel';
 import AppBundleModal from '@/components/modals/AppBundleModal';
 import AppModal from '@/components/modals/AppModal';
-import { useDbStore, useHostStore } from '@/lib/store';
+import { useDbStore } from '@/lib/store/db';
+import { useHostStore } from '@/lib/store/host';
 import { type AppBundle } from '@/types';
 
 export default function RecommendationsPanel() {
@@ -21,13 +22,10 @@ export default function RecommendationsPanel() {
     useState<AppBundle | null>(null);
 
   const { recommendedApps, barelyUsableApps, unsupportedApps } = useMemo(() => {
-    const isCloudComp = (a: App) =>
-      a.isCloudRecommended !== false;
-    const meetsMin = (a: App) =>
-      a.minCPU <= core && a.minRAM <= ram;
+    const isCloudComp = (a: App) => a.isCloudRecommended !== false;
+    const meetsMin = (a: App) => a.minCPU <= core && a.minRAM <= ram;
     const meetsRec = (a: App) =>
-      a.recommendedCPU <= core &&
-      a.recommendedRAM <= ram;
+      a.recommendedCPU <= core && a.recommendedRAM <= ram;
 
     return {
       recommendedApps: apps
@@ -80,7 +78,10 @@ export default function RecommendationsPanel() {
 
         {/* 3. Barely Usable Individual Apps */}
         <div id="section-barely-usable" className="scroll-mt-24">
-          <BarelyUsableAppsPanel apps={barelyUsableApps} onAppClick={setAppModalData} />
+          <BarelyUsableAppsPanel
+            apps={barelyUsableApps}
+            onAppClick={setAppModalData}
+          />
         </div>
 
         {/* 4. Unsupported Individual Apps */}

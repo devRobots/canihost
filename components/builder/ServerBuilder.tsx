@@ -7,7 +7,8 @@ import { useState } from 'react';
 import BuilderCatalog from '@/components/builder/BuilderCatalog';
 import BuilderMonitor from '@/components/builder/BuilderMonitor';
 import AppModal from '@/components/modals/AppModal';
-import { useDbStore, useHostStore } from '@/lib/store';
+import { useDbStore } from '@/lib/store/db';
+import { useHostStore } from '@/lib/store/host';
 import { type ActiveHost, type Host } from '@/types';
 
 export default function ServerBuilder() {
@@ -40,10 +41,7 @@ export default function ServerBuilder() {
   return (
     <div className="bg-page mx-auto flex min-h-[calc(100vh-56px)] w-full max-w-screen-2xl flex-col font-mono lg:flex-row">
       {/* ─── LEFT: Catalog ─── */}
-      <BuilderCatalog
-        host={activeHost}
-        setAppModalData={setAppModalData}
-      />
+      <BuilderCatalog host={activeHost} setAppModalData={setAppModalData} />
 
       {/* ─── RIGHT: Resource Monitor ─── */}
       <BuilderMonitor host={activeHost} setAppModalData={setAppModalData} />

@@ -1,17 +1,14 @@
 import { App } from '@prisma/client';
 import { Cpu, MemoryStick } from 'lucide-react';
 
-import { useModeStore } from '@/lib/store';
+import { useModeStore } from '@/lib/store/mode';
 
 interface Props {
   app: App;
   onAppClick: (app: App) => void;
 }
 
-export default function IndividualAppCard({
-  app,
-  onAppClick,
-}: Props) {
+export default function IndividualAppCard({ app, onAppClick }: Props) {
   const { mode } = useModeStore();
 
   return (

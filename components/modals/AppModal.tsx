@@ -4,7 +4,7 @@ import { App } from '@prisma/client';
 import { Cpu, FileCode2, Globe, MemoryStick, Monitor, Zap } from 'lucide-react';
 
 import Modal from '@/components/modals/Modal';
-import { useModeStore } from '@/lib/store';
+import { useModeStore } from '@/lib/store/mode';
 
 export default function AppModal({
   app,
@@ -48,7 +48,7 @@ export default function AppModal({
                 href={app.officialUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="ml-auto flex items-center gap-1 rounded-sm px-3 py-1 text-xs opacity-50 transition-opacity hover:opacity-90 font-bold"
+                className="ml-auto flex items-center gap-1 rounded-sm px-3 py-1 text-xs font-bold opacity-50 transition-opacity hover:opacity-90"
                 style={{
                   border: '1px solid var(--border)',
                   color: 'var(--fg)',
@@ -64,10 +64,11 @@ export default function AppModal({
             <span className="relative ml-1 inline-flex">
               <span
                 title="Local Only"
-                className="group inline-flex cursor-default items-center justify-center rounded-sm p-1 text-xs gap-2"
+                className="group inline-flex cursor-default items-center justify-center gap-2 rounded-sm p-1 text-xs"
                 style={{
                   background: 'color-mix(in srgb, #f59e0b 18%, transparent)',
-                  border: '1px solid color-mix(in srgb, #f59e0b 45%, transparent)',
+                  border:
+                    '1px solid color-mix(in srgb, #f59e0b 45%, transparent)',
                   color: '#f59e0b',
                 }}
               >
@@ -98,16 +99,22 @@ export default function AppModal({
                 <div className="flex items-center gap-4">
                   <div className="flex items-center gap-1.5">
                     <Cpu size={14} style={{ color: 'var(--accent)' }} />
-                    <span className="text-xs font-bold" style={{ color: 'var(--fg)' }}>
+                    <span
+                      className="text-xs font-bold"
+                      style={{ color: 'var(--fg)' }}
+                    >
                       {app.minCPU}
-                      <span className="ml-1 opacity-50 font-normal">Cores</span>
+                      <span className="ml-1 font-normal opacity-50">Cores</span>
                     </span>
                   </div>
                   <div className="flex items-center gap-1.5">
                     <MemoryStick size={14} style={{ color: 'var(--accent)' }} />
-                    <span className="text-xs font-bold" style={{ color: 'var(--fg)' }}>
+                    <span
+                      className="text-xs font-bold"
+                      style={{ color: 'var(--fg)' }}
+                    >
                       {app.minRAM}
-                      <span className="ml-1 opacity-50 font-normal">GB</span>
+                      <span className="ml-1 font-normal opacity-50">GB</span>
                     </span>
                   </div>
                 </div>
@@ -129,16 +136,22 @@ export default function AppModal({
                 <div className="flex items-center gap-4">
                   <div className="flex items-center gap-1.5">
                     <Cpu size={14} style={{ color: 'var(--accent)' }} />
-                    <span className="text-xs font-bold" style={{ color: 'var(--fg)' }}>
+                    <span
+                      className="text-xs font-bold"
+                      style={{ color: 'var(--fg)' }}
+                    >
                       {app.recommendedCPU}
-                      <span className="ml-1 opacity-50 font-normal">Cores</span>
+                      <span className="ml-1 font-normal opacity-50">Cores</span>
                     </span>
                   </div>
                   <div className="flex items-center gap-1.5">
                     <MemoryStick size={14} style={{ color: 'var(--accent)' }} />
-                    <span className="text-xs font-bold" style={{ color: 'var(--fg)' }}>
+                    <span
+                      className="text-xs font-bold"
+                      style={{ color: 'var(--fg)' }}
+                    >
                       {app.recommendedRAM}
-                      <span className="ml-1 opacity-50 font-normal">GB</span>
+                      <span className="ml-1 font-normal opacity-50">GB</span>
                     </span>
                   </div>
                 </div>
@@ -162,7 +175,7 @@ export default function AppModal({
                   href={app.dockerRegistryUrl}
                   target="_blank"
                   rel="noreferrer"
-                  className="flex flex-1 items-center justify-center gap-2 rounded-md px-4 py-2.5 text-xs font-bold transition-opacity hover:opacity-80 text-center"
+                  className="flex flex-1 items-center justify-center gap-2 rounded-md px-4 py-2.5 text-center text-xs font-bold transition-opacity hover:opacity-80"
                   style={{
                     background:
                       'color-mix(in srgb, var(--accent) 15%, transparent)',
@@ -180,7 +193,7 @@ export default function AppModal({
                   href={app.cubepathUrl}
                   target="_blank"
                   rel="noreferrer"
-                  className="flex flex-1 items-center justify-center gap-2 rounded-md px-4 py-2.5 text-xs font-bold transition-opacity hover:opacity-80 text-center"
+                  className="flex flex-1 items-center justify-center gap-2 rounded-md px-4 py-2.5 text-center text-xs font-bold transition-opacity hover:opacity-80"
                   style={{
                     background:
                       'color-mix(in srgb, var(--green) 15%, transparent)',
