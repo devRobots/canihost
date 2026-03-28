@@ -9,7 +9,6 @@ import DeployScriptButton from '@/components/core/DeployScriptButton';
 import { ResourceUsageBar } from '@/components/core/ResourceUsageBar';
 import { useBuilderStore } from '@/store/builder';
 import { useDbStore } from '@/store/db';
-import { useModeStore } from '@/store/mode';
 import { type ActiveHost } from '@/types';
 
 type Props = {
@@ -20,8 +19,6 @@ type Props = {
 export default function BuilderMonitor({ host, setAppModalData }: Props) {
   const { apps: apps } = useDbStore();
   const { selectedAppIds, toggleAppId } = useBuilderStore();
-  const { mode } = useModeStore();
-  const isExpert = mode === 'expert';
 
   const selectedApps = apps.filter((s) => selectedAppIds.has(s.id));
   const totalCpu = selectedApps.reduce((acc, s) => acc + s.minCPU, 0);
@@ -146,9 +143,7 @@ export default function BuilderMonitor({ host, setAppModalData }: Props) {
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="text-fg-dim font-mono text-xs whitespace-nowrap">
-                    {isExpert
-                      ? `${s.minCPU}c · ${s.minRAM}G`
-                      : `${Math.round((s.minCPU / host.cores) * 100)}%C`}
+                    {s.minCPU}c · {s.minRAM}G
                   </span>
                   <button
                     onClick={() => setAppModalData(s)}
