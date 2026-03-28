@@ -2,8 +2,8 @@ import { App } from '@prisma/client';
 import { useMemo } from 'react';
 
 import AppBundleCard from '@/components/home/AppBundleCard';
-import { useDbStore } from '@/lib/store/db';
-import { useHostStore } from '@/lib/store/host';
+import { useDbStore } from '@/store/db';
+import { useHostStore } from '@/store/host';
 import { type AppBundle } from '@/types';
 
 interface Props {

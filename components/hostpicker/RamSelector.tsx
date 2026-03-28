@@ -3,8 +3,8 @@
 import { HostType } from '@prisma/enums';
 import { ChevronDown, MemoryStick } from 'lucide-react';
 
-import { useDbStore } from '@/lib/store/db';
-import { useHostStore } from '@/lib/store/host';
+import { useDbStore } from '@/store/db';
+import { useHostStore } from '@/store/host';
 
 const RAM_OPTIONS = [1, 2, 4, 6, 8, 12, 16, 24, 32, 64, 128];
 

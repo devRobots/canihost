@@ -3,8 +3,8 @@
 import { HostType } from '@prisma/enums';
 import { ChevronDown, Cpu } from 'lucide-react';
 
-import { useDbStore } from '@/lib/store/db';
-import { useHostStore } from '@/lib/store/host';
+import { useDbStore } from '@/store/db';
+import { useHostStore } from '@/store/host';
 
 const CPU_OPTIONS = [1, 2, 4, 6, 8, 10, 12, 14, 16, 24, 32, 64];
 

@@ -10,8 +10,8 @@ import RecommendedAppsPanel from '@/components/home/RecommendedAppsPanel';
 import UnsupportedAppsPanel from '@/components/home/UnsupportedAppsPanel';
 import AppBundleModal from '@/components/modals/AppBundleModal';
 import AppModal from '@/components/modals/AppModal';
-import { useDbStore } from '@/lib/store/db';
-import { useHostStore } from '@/lib/store/host';
+import { useDbStore } from '@/store/db';
+import { useHostStore } from '@/store/host';
 import { type AppBundle } from '@/types';
 
 export default function RecommendationsPanel() {

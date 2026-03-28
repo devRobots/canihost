@@ -1,7 +1,7 @@
 import { App } from '@prisma/client';
 
-import { useHostStore } from '@/lib/store/host';
-import { useModeStore } from '@/lib/store/mode';
+import { useHostStore } from '@/store/host';
+import { useModeStore } from '@/store/mode';
 import { type AppBundle } from '@/types';
 
 interface Props {

@@ -2,7 +2,7 @@
 
 import { LayoutDashboard } from 'lucide-react';
 
-import { useModeStore } from '@/lib/store/mode';
+import { useModeStore } from '@/store/mode';
 
 export default function ModeToggle() {
   const { mode, toggleMode } = useModeStore();

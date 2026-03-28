@@ -1,7 +1,7 @@
 import { App } from '@prisma/client';
 import { Cpu, MemoryStick } from 'lucide-react';
 
-import { useModeStore } from '@/lib/store/mode';
+import { useModeStore } from '@/store/mode';
 
 interface Props {
   app: App;

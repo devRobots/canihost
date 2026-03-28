@@ -7,8 +7,8 @@ import { useState } from 'react';
 import BuilderCatalog from '@/components/builder/BuilderCatalog';
 import BuilderMonitor from '@/components/builder/BuilderMonitor';
 import AppModal from '@/components/modals/AppModal';
-import { useDbStore } from '@/lib/store/db';
-import { useHostStore } from '@/lib/store/host';
+import { useDbStore } from '@/store/db';
+import { useHostStore } from '@/store/host';
 import { type ActiveHost, type Host } from '@/types';
 
 export default function ServerBuilder() {

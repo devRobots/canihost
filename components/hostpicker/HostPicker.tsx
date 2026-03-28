@@ -7,8 +7,8 @@ import HostDropdown from '@/components/hostpicker/HostDropdown';
 import ModeToggle from '@/components/hostpicker/ModeToggle';
 import RamSelector from '@/components/hostpicker/RamSelector';
 import VariantDropdown from '@/components/hostpicker/VariantDropdown';
-import { useDbStore } from '@/lib/store/db';
-import { useHostStore } from '@/lib/store/host';
+import { useDbStore } from '@/store/db';
+import { useHostStore } from '@/store/host';
 
 export default function HostPicker() {
   const { hosts } = useDbStore();

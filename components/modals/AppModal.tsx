@@ -4,7 +4,7 @@ import { App } from '@prisma/client';
 import { Cpu, FileCode2, Globe, MemoryStick, Monitor, Zap } from 'lucide-react';
 
 import Modal from '@/components/modals/Modal';
-import { useModeStore } from '@/lib/store/mode';
+import { useModeStore } from '@/store/mode';
 
 export default function AppModal({
   app,

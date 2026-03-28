@@ -14,7 +14,7 @@ import { useState } from 'react';
 
 import ModeToggle from '@/components/hostpicker/ModeToggle';
 import { App } from '@/generated/prisma/client';
-import { useModeStore } from '@/lib/store/mode';
+import { useModeStore } from '@/store/mode';
 
 export default function AppsGrid({ initialApps }: { initialApps: App[] }) {
   const [searchQuery, setSearchQuery] = useState('');

@@ -4,9 +4,9 @@ import { App } from '@prisma/client';
 import { HostType } from '@prisma/enums';
 
 import PieChart from '@/components/builder/PieChart';
-import { useBuilderStore } from '@/lib/store/builder';
-import { useDbStore } from '@/lib/store/db';
-import { useModeStore } from '@/lib/store/mode';
+import { useBuilderStore } from '@/store/builder';
+import { useDbStore } from '@/store/db';
+import { useModeStore } from '@/store/mode';
 import { type ActiveHost } from '@/types';
 
 type Props = {
