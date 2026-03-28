@@ -7,15 +7,19 @@ id,name,description,appIds
 6,SME Productivity Suite,Ideal for small businesses moving away from Google/Microsoft. Manage files documents and web presence.,12|14|17|28
 7,Full-Stack Database Lab,A playground for backend developers to test different database paradigms and caching.,11|12|21|22
 8,Infrastructure & Monitoring,Perfect for sysadmins needing to manage traffic and monitor server health.,5|20|24|25
-9,Lightweight Gaming & Fun,Quick and lightweight fun for servers with limited resources.,10|16
-10,Modern PaaS Cloud,Turn a blank server into a private cloud with a management panel and automatic proxy.,2|24|20
-11,Personal Cloud Hub,Full replacement for Google Drive with basic security services. Very balanced for family use.,14|26|1
-12,Streaming & Transcoding,Exclusively focused on serving high-quality multimedia content with optimized traffic management.,8|19|24
-13,API & Web Backend,The ideal stack for developers who need to deploy a robust and scalable API quickly.,23|21|22
-14,Secure Remote Office,Designed for secure remote work. Private VPN file storage and task automation.,14|27|26|13
-15,Paperless Home Office,Focuses on eliminating physical paper. Smart scanning cloud storage and relational database.,17|14|12
-16,Webmaster Tools & SEO,Everything needed to launch and maintain professional websites with uptime monitoring and metrics.,28|12|24|25|5
-17,Junior Backend Starter,A lightweight environment to learn database management and containers without overloading the machine.,21|11|20
-18,AI-Assisted Content Lab,Ideal for creators using AI to process documents and automate blog publishing.,15|13|17|28
-19,Advanced Network Security,Total network protection with double DNS filtering VPN tunneling and container management.,24|27|18|1|20
-20,The Ultimate All-Rounder,A mix of the most popular apps for those with a powerful server who want to try a bit of everything.,6|14|19|26|1|25
+9,Modern PaaS Cloud,Turn a blank server into a private cloud with a management panel and automatic proxy.,2|24|20
+10,Personal Cloud Hub,Full replacement for Google Drive with basic security services. Very balanced for family use.,14|26|1
+11,Streaming & Transcoding,Exclusively focused on serving high-quality multimedia content with optimized traffic management.,8|19|24
+12,API & Web Backend,The ideal stack for developers who need to deploy a robust and scalable API quickly.,23|21|22
+13,Secure Remote Office,Designed for secure remote work. Private VPN file storage and task automation.,14|27|26|13
+14,Paperless Home Office,Focuses on eliminating physical paper. Smart scanning cloud storage and relational database.,17|14|12
+15,Webmaster Tools & SEO,Everything needed to launch and maintain professional websites with uptime monitoring and metrics.,28|12|24|25|5
+16,Junior Backend Starter,A lightweight environment to learn database management and containers without overloading the machine.,21|11|20
+17,AI-Assisted Content Lab,Ideal for creators using AI to process documents and automate blog publishing.,15|13|17|28
+18,Advanced Network Security,Total network protection with double DNS filtering VPN tunneling and container management.,24|27|18|1|20
+19,The Ultimate All-Rounder,A mix of the most popular apps for those with a powerful server who want to try a bit of everything.,6|14|19|26|1|25
+20,Micro PaaS Setup,Everything you need to host apps like Heroku. Designed for 2 CPU and 2GB RAM.,38|24
+21,Data Management Lite,Perfect for managing documents and databases on small 2GB servers.,39|11|12
+22,Smart Wiki & Docs,Collaborative documentation and wikis for a small team (2GB RAM).,35|23|28
+23,Marketing & Tracking,Run your own marketing campaigns and track network securely (2 CPU / 2GB RAM).,30|18
+24,Ultimate Local AI,Run AI agents. Requires more CPU but includes OpenClaw for local automation.,15|16
