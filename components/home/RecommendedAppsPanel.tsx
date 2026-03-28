@@ -4,13 +4,11 @@ import IndividualAppCard from '@/components/home/IndividualAppCard';
 
 interface Props {
   apps: App[];
-  isExpert: boolean;
   onAppClick: (app: App) => void;
 }
 
 export default function RecommendedAppsPanel({
   apps,
-  isExpert,
   onAppClick,
 }: Props) {
   if (apps.length === 0) return null;
@@ -27,7 +25,6 @@ export default function RecommendedAppsPanel({
           <IndividualAppCard
             key={app.id}
             app={app}
-            isExpert={isExpert}
             onAppClick={onAppClick}
           />
         ))}

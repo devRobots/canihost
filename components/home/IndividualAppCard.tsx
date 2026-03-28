@@ -1,17 +1,19 @@
 import { App } from '@prisma/client';
 import { Cpu, MemoryStick } from 'lucide-react';
 
+import { useModeStore } from '@/lib/store';
+
 interface Props {
   app: App;
-  isExpert: boolean;
   onAppClick: (app: App) => void;
 }
 
 export default function IndividualAppCard({
   app,
-  isExpert,
   onAppClick,
 }: Props) {
+  const { mode } = useModeStore();
+
   return (
     <button
       onClick={() => onAppClick(app)}
@@ -32,7 +34,7 @@ export default function IndividualAppCard({
           {app.name}
         </span>
       </div>
-      {isExpert && (
+      {mode === 'expert' && (
         <div className="border-default text-fg-dim mt-auto flex w-full justify-center border-t pt-2 font-mono text-[10px]">
           <div className="flex w-full items-center justify-center gap-3">
             <span className="flex items-center gap-1 whitespace-nowrap">

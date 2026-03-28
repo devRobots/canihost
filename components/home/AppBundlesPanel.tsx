@@ -1,23 +1,39 @@
 import { App } from '@prisma/client';
+import { useMemo } from 'react';
 
 import AppBundleCard from '@/components/home/AppBundleCard';
-import { type ActiveHost, type AppBundle } from '@/types';
+import { useDbStore, useHostStore } from '@/lib/store';
+import { type AppBundle } from '@/types';
 
 interface Props {
-  bundles: AppBundle[];
-  host: ActiveHost;
-  isExpert: boolean;
   onBundleClick: (bundle: AppBundle) => void;
   onAppClick: (app: App) => void;
 }
 
 export default function AppBundlesPanel({
-  bundles,
-  host,
-  isExpert,
   onBundleClick,
   onAppClick,
 }: Props) {
+  const { bundles } = useDbStore();
+  const { core, ram } = useHostStore();
+
+  const recommendedBundles = useMemo(() => {
+      return bundles
+        .filter((bundle) => {
+          const total = bundle.apps.reduce(
+            (acc, app) => ({
+              cpu: acc.cpu + app.minCPU,
+              ram: acc.ram + app.minRAM,
+            }),
+            { cpu: 0, ram: 0 },
+          );
+          return (
+            total.cpu <= core && total.ram <= ram
+          );
+        })
+        .slice(0, 6);
+    }, [bundles, core, ram]);
+
   return (
     <div className="flex flex-col gap-6">
       <div className="text-fg-muted flex items-center gap-3 text-xs font-bold tracking-widest uppercase">
@@ -25,7 +41,7 @@ export default function AppBundlesPanel({
         Recommended App Bundles
       </div>
 
-      {bundles.length === 0 ? (
+      {recommendedBundles.length === 0 ? (
         <div className="text-fg-dim border-border flex flex-col items-center justify-center gap-3 rounded-md border border-dashed bg-transparent py-6 text-xs sm:flex-row">
           <span className="text-lg opacity-70">ℹ</span>
           <span className="opacity-80 text-center">
@@ -35,12 +51,10 @@ export default function AppBundlesPanel({
         </div>
       ) : (
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {bundles.map((bundle) => (
+          {recommendedBundles.map((bundle) => (
             <AppBundleCard
               key={bundle.id}
               bundle={bundle}
-              host={host}
-              isExpert={isExpert}
               onBundleClick={onBundleClick}
               onAppClick={onAppClick}
             />

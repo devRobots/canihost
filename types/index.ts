@@ -1,10 +1,5 @@
 import { Prisma } from '@prisma/client';
 
-export type ActiveHost = Host & {
-  cpuCores: number;
-  memoryRamGb: number;
-};
-
 export type Host = Prisma.HostGetPayload<{
   include: {
     variants: true;
@@ -16,3 +11,8 @@ export type AppBundle = Prisma.AppBundleGetPayload<{
     apps: true;
   };
 }>;
+
+export type ActiveHost = Host & {
+  cores: number;
+  ram: number;
+};

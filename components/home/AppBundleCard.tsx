@@ -1,26 +1,25 @@
 import { App } from '@prisma/client';
 
-import { type ActiveHost, type AppBundle } from '@/types';
+import { useHostStore, useModeStore } from '@/lib/store';
+import { type AppBundle } from '@/types';
 
 interface Props {
   bundle: AppBundle;
-  host: ActiveHost;
-  isExpert: boolean;
   onBundleClick: (bundle: AppBundle) => void;
   onAppClick: (app: App) => void;
 }
 
 export default function AppBundleCard({
   bundle,
-  host,
-  isExpert,
-  onBundleClick,
-  onAppClick,
+  onBundleClick
 }: Props) {
+  const { core, ram } = useHostStore();
+  const { mode } = useModeStore();
+
   const totalCpu = bundle.apps.reduce((acc, s) => acc + s.minCPU, 0);
   const totalRam = bundle.apps.reduce((acc, s) => acc + s.minRAM, 0);
-  const cpuPct = Math.min(Math.round((totalCpu / host.cpuCores) * 100), 999);
-  const ramPct = Math.min(Math.round((totalRam / host.memoryRamGb) * 100), 999);
+  const cpuPct = Math.min(Math.round((totalCpu / core) * 100), 999);
+  const ramPct = Math.min(Math.round((totalRam / ram) * 100), 999);
   const cpuClass = cpuPct > 70 ? 'warn' : 'accent';
   const ramClass = ramPct > 70 ? 'warn' : 'accent';
 
@@ -47,12 +46,12 @@ export default function AppBundleCard({
       </div>
 
       {/* CPU bar — expert only */}
-      {isExpert && (
+      {mode === 'expert' && (
         <div className="mt-auto flex flex-col gap-1">
           <div className="text-fg-dim flex justify-between text-xs">
             <span className={`text-${cpuClass}`}>CPU</span>
             <span>
-              {totalCpu.toFixed(2)}c / {host.cpuCores}c
+              {totalCpu.toFixed(2)}c / {core}c
             </span>
           </div>
           <div className="bg-input flex h-1 overflow-hidden rounded">
@@ -65,12 +64,12 @@ export default function AppBundleCard({
       )}
 
       {/* RAM bar — expert only */}
-      {isExpert && (
+      {mode === 'expert' && (
         <div className="flex flex-col gap-1">
           <div className="text-fg-dim flex justify-between text-xs">
             <span className={`text-${ramClass}`}>RAM</span>
             <span>
-              {totalRam.toFixed(2)}GB / {host.memoryRamGb}GB
+              {totalRam.toFixed(2)}GB / {ram}GB
             </span>
           </div>
           <div className="bg-input flex h-1 overflow-hidden rounded">
@@ -85,9 +84,8 @@ export default function AppBundleCard({
       {/* Apps list */}
       <div className="mt-2 flex flex-wrap gap-2">
         {bundle.apps.map((app) => (
-          <button
+          <div
             key={app.id}
-            onClick={() => onAppClick(app)}
             className="tag cursor-pointer items-center gap-2 transition-all"
           >
             <img
@@ -95,7 +93,7 @@ export default function AppBundleCard({
               alt={`${app.name} logo`}
               className="h-2 w-2 object-contain"
             /> <span className="text-xs">{app.name}</span>
-          </button>
+          </div>
         ))}
       </div>
     </div>

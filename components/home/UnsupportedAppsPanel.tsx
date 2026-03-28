@@ -4,13 +4,11 @@ import IndividualAppCard from '@/components/home/IndividualAppCard';
 
 interface Props {
   apps: App[];
-  isExpert: boolean;
   onAppClick: (app: App) => void;
 }
 
 export default function UnsupportedAppsPanel({
   apps,
-  isExpert,
   onAppClick,
 }: Props) {
   if (apps.length === 0) return null;
@@ -32,11 +30,7 @@ export default function UnsupportedAppsPanel({
             key={svc.id}
             className="h-full w-full cursor-not-allowed opacity-85 grayscale transition-all hover:opacity-100 hover:grayscale-30"
           >
-            <IndividualAppCard
-              app={svc}
-              isExpert={isExpert}
-              onAppClick={onAppClick}
-            />
+            <IndividualAppCard app={svc} onAppClick={onAppClick} />
           </div>
         ))}
       </div>
