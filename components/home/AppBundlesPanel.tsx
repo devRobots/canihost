@@ -1,6 +1,6 @@
 import { App } from '@prisma/client';
 
-import AppBundleCard from '@/components/AppBundleCard';
+import AppBundleCard from '@/components/home/AppBundleCard';
 import { type ActiveHost, type AppBundle } from '@/types';
 
 interface Props {

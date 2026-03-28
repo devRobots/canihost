@@ -1,6 +1,6 @@
 import { App } from '@prisma/client';
 
-import IndividualAppCard from '@/components/IndividualAppCard';
+import IndividualAppCard from '@/components/home/IndividualAppCard';
 
 interface Props {
   apps: App[];

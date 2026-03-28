@@ -33,7 +33,7 @@ export default function Hero() {
           </div>
           <h1 className="glow-text text-fg mb-3 text-3xl font-black tracking-tight sm:text-5xl text-center sm:text-start">
             Can <span className="text-accent"> I </span> host
-            <span className="text-fg-muted"> a{WORDS[index].startsWith('A') ? 'n' : ''} </span>
+            <span className="text-fg-muted"> {WORDS[index].startsWith('A') ? 'an' : 'a'} </span>
             <br className="sm:hidden" />{' '}
             <span className="whitespace-nowrap">
               <span

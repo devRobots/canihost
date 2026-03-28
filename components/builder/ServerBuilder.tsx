@@ -4,8 +4,8 @@ import { App } from '@prisma/client';
 import { HostType } from '@prisma/enums';
 import { useState } from 'react';
 
-import BuilderCatalog from '@/components/BuilderCatalog';
-import BuilderMonitor from '@/components/BuilderMonitor';
+import BuilderCatalog from '@/components/builder/BuilderCatalog';
+import BuilderMonitor from '@/components/builder/BuilderMonitor';
 import AppModal from '@/components/modals/AppModal';
 import { useDbStore, useHostStore } from '@/lib/store';
 import { type ActiveHost, type Host } from '@/types';

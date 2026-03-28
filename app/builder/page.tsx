@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 
-import ServerBuilder from '@/components/ServerBuilder';
-import StoreInitializer from '@/components/StoreInitializer';
+import ServerBuilder from '@/components/builder/ServerBuilder';
+import StoreInitializer from '@/components/core/StoreInitializer';
 import prisma from '@/lib/prisma';
 import { type Host } from '@/types';
 

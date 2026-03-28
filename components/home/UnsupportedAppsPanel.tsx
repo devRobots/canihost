@@ -1,6 +1,6 @@
 import { App } from '@prisma/client';
 
-import IndividualAppCard from '@/components/IndividualAppCard';
+import IndividualAppCard from '@/components/home/IndividualAppCard';
 
 interface Props {
   apps: App[];
@@ -8,7 +8,7 @@ interface Props {
   onAppClick: (app: App) => void;
 }
 
-export default function BarelyUsableAppsPanel({
+export default function UnsupportedAppsPanel({
   apps,
   isExpert,
   onAppClick,
@@ -17,23 +17,23 @@ export default function BarelyUsableAppsPanel({
 
   return (
     <div className="mt-6 flex flex-col gap-4">
-      <div className="flex items-center gap-3 text-xs font-bold tracking-widest text-orange-400 uppercase">
-        <span className="text-orange-400">{'//'}</span>
-        Barely Usable Apps
+      <div className="flex items-center gap-3 text-xs font-bold tracking-widest text-red-500 uppercase">
+        <span className="text-red-500">{'//'}</span>
+        Not Supported Apps
       </div>
       <p className="text-fg-dim -mt-2 text-xs text-pretty">
-        These apps can run on the host, but might encounter performance
-        constraints or leave little room for other apps.
+        These apps require more resources than the current host can provide or
+        are incompatible with the environment.
       </p>
 
       <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-5">
-        {apps.map((app) => (
+        {apps.map((svc) => (
           <div
-            key={app.id}
-            className="h-full w-full opacity-85 grayscale-30 transition-all hover:opacity-100 hover:grayscale-0"
+            key={svc.id}
+            className="h-full w-full cursor-not-allowed opacity-85 grayscale transition-all hover:opacity-100 hover:grayscale-30"
           >
             <IndividualAppCard
-              app={app}
+              app={svc}
               isExpert={isExpert}
               onAppClick={onAppClick}
             />

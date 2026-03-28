@@ -4,12 +4,12 @@ import { App } from '@prisma/client';
 import { HostType } from '@prisma/enums';
 import { useMemo, useState } from 'react';
 
-import AppBundlesPanel from '@/components/AppBundlesPanel';
-import BarelyUsableAppsPanel from '@/components/BarelyUsableAppsPanel';
+import AppBundlesPanel from '@/components/home/AppBundlesPanel';
+import BarelyUsableAppsPanel from '@/components/home/BarelyUsableAppsPanel';
+import RecommendedAppsPanel from '@/components/home/RecommendedAppsPanel';
+import UnsupportedAppsPanel from '@/components/home/UnsupportedAppsPanel';
 import AppBundleModal from '@/components/modals/AppBundleModal';
 import AppModal from '@/components/modals/AppModal';
-import RecommendedAppsPanel from '@/components/RecommendedAppsPanel';
-import UnsupportedAppsPanel from '@/components/UnsupportedAppsPanel';
 import { useDbStore, useHostStore, useModeStore } from '@/lib/store';
 import { type ActiveHost, type AppBundle } from '@/types';
 
@@ -58,17 +58,13 @@ export default function RecommendationsPanel() {
       .filter((bundle) => {
         let totalMinCpu = 0;
         let totalMinRam = 0;
-        let cloudSafe = true;
         for (const svc of bundle.apps) {
           totalMinCpu += svc.minCPU;
           totalMinRam += svc.minRAM;
-          if (!svc.isCloudRecommended && activeHost.type === HostType.VPS)
-            cloudSafe = false;
         }
         return (
           totalMinCpu <= activeHost.cpuCores &&
-          totalMinRam <= activeHost.memoryRamGb &&
-          cloudSafe
+          totalMinRam <= activeHost.memoryRamGb
         );
       })
       .slice(0, maxBundles);

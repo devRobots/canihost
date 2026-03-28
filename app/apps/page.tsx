@@ -1,4 +1,4 @@
-import AppsGrid from '@/components/AppsGrid';
+import AppsGrid from '@/components/apps/AppsGrid';
 import prisma from '@/lib/prisma';
 
 export default async function AppsPage() {

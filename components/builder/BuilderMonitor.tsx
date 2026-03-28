@@ -3,7 +3,7 @@
 import { App } from '@prisma/client';
 import { HostType } from '@prisma/enums';
 
-import PieChart from '@/components/PieChart';
+import PieChart from '@/components/builder/PieChart';
 import { useBuilderStore, useDbStore, useModeStore } from '@/lib/store';
 import { type ActiveHost } from '@/types';
 

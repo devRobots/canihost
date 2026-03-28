@@ -4,10 +4,9 @@ import { App } from '@prisma/client';
 import { HostType } from '@prisma/enums';
 import { useState } from 'react';
 
+import HostPicker from '@/components/hostpicker/HostPicker';
 import { useBuilderStore, useDbStore, useModeStore } from '@/lib/store';
 import { type ActiveHost } from '@/types';
-
-import HostPicker from './hostpicker/HostPicker';
 
 type Props = {
   host: ActiveHost;
