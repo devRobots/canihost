@@ -189,9 +189,7 @@ export default function AppsGrid({ initialApps }: { initialApps: App[] }) {
                 <DeployScriptButton
                   apps={[app]}
                   className="flex flex-1 items-center justify-center gap-2 rounded-md px-4 py-2.5 text-center text-xs font-bold transition-opacity hover:opacity-80"
-                >
-                  Deploy Script
-                </DeployScriptButton>
+                />
               )}
               {app.cubepathUrl && app.isCloudRecommended && (
                 <a

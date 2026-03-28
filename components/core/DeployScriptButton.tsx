@@ -8,13 +8,11 @@ import { getDockerMetadata } from '@/app/actions/docker';
 
 interface Props {
   apps: App[];
-  children: React.ReactNode;
   className?: string;
 }
 
 export default function DeployScriptButton({
   apps,
-  children,
   className = '',
 }: Props) {
   const [loading, setLoading] = useState(false);
@@ -115,7 +113,7 @@ ${services}
       ) : (
         <FileCode2 size={14} />
       )}
-      {loading ? 'Generating...' : children}
+      {loading ? 'Generating...' : 'Deploy Script'}
     </button>
   );
 }

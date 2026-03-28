@@ -175,9 +175,7 @@ export default function AppModal({
                 <DeployScriptButton
                   apps={[app]}
                   className="flex-1 px-4 py-2.5 text-xs font-bold"
-                >
-                  Deployment Script
-                </DeployScriptButton>
+                />
               )}
               {app.cubepathUrl && app.isCloudRecommended && (
                 <a
