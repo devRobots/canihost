@@ -3,7 +3,6 @@
 import { HostType } from '@prisma/enums';
 import { ChevronDown, MemoryStick } from 'lucide-react';
 
-import { useDbStore } from '@/store/db';
 import { useHostStore } from '@/store/host';
 
 const RAM_OPTIONS = [1, 2, 4, 6, 8, 12, 16, 24, 32, 64, 128];
@@ -19,20 +18,13 @@ export default function RamSelector({
   onToggle,
   onClose,
 }: RamSelectorProps) {
-  const { hosts } = useDbStore();
-  const { selectedHostId, selectedVariantId, core, ram, setCustomResources } =
-    useHostStore();
+  const { activeHost, setCustomResources } = useHostStore();
 
-  const selectedHost = hosts.find((m) => m.id === selectedHostId);
-  const selectedVariant =
-    selectedHost?.variants.find((v) => v.id === selectedVariantId) ||
-    selectedHost?.variants[0];
+  if (!activeHost) return null;
 
-  if (!selectedHost) return null;
-
-  const isCustom = selectedHost.type === HostType.CUSTOM;
-  const currentCores = isCustom ? core : selectedVariant?.cpuCores || 0;
-  const currentRam = isCustom ? ram : selectedVariant?.memoryRamGb || 0;
+  const isCustom = activeHost.type === HostType.CUSTOM;
+  const currentCores = activeHost.cores;
+  const currentRam = activeHost.ram;
 
   return (
     <div className="relative flex-1 md:flex-none">
@@ -56,7 +48,9 @@ export default function RamSelector({
         {isCustom && (
           <ChevronDown
             size={14}
-            className={`text-fg-dim transition-transform ${isOpen ? 'rotate-180' : ''}`}
+            className={`text-fg-dim transition-transform ${
+              isOpen ? 'rotate-180' : ''
+            }`}
           />
         )}
       </button>
@@ -71,7 +65,11 @@ export default function RamSelector({
                   setCustomResources(currentCores, ramOpt);
                   onClose();
                 }}
-                className={`w-full rounded-sm px-3 py-1.5 text-center text-xs transition-all ${currentRam === ramOpt ? 'bg-accent/10 text-accent font-bold' : 'hover:bg-input text-fg'}`}
+                className={`w-full rounded-sm px-3 py-1.5 text-center text-xs transition-all ${
+                  currentRam === ramOpt
+                    ? 'bg-accent/10 text-accent font-bold'
+                    : 'hover:bg-input text-fg'
+                }`}
               >
                 {ramOpt} GB
               </button>

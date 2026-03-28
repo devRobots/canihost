@@ -5,6 +5,7 @@ import { ChevronDown, Cloud, Server, Settings } from 'lucide-react';
 
 import { useDbStore } from '@/store/db';
 import { useHostStore } from '@/store/host';
+import { type Host } from '@/types';
 
 const getHostTypeIcon = (type?: string) => {
   if (type === 'VPS') return <Cloud size={20} />;
@@ -30,10 +31,10 @@ export default function HostDropdown({
   onClose,
 }: HostDropdownProps) {
   const { hosts } = useDbStore();
-  const { selectedHostId, setSelectedHostId } = useHostStore();
+  const { activeHost, setActiveHost } = useHostStore();
 
-  const handleSelectHost = (id: string) => {
-    setSelectedHostId(id, hosts);
+  const handleSelectHost = (host: Host) => {
+    setActiveHost(host);
     onClose();
   };
 
@@ -45,7 +46,8 @@ export default function HostDropdown({
     .sort((a, b) => a.name.localeCompare(b.name));
   const customs = hosts.filter((m) => m.type === HostType.CUSTOM);
 
-  const selectedHost = hosts.find((m) => m.id === selectedHostId);
+  const selectedHost = activeHost;
+
 
   return (
     <div className="relative flex-1 sm:flex-none">
@@ -80,8 +82,8 @@ export default function HostDropdown({
             {vpss.map((h) => (
               <button
                 key={h.id}
-                onClick={() => handleSelectHost(h.id)}
-                className={`w-full rounded-sm px-3 py-2 text-left text-xs transition-all ${selectedHostId === h.id ? 'bg-accent/10 text-accent font-bold' : 'hover:bg-input text-fg'}`}
+                onClick={() => handleSelectHost(h)}
+                className={`w-full rounded-sm px-3 py-2 text-left text-xs transition-all ${activeHost?.id === h.id ? 'bg-accent/10 text-accent font-bold' : 'hover:bg-input text-fg'}`}
               >
                 {h.name}
               </button>
@@ -93,8 +95,8 @@ export default function HostDropdown({
             {miniPcs.map((h) => (
               <button
                 key={h.id}
-                onClick={() => handleSelectHost(h.id)}
-                className={`w-full rounded-sm px-3 py-2 text-left text-xs transition-all ${selectedHostId === h.id ? 'bg-accent/10 text-accent font-bold' : 'hover:bg-input text-fg'}`}
+                onClick={() => handleSelectHost(h)}
+                className={`w-full rounded-sm px-3 py-2 text-left text-xs transition-all ${activeHost?.id === h.id ? 'bg-accent/10 text-accent font-bold' : 'hover:bg-input text-fg'}`}
               >
                 {h.name}
               </button>
@@ -106,8 +108,8 @@ export default function HostDropdown({
             {customs.map((h) => (
               <button
                 key={h.id}
-                onClick={() => handleSelectHost(h.id)}
-                className={`w-full rounded-sm px-3 py-2 text-left text-xs transition-all ${selectedHostId === h.id ? 'bg-accent/10 text-accent font-bold' : 'hover:bg-input text-fg'}`}
+                onClick={() => handleSelectHost(h)}
+                className={`w-full rounded-sm px-3 py-2 text-left text-xs transition-all ${activeHost?.id === h.id ? 'bg-accent/10 text-accent font-bold' : 'hover:bg-input text-fg'}`}
               >
                 {h.name}
               </button>

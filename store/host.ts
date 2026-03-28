@@ -1,35 +1,52 @@
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 
-import { type Host } from '@/types';
+import { type ActiveHost, type Host } from '@/types';
 
 interface HostState {
-  core: number;
-  ram: number;
-  selectedHostId: string | null;
-  selectedVariantId: string | null;
-  setCustomResources: (core: number, ram: number) => void;
-  setSelectedHostId: (id: string | null, hosts: Host[]) => void;
-  setSelectedVariantId: (id: string | null) => void;
+  activeHost: ActiveHost | null;
+  setActiveHost: (host: Host) => void;
+  setVariant: (variantId: string | null) => void;
+  setCustomResources: (cores: number, ram: number) => void;
 }
 
 export const useHostStore = create<HostState>()(
   persist(
     (set) => ({
-      core: 4,
-      ram: 8,
-      selectedHostId: null,
-      selectedVariantId: null,
-      setCustomResources: (core, ram) => set({ core, ram }),
-      setSelectedHostId: (id, hosts) =>
-        set(() => {
-          const host = hosts.find((h) => h.id === id);
+      activeHost: null,
+      setActiveHost: (host) =>
+        set(() => ({
+          activeHost: {
+            ...host,
+            cores: host.variants[0]?.cpuCores || 4,
+            ram: host.variants[0]?.memoryRamGb || 8,
+            selectedVariantId: host.variants[0]?.id || null,
+          },
+        })),
+      setVariant: (id) =>
+        set((state) => {
+          if (!state.activeHost) return state;
+          const v = state.activeHost.variants.find((v) => v.id === id);
           return {
-            selectedHostId: id,
-            selectedVariantId: host?.variants[0]?.id || null,
+            activeHost: {
+              ...state.activeHost,
+              selectedVariantId: id,
+              cores: v?.cpuCores ?? state.activeHost.cores,
+              ram: v?.memoryRamGb ?? state.activeHost.ram,
+            },
           };
         }),
-      setSelectedVariantId: (id) => set({ selectedVariantId: id }),
+      setCustomResources: (cores, ram) =>
+        set((state) => {
+          if (!state.activeHost) return state;
+          return {
+            activeHost: {
+              ...state.activeHost,
+              cores,
+              ram,
+            },
+          };
+        }),
     }),
     {
       name: 'host-store',

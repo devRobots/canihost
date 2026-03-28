@@ -3,7 +3,6 @@
 import { HostType } from '@prisma/enums';
 import { Box, ChevronDown } from 'lucide-react';
 
-import { useDbStore } from '@/store/db';
 import { useHostStore } from '@/store/host';
 
 const getVariantLabel = (type?: string) => {
@@ -22,11 +21,10 @@ export default function VariantDropdown({
   onToggle,
   onClose,
 }: VariantDropdownProps) {
-  const { hosts } = useDbStore();
-  const { selectedHostId, selectedVariantId, setSelectedVariantId } =
-    useHostStore();
+  const { activeHost, setVariant } = useHostStore();
 
-  const selectedHost = hosts.find((m) => m.id === selectedHostId);
+  const selectedHost = activeHost;
+  const selectedVariantId = activeHost?.selectedVariantId;
   const selectedVariant =
     selectedHost?.variants.find((v) => v.id === selectedVariantId) ||
     selectedHost?.variants[0];
@@ -57,7 +55,9 @@ export default function VariantDropdown({
         {selectedHost.variants.length > 1 && !isCustom && (
           <ChevronDown
             size={14}
-            className={`text-fg-dim transition-transform ${isOpen ? 'rotate-180' : ''}`}
+            className={`text-fg-dim transition-transform ${
+              isOpen ? 'rotate-180' : ''
+            }`}
           />
         )}
       </button>
@@ -69,10 +69,14 @@ export default function VariantDropdown({
               <button
                 key={v.id}
                 onClick={() => {
-                  setSelectedVariantId(v.id);
+                  setVariant(v.id);
                   onClose();
                 }}
-                className={`w-full rounded-sm px-3 py-2 text-left text-xs transition-all ${selectedVariantId === v.id ? 'bg-accent/10 text-accent font-bold' : 'hover:bg-input text-fg'}`}
+                className={`w-full rounded-sm px-3 py-2 text-left text-xs transition-all ${
+                  selectedVariantId === v.id
+                    ? 'bg-accent/10 text-accent font-bold'
+                    : 'hover:bg-input text-fg'
+                }`}
               >
                 {v.name}
               </button>

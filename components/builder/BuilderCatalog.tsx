@@ -141,7 +141,7 @@ export default function BuilderCatalog({ host, setAppModalData }: Props) {
                           ) : (
                             <div className="flex w-full justify-center gap-2">
                               <span>
-                                {((svc.minCPU / host.cpuCores) * 100).toFixed(
+                                {((svc.minCPU / host.cores) * 100).toFixed(
                                   0,
                                 )}
                                 %C
@@ -149,7 +149,7 @@ export default function BuilderCatalog({ host, setAppModalData }: Props) {
                               <span>|</span>
                               <span>
                                 {(
-                                  (svc.minRAM / host.memoryRamGb) *
+                                  (svc.minRAM / host.ram) *
                                   100
                                 ).toFixed(0)}
                                 %R

@@ -7,12 +7,10 @@ import HostDropdown from '@/components/hostpicker/HostDropdown';
 import ModeToggle from '@/components/hostpicker/ModeToggle';
 import RamSelector from '@/components/hostpicker/RamSelector';
 import VariantDropdown from '@/components/hostpicker/VariantDropdown';
-import { useDbStore } from '@/store/db';
 import { useHostStore } from '@/store/host';
 
 export default function HostPicker() {
-  const { hosts } = useDbStore();
-  const { selectedHostId } = useHostStore();
+  const { activeHost } = useHostStore();
 
   const [openDropdown, setOpenDropdown] = useState<
     'host' | 'variant' | 'cpu' | 'ram' | null
@@ -38,7 +36,7 @@ export default function HostPicker() {
     };
   }, []);
 
-  const selectedHost = hosts.find((m) => m.id === selectedHostId);
+  const selectedHost = activeHost;
 
   return (
     <div className="flex w-full flex-col items-end justify-center gap-4 font-mono md:flex-row">

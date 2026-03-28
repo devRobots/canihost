@@ -15,4 +15,5 @@ export type AppBundle = Prisma.AppBundleGetPayload<{
 export type ActiveHost = Host & {
   cores: number;
   ram: number;
+  selectedVariantId: string | null;
 };

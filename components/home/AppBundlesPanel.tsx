@@ -13,7 +13,10 @@ interface Props {
 
 export default function AppBundlesPanel({ onBundleClick, onAppClick }: Props) {
   const { bundles } = useDbStore();
-  const { core, ram } = useHostStore();
+  const { activeHost } = useHostStore();
+
+  const core = activeHost?.cores || 0;
+  const ram = activeHost?.ram || 0;
 
   const recommendedBundles = useMemo(() => {
     return bundles

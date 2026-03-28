@@ -22,25 +22,21 @@ export default function StoreInitializer({
     const hostState = useHostStore.getState();
 
     if (dbState.hosts.length === 0) {
-      dbState.setInitialData({ hosts, bundles: bundles, apps: apps });
+      dbState.setInitialData({ hosts, bundles, apps });
 
-      const hostId = hostState.selectedHostId;
-      const variantId = hostState.selectedVariantId;
-
-      const hostExists = hosts.find((m) => m.id === hostId);
-      if (!hostExists) {
-        hostState.setSelectedHostId(hosts[0]?.id || null, hosts);
+      if (!hostState.activeHost) {
+        if (hosts.length > 0) {
+          hostState.setActiveHost(hosts[0]);
+        }
       } else {
-        const variantExists = hostExists.variants.find(
-          (v) => v.id === variantId,
-        );
-        if (!variantExists) {
-          useHostStore.setState({
-            selectedVariantId: hostExists.variants[0]?.id || null,
-          });
+        // Opcional: Validar que el host persistido aún sea válido
+        const hostExists = hosts.find((h) => h.id === hostState.activeHost?.id);
+        if (!hostExists && hosts.length > 0) {
+          hostState.setActiveHost(hosts[0]);
         }
       }
     }
+
     initialized.current = true;
   }
   return null;

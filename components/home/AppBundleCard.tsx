@@ -11,8 +11,11 @@ interface Props {
 }
 
 export default function AppBundleCard({ bundle, onBundleClick }: Props) {
-  const { core, ram } = useHostStore();
+  const { activeHost } = useHostStore();
   const { mode } = useModeStore();
+
+  const core = activeHost?.cores || 1;
+  const ram = activeHost?.ram || 1;
 
   const totalCpu = bundle.apps.reduce((acc, s) => acc + s.minCPU, 0);
   const totalRam = bundle.apps.reduce((acc, s) => acc + s.minRAM, 0);
@@ -43,40 +46,38 @@ export default function AppBundleCard({ bundle, onBundleClick }: Props) {
         </button>
       </div>
 
-      {/* CPU bar — expert only */}
       {mode === 'expert' && (
-        <div className="mt-auto flex flex-col gap-1">
-          <div className="text-fg-dim flex justify-between text-xs">
-            <span className={`text-${cpuClass}`}>CPU</span>
-            <span>
-              {totalCpu.toFixed(2)}c / {core}c
-            </span>
+        <>
+          <div className="mt-auto flex flex-col gap-1">
+            <div className="text-fg-dim flex justify-between text-xs">
+              <span className={`text-${cpuClass}`}>CPU</span>
+              <span>
+                {totalCpu.toFixed(2)}c / {core}c
+              </span>
+            </div>
+            <div className="bg-input flex h-1 overflow-hidden rounded">
+              <div
+                className={`bar-fill ${cpuClass}`}
+                style={{ width: `${cpuPct}%` }}
+              />
+            </div>
           </div>
-          <div className="bg-input flex h-1 overflow-hidden rounded">
-            <div
-              className={`bar-fill ${cpuClass}`}
-              style={{ width: `${cpuPct}%` }}
-            />
-          </div>
-        </div>
-      )}
 
-      {/* RAM bar — expert only */}
-      {mode === 'expert' && (
-        <div className="flex flex-col gap-1">
-          <div className="text-fg-dim flex justify-between text-xs">
-            <span className={`text-${ramClass}`}>RAM</span>
-            <span>
-              {totalRam.toFixed(2)}GB / {ram}GB
-            </span>
+          <div className="flex flex-col gap-1">
+            <div className="text-fg-dim flex justify-between text-xs">
+              <span className={`text-${ramClass}`}>RAM</span>
+              <span>
+                {totalRam.toFixed(2)}GB / {ram}GB
+              </span>
+            </div>
+            <div className="bg-input flex h-1 overflow-hidden rounded">
+              <div
+                className={`bar-fill ${ramClass}`}
+                style={{ width: `${ramPct}%` }}
+              />
+            </div>
           </div>
-          <div className="bg-input flex h-1 overflow-hidden rounded">
-            <div
-              className={`bar-fill ${ramClass}`}
-              style={{ width: `${ramPct}%` }}
-            />
-          </div>
-        </div>
+        </>
       )}
 
       {/* Apps list */}

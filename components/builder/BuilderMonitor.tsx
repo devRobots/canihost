@@ -24,11 +24,11 @@ export default function BuilderMonitor({ host, setAppModalData }: Props) {
   const totalCpu = selectedApps.reduce((acc, s) => acc + s.minCPU, 0);
   const totalRam = selectedApps.reduce((acc, s) => acc + s.minRAM, 0);
 
-  const cpuPct = Math.min(Math.round((totalCpu / host.cpuCores) * 100), 999);
-  const ramPct = Math.min(Math.round((totalRam / host.memoryRamGb) * 100), 999);
+  const cpuPct = Math.min(Math.round((totalCpu / host.cores) * 100), 999);
+  const ramPct = Math.min(Math.round((totalRam / host.ram) * 100), 999);
 
-  const isCpuOver = totalCpu > host.cpuCores;
-  const isRamOver = totalRam > host.memoryRamGb;
+  const isCpuOver = totalCpu > host.cores;
+  const isRamOver = totalRam > host.ram;
   const cloudWarnings = selectedApps.filter(
     (s) => !s.isCloudRecommended && host.type === HostType.VPS,
   );
@@ -54,7 +54,7 @@ export default function BuilderMonitor({ host, setAppModalData }: Props) {
             <div className="text-fg-dim flex justify-between text-xs">
               <span>CPU</span>
               <span className={isCpuOver ? 'text-red-500' : 'text-fg'}>
-                {totalCpu.toFixed(1)} / {host.cpuCores.toFixed(1)} ({cpuPct}
+                {totalCpu.toFixed(1)} / {host.cores.toFixed(1)} ({cpuPct}
                 %)
               </span>
             </div>
@@ -70,7 +70,7 @@ export default function BuilderMonitor({ host, setAppModalData }: Props) {
             <div className="text-fg-dim flex justify-between text-xs">
               <span>RAM</span>
               <span className={isRamOver ? 'text-red-500' : 'text-fg'}>
-                {totalRam.toFixed(1)}GB / {host.memoryRamGb}GB ({ramPct}%)
+                {totalRam.toFixed(1)}GB / {host.ram}GB ({ramPct}%)
               </span>
             </div>
             <div className="bg-input border-line flex h-2 overflow-hidden rounded">
@@ -143,7 +143,7 @@ export default function BuilderMonitor({ host, setAppModalData }: Props) {
                 <span className="text-fg-dim ml-auto font-mono text-xs whitespace-nowrap">
                   {isExpert
                     ? `${s.minCPU}c · ${s.minRAM}G`
-                    : `${Math.round((s.minCPU / host.cpuCores) * 100)}%C`}
+                    : `${Math.round((s.minCPU / host.cores) * 100)}%C`}
                 </span>
               </button>
             ))}

@@ -16,10 +16,13 @@ import { type AppBundle } from '@/types';
 
 export default function RecommendationsPanel() {
   const { apps } = useDbStore();
-  const { core, ram, selectedHostId } = useHostStore();
+  const { activeHost } = useHostStore();
   const [appModalData, setAppModalData] = useState<App | null>(null);
   const [appBundleModalData, setAppBundleModalData] =
     useState<AppBundle | null>(null);
+
+  const core = activeHost?.cores || 0;
+  const ram = activeHost?.ram || 0;
 
   const { recommendedApps, barelyUsableApps, unsupportedApps } = useMemo(() => {
     const isCloudComp = (a: App) => a.isCloudRecommended !== false;
@@ -42,7 +45,7 @@ export default function RecommendationsPanel() {
     };
   }, [apps, core, ram]);
 
-  if (!selectedHostId) {
+  if (!activeHost) {
     return (
       <div className="text-fg-dim py-16 text-center text-sm">
         <div className="mb-4 text-4xl">_</div>
