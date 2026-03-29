@@ -56,7 +56,7 @@ export const metadata: Metadata = {
     siteName: 'CanIHost.tech',
     images: [
       {
-        url: '/resources/og-image.png',
+        url: '/og-image.png',
         width: 1200,
         height: 630,
         alt: 'CanIHost.tech Open Graph Image',
@@ -71,7 +71,7 @@ export const metadata: Metadata = {
     description:
       'Discover, manage, and deploy the perfect services for your self-hosted homelab, VPS, or Mini PC setup.',
     creator: '@devRobots',
-    images: ['/resources/og-image.png'],
+    images: ['/og-image.png'],
   },
   robots: {
     index: true,
