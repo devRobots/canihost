@@ -1,7 +1,7 @@
 # CanIHost.tech
 
 <div align="center">
-  <img src="https://via.placeholder.com/800x400/18160f/e87c2a?text=CanIHost.tech+Hero+Banner" alt="Hero Banner Preview" />
+  <img src="./resources/main_banner.png" alt="Hero Banner Preview" />
   <p><em>La página principal de CanIHost, mostrando el terminal estético, el selector de host y las recomendaciones de apps.</em></p>
 </div>
 
@@ -17,7 +17,7 @@ Ya no tendrás que adivinar si tu Mini PC o tu VPS resistirá un servidor de med
 Planifica arquitecturas completas sin tocar la terminal. Selecciona múltiples aplicaciones como si fuera un carrito de compras y observa en tiempo real cómo impactan en el consumo de RAM y CPU de diferentes modelos de servidores (Hosts).
 
 <div align="center">
-  <img src="https://via.placeholder.com/800x400/18160f/7ec45a?text=Resource+Builder+Monitor" alt="Builder Monitor" />
+  <img src="./resources/builder_banner.png" alt="Builder Monitor" />
   <p><em>El panel de construcción (Builder) donde se refleja visualmente la sumatoria del consumo de RAM y CPU frente al límite del Hardware elegido.</em></p>
 </div>
 
@@ -62,17 +62,17 @@ CanIHost no solo es potente en lo que hace, sino en cómo está construido. Empl
 ## 🖼️ Flujo y Diseño UI
 
 <div align="center">
-  <img src="https://via.placeholder.com/800x400/18160f/e8b42a?text=Host+Picker+Section" alt="Selector de Host" />
+  <img src="./resources/picker_banner.png" alt="Selector de Host" />
   <p><em>El Host Picker, donde defines qué máquina simulará tus contenedores. Podrás ver etiquetas, recursos máximos y variaciones operativas.</em></p>
 </div>
 
 <div align="center">
-  <img src="https://via.placeholder.com/800x400/18160f/5abec4?text=Docker+Compose+Terminal+View" alt="Vista Terminal de Docker Compose" />
+  <img src="./resources/script_banner.png" alt="Vista Terminal de Docker Compose" />
   <p><em>Salida generada: El script de despliegue y el YAML generado estructuradamente, listo para ser copiado en tu servidor.</em></p>
 </div>
 
 ---
 
 <div align="center">
-  <p>Construido con ❤️ por el equipo de <strong>devRobots</strong></p>
+  <p>Hecho con ❤️ por <strong><a href="https://github.com/devRobots">devRobots</a></strong></p>
 </div>

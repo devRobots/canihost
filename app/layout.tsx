@@ -56,13 +56,13 @@ export const metadata: Metadata = {
     siteName: 'CanIHost.tech',
     images: [
       {
-        url: '/og-image.png',
+        url: '/resources/og-image.png',
         width: 1200,
         height: 630,
         alt: 'CanIHost.tech Open Graph Image',
       },
     ],
-    locale: 'en_US',
+    locale: 'es_ES',
     type: 'website',
   },
   twitter: {
@@ -71,7 +71,7 @@ export const metadata: Metadata = {
     description:
       'Discover, manage, and deploy the perfect services for your self-hosted homelab, VPS, or Mini PC setup.',
     creator: '@devRobots',
-    images: ['/twitter-image.png'],
+    images: ['/resources/og-image.png'],
   },
   robots: {
     index: true,
@@ -92,7 +92,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning className="dark">
+    <html lang="es" suppressHydrationWarning className="dark">
       <body className="scanlines flex min-h-screen flex-col">
         <Navbar />
         <div className="flex flex-1 flex-col">{children}</div>
