@@ -170,7 +170,11 @@ export default function BuilderMonitor({ host, setAppModalData }: Props) {
       )}
 
       {selectedApps.length > 0 && (
-        <DeployScriptButton apps={selectedApps} className="w-full mt-auto py-3 text-xs font-bold" />
+        <DeployScriptButton
+          apps={selectedApps}
+          projectName="My Stack"
+          className="mt-auto w-full py-3 text-xs font-bold"
+        />
       )}
     </div>
   );

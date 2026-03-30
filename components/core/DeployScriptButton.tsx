@@ -2,17 +2,19 @@
 
 import { App } from '@prisma/client';
 import { FileCode2, Loader2 } from 'lucide-react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 import { getDockerMetadata } from '@/app/actions/docker';
 
 interface Props {
   apps: App[];
+  projectName?: string;
   className?: string;
 }
 
 export default function DeployScriptButton({
   apps,
+  projectName,
   className = '',
 }: Props) {
   const [loading, setLoading] = useState(false);
@@ -103,7 +105,10 @@ export default function DeployScriptButton({
         })
         .join('\n\n');
 
-      const dockerCompose = `version: '3.8'
+      const name = projectName || (apps.length === 1 ? apps[0].name : 'custom-stack');
+      const sanitizedName = name.toLowerCase().replace(/[^a-z0-9]/g, '-');
+
+      const dockerCompose = `name: ${sanitizedName}
 
 services:
 ${services}

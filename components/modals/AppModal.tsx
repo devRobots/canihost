@@ -174,6 +174,7 @@ export default function AppModal({
               {app.dockerRegistryUrl && (
                 <DeployScriptButton
                   apps={[app]}
+                  projectName={app.name}
                   className="flex-1 px-4 py-2.5 text-xs font-bold"
                 />
               )}

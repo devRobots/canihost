@@ -188,6 +188,7 @@ export default function AppsGrid({ initialApps }: { initialApps: App[] }) {
               {app.dockerRegistryUrl && (
                 <DeployScriptButton
                   apps={[app]}
+                  projectName={app.name}
                   className="flex flex-1 items-center justify-center gap-2 rounded-md px-4 py-2.5 text-center text-xs font-bold transition-opacity hover:opacity-80"
                 />
               )}

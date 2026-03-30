@@ -157,7 +157,7 @@ export default function AppBundleModal({
           </div>
 
           {/* Deployment Button */}
-          <DeployScriptButton apps={bundle.apps} className="w-full py-3 text-xs font-bold" />
+          <DeployScriptButton apps={bundle.apps} projectName={bundle.name} className="w-full py-3 text-xs font-bold" />
         </div>
       )}
     </Modal>
