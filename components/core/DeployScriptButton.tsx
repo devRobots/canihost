@@ -36,85 +36,153 @@ export default function DeployScriptButton({
         })
       );
 
-      const services = appMetadatas
-        .map(({ app, metadata }) => {
-          const serviceName = app.name.toLowerCase().replace(/[^a-z0-9]/g, '-');
-          let serviceBlock = `  ${serviceName}:
-    image: ${metadata.imageName}
-    container_name: ${serviceName}
-    restart: always`;
+      // Check if there's any database service in the stack
+      const dbServices = appMetadatas.filter(({ app }) =>
+        app.name.toLowerCase().match(/(mariadb|mysql|postgres|mongodb)/)
+      );
+      const mainDbService =
+        dbServices.length > 0
+          ? dbServices[0].app.name.toLowerCase().replace(/[^a-z0-9]/g, '-')
+          : null;
 
-          // Add Ports - Use Set to avoid duplicates and filter out empty items
-          const uniquePorts = Array.from(
-            new Set(
-              metadata.exposedPorts
-                .map((port) => port.split('/')[0])
-                .filter((p) => p && p.trim() !== '')
-            )
-          );
+      interface ComposeService {
+        container_name: string;
+        image: string;
+        restart: string;
+        depends_on?: string[];
+        environment?: Record<string, string>;
+        volumes?: string[];
+        ports?: string[];
+      }
 
-          if (uniquePorts.length > 0) {
-            serviceBlock += '\n    ports:';
-            uniquePorts.forEach((p) => {
-              serviceBlock += `\n      - "${p}:${p}"`;
-            });
+      const servicesObj: Record<string, ComposeService> = {};
+      const usedPorts = new Set<number>();
+      const internalDbPorts = new Set(['3306', '5432', '27017', '6379']);
+
+      // Predefined DB credentials
+      const DB_CREDS = {
+        dbName: 'canihostdb',
+        user: 'canihostuser',
+        dbPass: 'securedbpass',
+        rootPass: 'securerootpass',
+      };
+
+      const getAppEnvs = (serviceName: string) => {
+        const envs: Record<string, string> = {};
+
+        // DB setups
+        if (serviceName.includes('mariadb') || serviceName.includes('mysql')) {
+          envs.MYSQL_ROOT_PASSWORD = DB_CREDS.rootPass;
+          envs.MYSQL_DATABASE = DB_CREDS.dbName;
+          envs.MYSQL_USER = DB_CREDS.user;
+          envs.MYSQL_PASSWORD = DB_CREDS.dbPass;
+        } else if (serviceName.includes('postgres')) {
+          envs.POSTGRES_PASSWORD = DB_CREDS.rootPass;
+          envs.POSTGRES_USER = DB_CREDS.user;
+          envs.POSTGRES_DB = DB_CREDS.dbName;
+        }
+
+        // App setups
+        if (mainDbService) {
+          if (serviceName.includes('wordpress')) {
+            envs.WORDPRESS_DB_HOST = mainDbService;
+            envs.WORDPRESS_DB_USER = DB_CREDS.user;
+            envs.WORDPRESS_DB_PASSWORD = DB_CREDS.dbPass;
+            envs.WORDPRESS_DB_NAME = DB_CREDS.dbName;
+          } else if (serviceName.includes('nextcloud')) {
+            envs.MYSQL_HOST = mainDbService;
+            envs.MYSQL_USER = DB_CREDS.user;
+            envs.MYSQL_PASSWORD = DB_CREDS.dbPass;
+            envs.MYSQL_DATABASE = DB_CREDS.dbName;
           }
+        }
 
-          // Add Volumes - Filter out empty items and deduplicate
-          const uniqueVolumes = Array.from(
-            new Set(
-              metadata.volumes
-                .filter((vol) => vol && vol.trim() !== '')
-                .map((vol) => (vol.startsWith('/') ? vol : `/${vol}`))
-            )
+        return Object.keys(envs).length > 0 ? envs : undefined;
+      };
+
+      appMetadatas.forEach(({ app, metadata }) => {
+        const serviceName = app.name.toLowerCase().replace(/[^a-z0-9]/g, '-');
+        
+        const serviceDef: ComposeService = {
+          container_name: serviceName,
+          image: metadata.imageName,
+          restart: 'always',
+        };
+
+        // Depends On logic
+        if (mainDbService && serviceName !== mainDbService && !serviceName.match(/(mariadb|mysql|postgres|mongodb)/)) {
+          serviceDef.depends_on = [mainDbService];
+        }
+
+        // Environments
+        const appEnvs = getAppEnvs(serviceName);
+        if (appEnvs) {
+          serviceDef.environment = appEnvs;
+        }
+
+        // Volumes
+        const uniqueVolumes = Array.from(
+          new Set(
+            metadata.volumes
+              .filter((vol) => vol && vol.trim() !== '')
+              .map((vol) => (vol.startsWith('/') ? vol : `/${vol}`))
+          )
+        );
+        if (uniqueVolumes.length > 0) {
+          serviceDef.volumes = uniqueVolumes.map(
+            (vol) => `./data/${serviceName}${vol}:${vol}`
           );
+        }
 
-          if (uniqueVolumes.length > 0) {
-            serviceBlock += '\n    volumes:';
-            uniqueVolumes.forEach((vol) => {
-              serviceBlock += `\n      - "./data/${serviceName}${vol}:${vol}"`;
-            });
-          }
+        // Ports
+        const isDb = serviceName.match(/(mariadb|mysql|postgres|mongodb)/);
+        const uniquePorts = Array.from(
+          new Set(
+            metadata.exposedPorts
+              .map((port) => port.split('/')[0])
+              .filter((p) => p && p.trim() !== '')
+          )
+        );
 
-          // Add Envs (Filtering out some common internal ones and empty items)
-          // Also deduplicate environment keys (keeping the last value)
-          const usefulEnvsList = metadata.envs.filter(
-            (e) =>
-              e &&
-              e.trim() !== '' &&
-              !e.startsWith('PATH=') &&
-              !e.startsWith('HOME=')
-          );
-
-          const envMap = new Map<string, string>();
-          usefulEnvsList.forEach((e) => {
-            const [key, ...parts] = e.split('=');
-            if (key) {
-              envMap.set(key, parts.join('='));
+        if (uniquePorts.length > 0) {
+          const mappedPorts: string[] = [];
+          uniquePorts.forEach((p) => {
+            if (isDb && internalDbPorts.has(p)) {
+              // Do not expose internal database ports to host
+              return;
+            }
+            
+            let hostPort = parseInt(p, 10);
+            if (!isNaN(hostPort)) {
+              while (usedPorts.has(hostPort)) {
+                hostPort++;
+              }
+              usedPorts.add(hostPort);
+              mappedPorts.push(`${hostPort}:${p}`);
             }
           });
-
-          if (envMap.size > 0) {
-            serviceBlock += '\n    environment:';
-            envMap.forEach((value, key) => {
-              serviceBlock += `\n      - ${key}=${value}`;
-            });
+          
+          if (mappedPorts.length > 0) {
+            serviceDef.ports = mappedPorts;
           }
+        }
 
-          return serviceBlock;
-        })
-        .join('\n\n');
+        servicesObj[serviceName] = serviceDef;
+      });
 
       const name = projectName || (apps.length === 1 ? apps[0].name : 'custom-stack');
       const sanitizedName = name.toLowerCase().replace(/[^a-z0-9]/g, '-');
 
-      const dockerCompose = `name: ${sanitizedName}
+      const dockerComposeObj = {
+        name: sanitizedName,
+        services: servicesObj,
+      };
 
-services:
-${services}
-`;
+      // Import right before usage so it works correctly on client
+      const YAML = (await import('yaml')).default;
+      const dockerComposeYml = YAML.stringify(dockerComposeObj);
 
-      const blob = new Blob([dockerCompose], { type: 'text/yaml' });
+      const blob = new Blob([dockerComposeYml], { type: 'text/yaml' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
