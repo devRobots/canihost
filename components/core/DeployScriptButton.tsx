@@ -42,31 +42,60 @@ export default function DeployScriptButton({
     container_name: ${serviceName}
     restart: always`;
 
-          // Add Ports
-          if (metadata.exposedPorts.length > 0) {
+          // Add Ports - Use Set to avoid duplicates and filter out empty items
+          const uniquePorts = Array.from(
+            new Set(
+              metadata.exposedPorts
+                .map((port) => port.split('/')[0])
+                .filter((p) => p && p.trim() !== '')
+            )
+          );
+
+          if (uniquePorts.length > 0) {
             serviceBlock += '\n    ports:';
-            metadata.exposedPorts.forEach((port) => {
-              const p = port.split('/')[0];
+            uniquePorts.forEach((p) => {
               serviceBlock += `\n      - "${p}:${p}"`;
             });
           }
 
-          // Add Volumes
-          if (metadata.volumes.length > 0) {
+          // Add Volumes - Filter out empty items and deduplicate
+          const uniqueVolumes = Array.from(
+            new Set(
+              metadata.volumes
+                .filter((vol) => vol && vol.trim() !== '')
+                .map((vol) => (vol.startsWith('/') ? vol : `/${vol}`))
+            )
+          );
+
+          if (uniqueVolumes.length > 0) {
             serviceBlock += '\n    volumes:';
-            metadata.volumes.forEach((vol) => {
+            uniqueVolumes.forEach((vol) => {
               serviceBlock += `\n      - "./data/${serviceName}${vol}:${vol}"`;
             });
           }
 
-          // Add Envs (Filtering out some common internal ones)
-          const usefulEnvs = metadata.envs.filter(
-            (e) => !e.startsWith('PATH=') && !e.startsWith('HOME=')
+          // Add Envs (Filtering out some common internal ones and empty items)
+          // Also deduplicate environment keys (keeping the last value)
+          const usefulEnvsList = metadata.envs.filter(
+            (e) =>
+              e &&
+              e.trim() !== '' &&
+              !e.startsWith('PATH=') &&
+              !e.startsWith('HOME=')
           );
-          if (usefulEnvs.length > 0) {
+
+          const envMap = new Map<string, string>();
+          usefulEnvsList.forEach((e) => {
+            const [key, ...parts] = e.split('=');
+            if (key) {
+              envMap.set(key, parts.join('='));
+            }
+          });
+
+          if (envMap.size > 0) {
             serviceBlock += '\n    environment:';
-            usefulEnvs.forEach((env) => {
-              serviceBlock += `\n      - ${env}`;
+            envMap.forEach((value, key) => {
+              serviceBlock += `\n      - ${key}=${value}`;
             });
           }
 
