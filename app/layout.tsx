@@ -7,8 +7,8 @@ import Navbar from '@/components/core/Navbar';
 export const metadata: Metadata = {
   metadataBase: new URL('https://canihost.tech'),
   title: {
-    default: 'CanIHost.tech - Find Perfect Services to Self-Host',
-    template: '%s | CanIHost.tech',
+    default: 'Can I Host that Tech? - Find Perfect Services to Self-Host',
+    template: '%s | Can I Host that Tech?',
   },
   icons: {
     icon: [
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
   },
   manifest: '/site.webmanifest',
   description:
-    'CanIHost helps you discover, manage, and deploy the perfect services for your self-hosted homelab, VPS, or Mini PC setup.',
+    'Can I Host that Tech? Discover, manage and deploy the perfect services for your self-hosted homelab, VPS, or Mini PC setup.',
   keywords: [
     'self-hosting',
     'homelab',
@@ -49,17 +49,17 @@ export const metadata: Metadata = {
     telephone: false,
   },
   openGraph: {
-    title: 'CanIHost.tech - Find Perfect Services to Self-Host',
+    title: 'Can I Host that Tech? - Find Perfect Services to Self-Host',
     description:
       'Discover the best apps for your self-hosted setup. Generate customized docker-compose configurations instantly.',
     url: 'https://canihost.tech',
-    siteName: 'CanIHost.tech',
+    siteName: 'Can I Host that Tech?',
     images: [
       {
         url: '/og-image.png',
         width: 1200,
         height: 630,
-        alt: 'CanIHost.tech Open Graph Image',
+        alt: 'Can I Host that Tech? Open Graph Image',
       },
     ],
     locale: 'es_ES',
@@ -67,7 +67,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'CanIHost.tech - Host Your Own Apps',
+    title: 'Can I Host that Tech? - Host Your Own Apps',
     description:
       'Discover, manage, and deploy the perfect services for your self-hosted homelab, VPS, or Mini PC setup.',
     creator: '@devRobots',
